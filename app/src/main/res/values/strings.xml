@@ -1,0 +1,25 @@
+<resources>
+    <string name="app_name">SportMobli</string>
+    <string name="welcome">Welcome</string>
+    <string name="button">Button</string>
+    <string name="button2">Button</string>
+    <string name="log_in">log in</string>
+    <string name="sign_up">sign up</string>
+    <string name="sign_in">sign in</string>
+    <string name="Sign_In">Sign In</string>
+    <string name="name">Name</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="confirm_password">Confirm password</string>
+    <string name="signup">sign up</string>
+    <string name="Log_In">Log In</string>
+    <string name="Username">Username</string>
+    <string name="Password">Password</string>
+    <string name="Password2">Password</string>
+    <string name="homepage">Homepage</string>
+    <string name="diet_page">Diet Page</string>
+    <string name="training_page">Training Page</string>
+    <string name="tracking_page">Tracking Page</string>
+    <string name="user_profile_page">User Profile Page</string>
+    <string name="home_page">Home page</string>
+</resources>
