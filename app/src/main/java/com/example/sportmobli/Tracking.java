@@ -7,7 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-public class tracking extends AppCompatActivity {
+public class Tracking extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,7 +22,7 @@ public class tracking extends AppCompatActivity {
         lolButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), lol.class);
+                Intent intent = new Intent(getApplicationContext(), Home.class);
                 startActivity(intent);
             }
         });
@@ -30,7 +30,7 @@ public class tracking extends AppCompatActivity {
         dietButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), diet.class);
+                Intent intent = new Intent(getApplicationContext(), Diet.class);
                 startActivity(intent);
             }
         });
@@ -38,7 +38,7 @@ public class tracking extends AppCompatActivity {
         userProfileButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), userProfile.class);
+                Intent intent = new Intent(getApplicationContext(), UserProfile.class);
                 startActivity(intent);
             }
         });
@@ -46,7 +46,7 @@ public class tracking extends AppCompatActivity {
         trackingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), tracking.class);
+                Intent intent = new Intent(getApplicationContext(), Tracking.class);
                 startActivity(intent);
             }
         });

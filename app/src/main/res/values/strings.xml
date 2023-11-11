@@ -22,4 +22,15 @@
     <string name="tracking_page">Tracking Page</string>
     <string name="user_profile_page">User Profile Page</string>
     <string name="home_page">Home page</string>
+    <string name="recipes">Recipes</string>
+    <string name="drink">drink</string>
+    <string name="dinner">dinner</string>
+    <string name="lunch">lunch</string>
+    <string name="breakfast">breakfast</string>
+    <string name="breakfast_title">Breakfast</string>
+    <string name="description">description</string>
+    <string name="enter_grams">Enter grams</string>
+    <string name="add_quantity">Add quantity</string>
+    <string name="add_qtt">Add quantity:</string>
+    <string name="search">Search</string>
 </resources>

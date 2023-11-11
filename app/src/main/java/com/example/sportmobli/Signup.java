@@ -10,15 +10,11 @@ import android.widget.EditText;
 import android.widget.Toast;
 import android.content.SharedPreferences;
 
-import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-public class signup extends AppCompatActivity {
+public class Signup extends AppCompatActivity {
 
     EditText username, password, cPassword;
     Button signup;
-    db DB;
+    com.example.sportmobli.DB DB;
     SharedPreferences sharedPref;
 
     @Override
@@ -31,7 +27,7 @@ public class signup extends AppCompatActivity {
         cPassword = findViewById(R.id.cPassword);
         signup = findViewById(R.id.sign_in);
 
-        DB = new db(this);
+        DB = new DB(this);
         sharedPref = getSharedPreferences("user_info", MODE_PRIVATE);
 
         signup.setOnClickListener(new View.OnClickListener() {
@@ -42,13 +38,13 @@ public class signup extends AppCompatActivity {
                 String cPass = cPassword.getText().toString();
 
                 if (TextUtils.isEmpty(user) || TextUtils.isEmpty(pass) || TextUtils.isEmpty(cPass)) {
-                    Toast.makeText(signup.this, "Please fill in all fields!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Signup.this, "Please fill in all fields!", Toast.LENGTH_SHORT).show();
                 } else if (!isUsernameValid(user)) {
-                    Toast.makeText(signup.this, "Username must have at least 3 characters and start with a letter!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Signup.this, "Username must have at least 3 characters and start with a letter!", Toast.LENGTH_SHORT).show();
                 } else if (!isPasswordValid(pass)) {
-                    Toast.makeText(signup.this, "Password must have at least 6 characters, including uppercase, lowercase, and special characters.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Signup.this, "Password must have at least 6 characters, including uppercase, lowercase, digit and special character.", Toast.LENGTH_SHORT).show();
                 } else if (!pass.equals(cPass)) {
-                    Toast.makeText(signup.this, "Password is not matching!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Signup.this, "Password is not matching!", Toast.LENGTH_SHORT).show();
                 } else {
                     Boolean checkUser = DB.checkUsername(user);
                     if (!checkUser) {
@@ -57,14 +53,14 @@ public class signup extends AppCompatActivity {
                             sharedPref.edit().putBoolean("is_signed_in", true).apply();
                             sharedPref.edit().putString("username", user).apply();
                             sharedPref.edit().putString("password", pass).apply();
-                            Toast.makeText(signup.this, "Sign up successful!", Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(getApplicationContext(), login.class);
+                            Toast.makeText(Signup.this, "Sign up successful!", Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(getApplicationContext(), Login.class);
                             startActivity(intent);
                         } else {
-                            Toast.makeText(signup.this, "Please try again!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(Signup.this, "Please try again!", Toast.LENGTH_SHORT).show();
                         }
                     } else {
-                        Toast.makeText(signup.this, "This username already exists!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(Signup.this, "This username already exists!", Toast.LENGTH_SHORT).show();
                     }
                 }
             }
@@ -88,7 +84,8 @@ public class signup extends AppCompatActivity {
         boolean hasUppercase = !password.equals(password.toLowerCase());
         boolean hasLowercase = !password.equals(password.toUpperCase());
         boolean hasSpecialChar = password.matches(".*[!@#$%^&*()_+{}\\[\\]:;<>,.?~\\-].*");;
+        boolean hasDigit = password.matches(".*\\d.*");
 
-        return hasUppercase && hasLowercase && hasSpecialChar;
+        return hasUppercase && hasLowercase && hasSpecialChar && hasDigit;
     }
 }
