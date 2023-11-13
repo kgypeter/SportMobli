@@ -127,20 +127,20 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         if (isNoItemFound()) {
-            // Display "No item found" message
             holder.nameTxt.setText("No item found");
             holder.caloriesTxt.setText("");
             holder.proteinTxt.setText("");
             holder.carbsTxt.setText("");
             holder.fatsTxt.setText("");
+            holder.itemView.setClickable(false);
         } else {
-            // Display the actual data
             Diet diet = filteredList.get(position);
             holder.nameTxt.setText(diet.getFoodName());
             holder.caloriesTxt.setText("Calories: " + diet.getCalories());
             holder.proteinTxt.setText("Protein: " + diet.getProtein() + "g");
             holder.carbsTxt.setText("Carbs: " + diet.getCarbohydrates() + "g");
             holder.fatsTxt.setText("Fats: " + diet.getFats() + "g");
+            holder.itemView.setClickable(true);
         }
     }
 
@@ -167,6 +167,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
 
         notifyDataSetChanged(); // Notify the adapter that the data set has changed
     }
+
 
     public boolean isNoItemFound() {
         // Check if the filtered list contains only the dummy item

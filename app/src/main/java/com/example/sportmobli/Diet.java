@@ -173,6 +173,26 @@ public class Diet extends AppCompatActivity {
         foodList.add(new Diet("Tomato", 22, 1.1f, 5.5f, 0.2f));
         foodList.add(new Diet("Avocado", 160, 2, 9, 15));
         foodList.add(new Diet("Almonds", 579, 21, 22, 49));
+        foodList.add(new Diet("Oatmeal", 150, 5.5f, 27, 2.3f));
+        foodList.add(new Diet("Greek Yogurt", 100, 10, 3, 0.4f));
+        foodList.add(new Diet("Grilled Chicken Breast", 165, 31, 0, 3.6f));
+        foodList.add(new Diet("Cheese (Cheddar)", 110, 7, 1, 9));
+        foodList.add(new Diet("Brown Rice", 215, 5, 45, 1.6f));
+        foodList.add(new Diet("Eggplant", 20, 1, 5, 0.2f));
+        foodList.add(new Diet("Turkey (Roasted)", 135, 30, 0, 1));
+        foodList.add(new Diet("Pineapple", 50, 0.5f, 13, 0.1f));
+        foodList.add(new Diet("Cucumber", 16, 0.7f, 3.6f, 0.2f));
+        foodList.add(new Diet("Peanut Butter", 190, 8, 7, 16));
+        foodList.add(new Diet("Salad (Mixed Greens)", 50, 2, 8, 1));
+        foodList.add(new Diet("Pasta (Whole Wheat)", 180, 7, 39, 1.2f));
+        foodList.add(new Diet("Ground Turkey (Cooked)", 220, 22, 0, 14));
+        foodList.add(new Diet("Blueberries", 85, 1.1f, 21, 0.5f));
+        foodList.add(new Diet("Sweet Potato", 112, 2, 26, 0.2f));
+        foodList.add(new Diet("Cottage Cheese", 206, 28, 6, 8));
+        foodList.add(new Diet("Shrimp (Grilled)", 85, 18, 1, 1.7f));
+        foodList.add(new Diet("Quinoa Salad", 180, 6, 31, 3.5f));
+        foodList.add(new Diet("Green Beans", 31, 1.8f, 7, 0.4f));
+        foodList.add(new Diet("Walnuts", 185, 4, 3, 18));
 
         return foodList;
     }
