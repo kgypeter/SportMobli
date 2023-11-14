@@ -111,7 +111,14 @@ public class Diet extends AppCompatActivity {
             } else {
                 Log.d("DietActivity", "RecyclerView is not null");
                 TextView totalGramsTextView = findViewById(R.id.totalGramsTextView);
-                RecyclerAdapter adapter = new RecyclerAdapter(getFoodList(), totalGramsTextView);
+                TextView totalCaloriesTextView = findViewById(R.id.totalCaloriesTextView);
+                TextView totalProteinTextView = findViewById(R.id.totalProteinTextView);
+                TextView totalCarbsTextView = findViewById(R.id.totalCarbsTextView);
+                TextView totalFatsTextView = findViewById(R.id.totalFatsTextView);
+
+                RecyclerAdapter adapter = new RecyclerAdapter(getFoodList(), totalGramsTextView,
+                        totalCaloriesTextView, totalProteinTextView, totalCarbsTextView, totalFatsTextView);
+
                 recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
                 recyclerView.setItemAnimator(new DefaultItemAnimator());
                 recyclerView.setAdapter(adapter);

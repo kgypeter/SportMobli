@@ -22,11 +22,23 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
     private ArrayList<Diet> filteredList;
     private TextView totalGramsTextView;
 
-    public RecyclerAdapter(ArrayList<Diet> foodList, TextView totalGramsTextView) {
+    private TextView totalCaloriesTextView;
+    private TextView totalProteinTextView;
+    private TextView totalCarbsTextView;
+    private TextView totalFatsTextView;
+
+    public RecyclerAdapter(ArrayList<Diet> foodList, TextView totalGramsTextView,
+                           TextView totalCaloriesTextView, TextView totalProteinTextView,
+                           TextView totalCarbsTextView, TextView totalFatsTextView) {
         this.foodList = foodList;
         this.totalGramsTextView = totalGramsTextView;
+        this.totalCaloriesTextView = totalCaloriesTextView;
+        this.totalProteinTextView = totalProteinTextView;
+        this.totalCarbsTextView = totalCarbsTextView;
+        this.totalFatsTextView = totalFatsTextView;
         this.filteredList = new ArrayList<>(foodList);
     }
+
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         private TextView nameTxt;
@@ -97,15 +109,32 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
             builder.show();
         }
 
-
-        @SuppressLint("SetTextI18n")
+        //        todo - calculate the sum of the other fields and send them to the UI
+        @SuppressLint({"SetTextI18n", "DefaultLocale"})
         private void updateTotalGrams() {
+            float totalCalories = 0;
+            float totalProtein = 0;
+            float totalCarbs = 0;
+            float totalFats = 0;
             float total = 0;
+
             for (Diet diet : foodList) {
+                // Increment the respective totals based on the multiplied values
+                totalCalories += (diet.getCalories() / 100) * diet.getTotalGrams();
+                totalProtein += (diet.getProtein() / 100) * diet.getTotalGrams();
+                totalCarbs += (diet.getCarbohydrates() / 100) * diet.getTotalGrams();
+                totalFats += (diet.getFats() / 100) * diet.getTotalGrams();
                 total += diet.getTotalGrams();
             }
-            totalGramsTextView.setText("Total Grams: " + total);
+
+            // Update the respective TextViews with the calculated totals
+            totalGramsTextView.setText(String.format("Total: %.2f g", total));
+            totalCaloriesTextView.setText(String.format("Calories: %.2f g", totalCalories));
+            totalProteinTextView.setText(String.format("Protein: %.2f g", totalProtein));
+            totalCarbsTextView.setText(String.format("Carbs: %.2f g", totalCarbs));
+            totalFatsTextView.setText(String.format("Fats: %.2f g", totalFats));
         }
+
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -115,6 +144,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
         filteredList.addAll(foodList);
         notifyDataSetChanged();
     }
+
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -173,6 +203,5 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
         // Check if the filtered list contains only the dummy item
         return filteredList.size() == 1 && filteredList.get(0).getFoodName().isEmpty();
     }
-
 
 }

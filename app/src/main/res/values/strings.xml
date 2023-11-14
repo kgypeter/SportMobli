@@ -33,4 +33,10 @@
     <string name="add_quantity">Add quantity</string>
     <string name="add_qtt">Add quantity:</string>
     <string name="search">Search</string>
+    <string name="calories_0">Calories: 0</string>
+    <string name="protein_0">Protein: 0</string>
+    <string name="carbs_0">Carbs: 0</string>
+    <string name="fats_0">Fats: 0</string>
+    <string name="total_grams_0">Total Grams: 0</string>
+    <string name="data_100g">data/100g</string>
 </resources>
