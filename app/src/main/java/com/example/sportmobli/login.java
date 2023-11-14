@@ -11,7 +11,8 @@ import android.widget.Toast;
 import android.content.SharedPreferences;
 
 import com.example.sportmobli.R;
-
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 
 public class login extends AppCompatActivity {
@@ -31,7 +32,11 @@ public class login extends AppCompatActivity {
         login = findViewById(R.id.log_in);
         DB = new db(this);
         sharedPref = getSharedPreferences("user_info", MODE_PRIVATE);
+        // Write a message to the database
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference("message");
 
+        myRef.setValue("Hello, World!");
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
