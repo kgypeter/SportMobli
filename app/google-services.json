@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "96052389887",
+    "firebase_url": "https://sportmobli-a7cfa-default-rtdb.firebaseio.com",
+    "project_id": "sportmobli-a7cfa",
+    "storage_bucket": "sportmobli-a7cfa.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:96052389887:android:4aab5d7cd2ed7990ebe9ca",
+        "android_client_info": {
+          "package_name": "com.example.sportmobli"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCDqlgenFBZl4TXZq4-4lsYnHTB6fd4KsQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

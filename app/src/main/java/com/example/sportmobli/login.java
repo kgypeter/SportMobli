@@ -11,7 +11,8 @@ import android.widget.Toast;
 import android.content.SharedPreferences;
 
 import com.example.sportmobli.R;
-
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 
 public class login extends AppCompatActivity {
@@ -29,6 +30,9 @@ public class login extends AppCompatActivity {
         username = findViewById(R.id.username);
         password = findViewById(R.id.password);
         login = findViewById(R.id.log_in);
+        FirebaseDatabase db = FirebaseDatabase.getInstance();
+        DatabaseReference ref = db.getReference("test2");
+        ref.setValue("Hello world2!");
         DB = new db(this);
         sharedPref = getSharedPreferences("user_info", MODE_PRIVATE);
 
