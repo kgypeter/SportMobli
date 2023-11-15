@@ -7,30 +7,22 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-public class userProfile extends AppCompatActivity {
+public class Home extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_user_profile);
+        setContentView(R.layout.activity_home);
 
-        Button lolButton = findViewById(R.id.button3);
-        Button trainingButton = findViewById(R.id.button4);
-        Button trackingButton = findViewById(R.id.button7);
         Button dietButton = findViewById(R.id.button5);
-
-        lolButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), lol.class);
-                startActivity(intent);
-            }
-        });
+        Button trainingButton = findViewById(R.id.button4);
+        Button userProfileButton = findViewById(R.id.button6);
+        Button trackingButton = findViewById(R.id.button7);
 
         dietButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), diet.class);
+                Intent intent = new Intent(getApplicationContext(), Diet.class);
                 startActivity(intent);
             }
         });
@@ -38,7 +30,15 @@ public class userProfile extends AppCompatActivity {
         trainingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), training.class);
+                Intent intent = new Intent(getApplicationContext(), Training.class);
+                startActivity(intent);
+            }
+        });
+
+        userProfileButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), UserProfile.class);
                 startActivity(intent);
             }
         });
@@ -46,10 +46,11 @@ public class userProfile extends AppCompatActivity {
         trackingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), tracking.class);
+                Intent intent = new Intent(getApplicationContext(), Tracking.class);
                 startActivity(intent);
             }
         });
+
 
     }
 }

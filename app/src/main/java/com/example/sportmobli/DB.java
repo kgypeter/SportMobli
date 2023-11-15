@@ -4,16 +4,12 @@ import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.DatabaseErrorHandler;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
+public class DB extends SQLiteOpenHelper {
 
-public class db extends SQLiteOpenHelper {
-
-    public db(Context context) {
+    public DB(Context context) {
         super(context, "Userdata", null, 1);
     }
 
