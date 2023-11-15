@@ -57,14 +57,14 @@
         android:inputType="textPassword"
         android:paddingStart="20sp"
         android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@+id/cPassword"
+        app:layout_constraintBottom_toTopOf="@+id/checkPassword"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/username"
         tools:ignore="MissingConstraints,RtlSymmetry" />
 
     <EditText
-        android:id="@+id/cPassword"
+        android:id="@+id/checkPassword"
         android:layout_width="270dp"
         android:layout_height="0dp"
         android:layout_marginStart="55dp"
@@ -95,7 +95,7 @@
         app:circularflow_defaultRadius="50sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cPassword"
+        app:layout_constraintTop_toBottomOf="@+id/checkPassword"
         tools:ignore="MissingConstraints" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
