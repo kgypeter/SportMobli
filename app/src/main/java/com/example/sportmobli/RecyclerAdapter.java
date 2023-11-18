@@ -109,7 +109,6 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
             builder.show();
         }
 
-        //        todo - calculate the sum of the other fields and send them to the UI
         @SuppressLint({"SetTextI18n", "DefaultLocale"})
         private void updateTotalGrams() {
             float totalCalories = 0;
