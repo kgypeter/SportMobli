@@ -21,10 +21,10 @@
         android:textColorHint="#757272"
         app:layout_constraintBottom_toTopOf="@+id/recyclerView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.21"
+        app:layout_constraintHorizontal_bias="0.17"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.938" />
+        app:layout_constraintVertical_bias="0.977" />
 
     <Button
         android:id="@+id/button3"
@@ -109,7 +109,6 @@
         app:constraint_referenced_ids="button7,button6,button5,button3,button4" />
 
     <!-- RecyclerView setup -->
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="340dp"

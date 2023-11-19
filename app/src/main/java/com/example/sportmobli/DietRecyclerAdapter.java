@@ -2,8 +2,6 @@ package com.example.sportmobli;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
-import android.text.InputType;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
-public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyViewHolder> {
+public class DietRecyclerAdapter extends RecyclerView.Adapter<DietRecyclerAdapter.MyViewHolder> {
 
     private ArrayList<Diet> foodList;
     private ArrayList<Diet> filteredList;
@@ -27,9 +25,9 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
     private TextView totalCarbsTextView;
     private TextView totalFatsTextView;
 
-    public RecyclerAdapter(ArrayList<Diet> foodList, TextView totalGramsTextView,
-                           TextView totalCaloriesTextView, TextView totalProteinTextView,
-                           TextView totalCarbsTextView, TextView totalFatsTextView) {
+    public DietRecyclerAdapter(ArrayList<Diet> foodList, TextView totalGramsTextView,
+                               TextView totalCaloriesTextView, TextView totalProteinTextView,
+                               TextView totalCarbsTextView, TextView totalFatsTextView) {
         this.foodList = foodList;
         this.totalGramsTextView = totalGramsTextView;
         this.totalCaloriesTextView = totalCaloriesTextView;

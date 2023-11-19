@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+// todo - implement the functionality of crud operations and make data persistent in firebase DB
 public class Diet extends AppCompatActivity {
 
     private String foodName;
@@ -116,7 +117,7 @@ public class Diet extends AppCompatActivity {
                 TextView totalCarbsTextView = findViewById(R.id.totalCarbsTextView);
                 TextView totalFatsTextView = findViewById(R.id.totalFatsTextView);
 
-                RecyclerAdapter adapter = new RecyclerAdapter(getFoodList(), totalGramsTextView,
+                DietRecyclerAdapter adapter = new DietRecyclerAdapter(getFoodList(), totalGramsTextView,
                         totalCaloriesTextView, totalProteinTextView, totalCarbsTextView, totalFatsTextView);
 
                 recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
