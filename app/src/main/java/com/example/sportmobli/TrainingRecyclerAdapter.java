@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -17,7 +18,15 @@ import java.util.List;
 public class TrainingRecyclerAdapter extends RecyclerView.Adapter<TrainingRecyclerAdapter.TrainingViewHolder> {
 
     private List<TrainingSession> trainingSessions;
-    private List<TrainingSession> filteredList; // To store filtered items
+    private List<TrainingSession> filteredList;
+    private OnItemClickListener listener;
+    public interface OnItemClickListener {
+        void onItemClick(int position);
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.listener = listener;
+    }
 
     public TrainingRecyclerAdapter(List<TrainingSession> trainingSessions) {
         this.trainingSessions = trainingSessions;
@@ -33,14 +42,24 @@ public class TrainingRecyclerAdapter extends RecyclerView.Adapter<TrainingRecycl
 
     @Override
     public void onBindViewHolder(@NonNull TrainingViewHolder holder, int position) {
-        TrainingSession trainingSession = filteredList.get(position); // Get item from filtered list
-        holder.bind(trainingSession);
+        if (isNoItemFound()) {
+            holder.sessionNameTextView.setText("No item found");
+            holder.sessionDurationTextView.setText("");
+            holder.itemView.setClickable(false);
+        } else {
+            TrainingSession trainingSession = filteredList.get(position);
+            holder.bind(trainingSession);
+
+            holder.itemView.setOnClickListener(view -> {
+                if (listener != null) {
+                    listener.onItemClick(position);
+                }
+            });
+            holder.itemView.setClickable(true);
+        }
     }
 
-    @Override
-    public int getItemCount() {
-        return filteredList.size(); // Use filtered list size for item count
-    }
+
 
     public static class TrainingViewHolder extends RecyclerView.ViewHolder {
         private TextView sessionNameTextView;
@@ -53,10 +72,18 @@ public class TrainingRecyclerAdapter extends RecyclerView.Adapter<TrainingRecycl
         }
 
         @SuppressLint("SetTextI18n")
-        public void bind(TrainingSession trainingSession) {
-            sessionNameTextView.setText(trainingSession.getName());
-            sessionDurationTextView.setText("Duration: " + trainingSession.getDuration() + " minutes");
+        public void bind(TrainingSession session) {
+            sessionNameTextView.setText(session.getName());
+
+            // Calculate total duration including exercise duration and rest time
+            float totalDuration = 0;
+            for (Exercise exercise : session.getExercises()) {
+                totalDuration += exercise.getDuration() + exercise.getRestTime();
+            }
+            sessionDurationTextView.setText("Total Duration: " + totalDuration + "s");
+
         }
+
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -73,6 +100,15 @@ public class TrainingRecyclerAdapter extends RecyclerView.Adapter<TrainingRecycl
 
         notifyDataSetChanged(); // Notify adapter of data change
         Log.d("Adapter", "Filtered list size: " + filteredList.size());
+    }
+
+    @Override
+    public int getItemCount() {
+        if (isNoItemFound()) {
+            return 1; // Display only the "No item found" message
+        } else {
+            return filteredList.size();
+        }
     }
 
     public boolean isNoItemFound() {

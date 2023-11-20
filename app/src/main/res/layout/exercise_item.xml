@@ -1,8 +1,6 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/exerciseItemLayout"
+    android:id="@+id/recyclerView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
@@ -18,21 +16,30 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/sessionNameTextView"
-            android:layout_width="200dp"
+            android:id="@+id/exerciseNameTextView"
+            android:layout_width="230dp"
             android:layout_height="wrap_content"
-            android:textSize="18sp"
+            android:layout_marginBottom="4dp"
+            android:text="Exercise Name"
             android:textColor="@color/black"
-            android:textStyle="bold"
-            android:text="Training Session Name" />
+            android:textSize="18sp"
+            android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/sessionDurationTextView"
+            android:id="@+id/exerciseDurationTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="16sp"
-            android:textColor="@color/black"
-            android:text="Total Duration: 60 seconds" />
+            android:textColor="#3781C3"
+            android:text="Duration: 0 seconds"/>
+
+        <TextView
+            android:id="@+id/exerciseRestTimeTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:textColor="#3781C3"
+            android:text="Rest Time: 0 seconds"/>
     </LinearLayout>
 
     <LinearLayout
@@ -47,8 +54,8 @@
             android:id="@+id/deleteButton"
             android:layout_width="40dp"
             android:layout_height="40dp"
+            android:layout_marginRight="10dp"
             android:layout_marginBottom="10dp"
-            android:layout_marginEnd="10dp"
             android:background="@drawable/bin" />
 
         <Button

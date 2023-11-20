@@ -13,22 +13,25 @@
         android:theme="@style/Theme.SportMobli"
         tools:targetApi="31">
         <activity
+            android:name=".ExerciseListActivity"
+            android:exported="false" />
+        <activity
             android:name=".UserProfile"
             android:exported="false"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Tracking"
             android:exported="false"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Training"
             android:exported="false"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Diet"
-            android:windowSoftInputMode="adjustResize"
             android:exported="false"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".Home"
             android:exported="false"

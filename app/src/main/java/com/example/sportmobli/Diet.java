@@ -17,6 +17,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 // todo - implement the functionality of crud operations and make data persistent in firebase DB
+//  - hide delete and edit buttons when there is no search result for a session
 public class Diet extends AppCompatActivity {
 
     private String foodName;
