@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -100,11 +101,41 @@ public class Diet extends AppCompatActivity {
             Button userProfileButton = findViewById(R.id.button6);
             Button trackingButton = findViewById(R.id.button7);
 
-            // OnClickListeners for the buttons
-            lolButton.setOnClickListener(view -> startActivity(new Intent(getApplicationContext(), Home.class)));
-            trainingButton.setOnClickListener(view -> startActivity(new Intent(getApplicationContext(), Training.class)));
-            userProfileButton.setOnClickListener(view -> startActivity(new Intent(getApplicationContext(), UserProfile.class)));
-            trackingButton.setOnClickListener(view -> startActivity(new Intent(getApplicationContext(), Tracking.class)));
+            trainingButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(getApplicationContext(), Training.class);
+                    startActivity(intent);
+                    overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
+                }
+            });
+
+            userProfileButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(getApplicationContext(), UserProfile.class);
+                    startActivity(intent);
+                    overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
+                }
+            });
+
+            trackingButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(getApplicationContext(), Tracking.class);
+                    startActivity(intent);
+                    overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
+                }
+            });
+
+            lolButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(getApplicationContext(), Home.class);
+                    startActivity(intent);
+                    overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
+                }
+            });
 
             // Set up for the RecyclerView and Adapter
             RecyclerView recyclerView = findViewById(R.id.recyclerView);

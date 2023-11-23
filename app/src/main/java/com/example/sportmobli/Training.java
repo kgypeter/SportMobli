@@ -75,10 +75,42 @@ public class Training extends AppCompatActivity implements TrainingRecyclerAdapt
         Button userProfileButton = findViewById(R.id.button6);
         Button trackingButton = findViewById(R.id.button7);
 
-        lolButton.setOnClickListener(view -> startActivity(new Intent(getApplicationContext(), Home.class)));
-        dietButton.setOnClickListener(view -> startActivity(new Intent(getApplicationContext(), Diet.class)));
-        userProfileButton.setOnClickListener(view -> startActivity(new Intent(getApplicationContext(), UserProfile.class)));
-        trackingButton.setOnClickListener(view -> startActivity(new Intent(getApplicationContext(), Tracking.class)));
+        lolButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), Home.class);
+                startActivity(intent);
+                overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
+            }
+        });
+
+        dietButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), Diet.class);
+                startActivity(intent);
+                overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
+            }
+        });
+
+        userProfileButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), UserProfile.class);
+                startActivity(intent);
+                overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
+            }
+        });
+
+        trackingButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), Tracking.class);
+                startActivity(intent);
+                overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
+            }
+        });
+
 
         adapter = new TrainingRecyclerAdapter(trainingSessions);
         recyclerView = findViewById(R.id.recyclerView);
@@ -141,9 +173,11 @@ public class Training extends AppCompatActivity implements TrainingRecyclerAdapt
 
         Intent intent = new Intent(this, ExerciseListActivity.class);
         intent.putParcelableArrayListExtra("exercises", (ArrayList<? extends Parcelable>) clickedSession.getExercises());
-        startActivity(intent);
-    }
 
+        // Add transition animation
+        startActivity(intent);
+        overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
+    }
 
     private void filterTrainingSessions(String query) {
         adapter.filterList(query);

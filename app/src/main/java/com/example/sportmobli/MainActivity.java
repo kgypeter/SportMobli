@@ -40,10 +40,13 @@ public class MainActivity extends AppCompatActivity {
     private void openSignup() {
         Intent intent = new Intent(this, Signup.class);
         startActivity(intent);
+        overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
     }
 
     private void openLogin() {
         Intent intent = new Intent(this, Login.class);
         startActivity(intent);
+        overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
     }
+
 }

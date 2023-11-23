@@ -54,8 +54,10 @@ public class Signup extends AppCompatActivity {
                             sharedPref.edit().putString("username", user).apply();
                             sharedPref.edit().putString("password", pass).apply();
                             Toast.makeText(Signup.this, "Sign up successful!", Toast.LENGTH_SHORT).show();
+
                             Intent intent = new Intent(getApplicationContext(), Login.class);
                             startActivity(intent);
+                            overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
                         } else {
                             Toast.makeText(Signup.this, "Please try again!", Toast.LENGTH_SHORT).show();
                         }

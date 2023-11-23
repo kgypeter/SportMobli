@@ -46,8 +46,10 @@ public class Login extends AppCompatActivity {
 
                         if (DB.checkUsernamePassword(user, pass) && user.equals(storedUser) && pass.equals(storedPass)) {
                             Toast.makeText(Login.this, "Log in successful!", Toast.LENGTH_SHORT).show();
+
                             Intent intent = new Intent(getApplicationContext(), Home.class);
                             startActivity(intent);
+                            overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
                         } else {
                             Toast.makeText(Login.this, "Invalid username or password!", Toast.LENGTH_SHORT).show();
                         }
