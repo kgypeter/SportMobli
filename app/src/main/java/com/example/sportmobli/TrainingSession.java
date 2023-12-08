@@ -69,7 +69,7 @@ public class TrainingSession implements Parcelable {
         this.exercises = exercises;
     }
 
-    // add an exercise to the sesison
+    // add an exercise to the sessison
     public void addExercise(Exercise exercise) {
         exercises.add(exercise);
     }

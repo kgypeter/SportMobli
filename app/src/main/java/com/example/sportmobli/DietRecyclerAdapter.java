@@ -62,6 +62,16 @@ public class DietRecyclerAdapter extends RecyclerView.Adapter<DietRecyclerAdapte
             });
         }
 
+        public void hideButtons() {
+            itemView.findViewById(R.id.deleteButton).setVisibility(View.GONE);
+            itemView.findViewById(R.id.modifyButton).setVisibility(View.GONE);
+        }
+
+        public void showButtons() {
+            itemView.findViewById(R.id.deleteButton).setVisibility(View.VISIBLE);
+            itemView.findViewById(R.id.modifyButton).setVisibility(View.VISIBLE);
+        }
+
         @SuppressLint("SetTextI18n")
         private void showDetailsDialog(Diet diet) {
             AlertDialog.Builder builder = new AlertDialog.Builder(itemView.getContext());
@@ -159,6 +169,7 @@ public class DietRecyclerAdapter extends RecyclerView.Adapter<DietRecyclerAdapte
             holder.proteinTxt.setText("");
             holder.carbsTxt.setText("");
             holder.fatsTxt.setText("");
+            holder.hideButtons(); // Hide buttons when showing "No item found"
             holder.itemView.setClickable(false);
         } else {
             Diet diet = filteredList.get(position);
@@ -167,6 +178,7 @@ public class DietRecyclerAdapter extends RecyclerView.Adapter<DietRecyclerAdapte
             holder.proteinTxt.setText("Protein: " + diet.getProtein() + "g");
             holder.carbsTxt.setText("Carbs: " + diet.getCarbohydrates() + "g");
             holder.fatsTxt.setText("Fats: " + diet.getFats() + "g");
+            holder.showButtons(); // Show buttons when displaying regular list items
             holder.itemView.setClickable(true);
         }
     }

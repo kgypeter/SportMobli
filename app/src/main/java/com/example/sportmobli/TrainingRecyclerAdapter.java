@@ -40,15 +40,18 @@ public class TrainingRecyclerAdapter extends RecyclerView.Adapter<TrainingRecycl
         return new TrainingViewHolder(view);
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull TrainingViewHolder holder, int position) {
         if (isNoItemFound()) {
             holder.sessionNameTextView.setText("No item found");
             holder.sessionDurationTextView.setText("");
+            holder.hideButtons(); // Hide buttons when showing "No item found"
             holder.itemView.setClickable(false);
         } else {
             TrainingSession trainingSession = filteredList.get(position);
             holder.bind(trainingSession);
+            holder.showButtons(); // Show buttons when displaying regular list items
 
             holder.itemView.setOnClickListener(view -> {
                 if (listener != null) {
@@ -59,8 +62,6 @@ public class TrainingRecyclerAdapter extends RecyclerView.Adapter<TrainingRecycl
         }
     }
 
-
-
     public static class TrainingViewHolder extends RecyclerView.ViewHolder {
         private TextView sessionNameTextView;
         private TextView sessionDurationTextView;
@@ -69,6 +70,16 @@ public class TrainingRecyclerAdapter extends RecyclerView.Adapter<TrainingRecycl
             super(itemView);
             sessionNameTextView = itemView.findViewById(R.id.sessionNameTextView);
             sessionDurationTextView = itemView.findViewById(R.id.sessionDurationTextView);
+        }
+
+        public void hideButtons() {
+            itemView.findViewById(R.id.deleteButton).setVisibility(View.GONE);
+            itemView.findViewById(R.id.modifyButton).setVisibility(View.GONE);
+        }
+
+        public void showButtons() {
+            itemView.findViewById(R.id.deleteButton).setVisibility(View.VISIBLE);
+            itemView.findViewById(R.id.modifyButton).setVisibility(View.VISIBLE);
         }
 
         @SuppressLint("SetTextI18n")
