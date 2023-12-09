@@ -7,13 +7,16 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class ExerciseListActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private ExerciseRecyclerAdapter adapter;
+
+    private ArrayList<Exercise> exercisesList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,9 +27,19 @@ public class ExerciseListActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         if (intent != null && intent.hasExtra("exercises")) {
-            ArrayList<Exercise> exercisesList = intent.getParcelableArrayListExtra("exercises");
+            exercisesList = intent.getParcelableArrayListExtra("exercises"); // Assigning to class-level variable
             setupRecyclerView(exercisesList);
         }
+
+        Button startButton = findViewById(R.id.startButton);
+        startButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent chronometerIntent = new Intent(ExerciseListActivity.this, ChronometerActivity.class);
+                chronometerIntent.putParcelableArrayListExtra("exercises", exercisesList);
+                startActivity(chronometerIntent);
+            }
+        });
     }
 
     private void setupRecyclerView(ArrayList<Exercise> exercisesList) {

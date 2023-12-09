@@ -82,18 +82,23 @@ public class TrainingRecyclerAdapter extends RecyclerView.Adapter<TrainingRecycl
             itemView.findViewById(R.id.modifyButton).setVisibility(View.VISIBLE);
         }
 
-        @SuppressLint("SetTextI18n")
+        @SuppressLint({"SetTextI18n", "DefaultLocale"})
         public void bind(TrainingSession session) {
             sessionNameTextView.setText(session.getName());
 
             // Calculate total duration including exercise duration and rest time
-            float totalDuration = 0;
+            float totalDurationSeconds = 0;
             for (Exercise exercise : session.getExercises()) {
-                totalDuration += exercise.getDuration() + exercise.getRestTime();
+                totalDurationSeconds += exercise.getDuration() + exercise.getRestTime();
             }
-            sessionDurationTextView.setText("Total Duration: " + totalDuration + "s");
 
+            // Convert total duration from seconds to minutes
+            float totalDurationMinutes = totalDurationSeconds / 60;
+
+            // Display total duration in minutes with appropriate formatting
+            sessionDurationTextView.setText("Total Duration: " + String.format("%.2f min", totalDurationMinutes));
         }
+
 
     }
 

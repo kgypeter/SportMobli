@@ -12,15 +12,16 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class ExerciseRecyclerAdapter extends RecyclerView.Adapter<ExerciseRecyclerAdapter.ExerciseViewHolder> {
 
-    private RecyclerView recyclerView;
-    private ExerciseRecyclerAdapter adapter;
-    private ArrayList<Exercise> exercisesList;
+    private final ArrayList<Exercise> exercisesList;
 
     public ExerciseRecyclerAdapter(List<Exercise> exerciseList) {
-        this.exercisesList = (ArrayList<Exercise>) exerciseList;
+        this.exercisesList = new ArrayList<>(exerciseList);
+    }
+
+    public ArrayList<Exercise> getExercisesList() {
+        return exercisesList;
     }
 
     @NonNull
@@ -42,28 +43,29 @@ public class ExerciseRecyclerAdapter extends RecyclerView.Adapter<ExerciseRecycl
     }
 
     public static class ExerciseViewHolder extends RecyclerView.ViewHolder {
-        private TextView exerciseNameTextView;
-        private TextView exerciseDurationTextView;
+        private final TextView exerciseNameTextView;
+        private final TextView exerciseDurationTextView;
+        private final TextView exerciseRestTimeTextView;
 
         public ExerciseViewHolder(View itemView) {
             super(itemView);
             exerciseNameTextView = itemView.findViewById(R.id.exerciseNameTextView);
             exerciseDurationTextView = itemView.findViewById(R.id.exerciseDurationTextView);
+            exerciseRestTimeTextView = itemView.findViewById(R.id.exerciseRestTimeTextView);
         }
 
+        @SuppressLint("SetTextI18n")
         public void bind(Exercise exercise) {
             exerciseNameTextView.setText(exercise.getName());
             exerciseDurationTextView.setText("Duration: " + exercise.getDuration() + " seconds");
+            exerciseRestTimeTextView.setText("Rest Time: " + exercise.getRestTime() + " seconds");
         }
     }
 
-    // Method to update the exercise list without blocking the RecyclerView
-    private void updateExerciseList(List<Exercise> newExercises) {
-        exercisesList.clear(); // Clear the existing list
-        exercisesList.addAll(newExercises); // Add updated exercises
-
-        if (adapter != null) {
-            adapter.updateExerciseList(exercisesList); // Update the adapter
-        }
-    }
+//    @SuppressLint("NotifyDataSetChanged")
+//    public void updateExerciseList(List<Exercise> newExercises) {
+//        exercisesList.clear(); // Clear the existing list
+//        exercisesList.addAll(newExercises); // Add updated exercises
+//        notifyDataSetChanged(); // Notify RecyclerView about the change
+//    }
 }

@@ -18,6 +18,7 @@ import android.widget.EditText;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Random;
 
 
 // todo - implement the functionality of crud operations and make data persistent in firebase DB
@@ -162,6 +163,17 @@ public class Training extends AppCompatActivity implements TrainingRecyclerAdapt
             trainingSessions.add(session);
         }
 
+        Random random = new Random();
+        List<Exercise> session11Exercises = new ArrayList<>();
+        for (int exerciseNumber = 1; exerciseNumber <= 10; exerciseNumber++) {
+            int duration = random.nextInt(4) + 3; // Generates random duration between 3 and 6 seconds
+            int rest = random.nextInt(4) + 3; // Generates random rest time between 3 and 6 seconds
+
+            session11Exercises.add(new Exercise("Exercise " + exerciseNumber, duration, rest));
+        }
+        TrainingSession session11 = new TrainingSession("Session 11");
+        session11.setExercises(session11Exercises);
+        trainingSessions.add(session11);
         if (adapter != null) {
             adapter.notifyDataSetChanged();
         }
