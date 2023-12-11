@@ -1,11 +1,14 @@
-package com.example.sportmobli;
-
-import androidx.appcompat.app.AppCompatActivity;
+package com.example.sportmobli.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.sportmobli.R;
+import com.example.sportmobli.model.Diet;
 
 public class Tracking extends AppCompatActivity {
 

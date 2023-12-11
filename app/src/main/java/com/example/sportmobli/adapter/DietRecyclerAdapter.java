@@ -1,4 +1,4 @@
-package com.example.sportmobli;
+package com.example.sportmobli.adapter;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
@@ -11,6 +11,9 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.sportmobli.R;
+import com.example.sportmobli.model.Diet;
 
 import java.util.ArrayList;
 

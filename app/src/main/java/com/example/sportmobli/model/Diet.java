@@ -1,4 +1,4 @@
-package com.example.sportmobli;
+package com.example.sportmobli.model;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -14,6 +14,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import com.example.sportmobli.activity.Tracking;
+import com.example.sportmobli.activity.Training;
+import com.example.sportmobli.activity.UserProfile;
+import com.example.sportmobli.adapter.DietRecyclerAdapter;
+import com.example.sportmobli.activity.Home;
+import com.example.sportmobli.R;
 
 import java.util.ArrayList;
 

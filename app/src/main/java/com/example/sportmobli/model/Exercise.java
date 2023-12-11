@@ -1,4 +1,4 @@
-package com.example.sportmobli;
+package com.example.sportmobli.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;

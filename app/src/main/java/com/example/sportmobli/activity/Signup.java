@@ -1,4 +1,4 @@
-package com.example.sportmobli;
+package com.example.sportmobli.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
@@ -10,11 +10,14 @@ import android.widget.EditText;
 import android.widget.Toast;
 import android.content.SharedPreferences;
 
+import com.example.sportmobli.util.DB;
+import com.example.sportmobli.R;
+
 public class Signup extends AppCompatActivity {
 
     EditText username, password, cPassword;
     Button signup;
-    com.example.sportmobli.DB DB;
+    com.example.sportmobli.util.DB DB;
     SharedPreferences sharedPref;
 
     @Override

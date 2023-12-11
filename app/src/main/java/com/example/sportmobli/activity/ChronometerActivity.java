@@ -1,4 +1,4 @@
-package com.example.sportmobli;
+package com.example.sportmobli.activity;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -10,6 +10,9 @@ import android.widget.Chronometer;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.sportmobli.R;
+import com.example.sportmobli.model.Exercise;
 
 import java.util.ArrayList;
 

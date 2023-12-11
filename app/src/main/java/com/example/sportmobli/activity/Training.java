@@ -1,4 +1,4 @@
-package com.example.sportmobli;
+package com.example.sportmobli.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -10,14 +10,22 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.example.sportmobli.activity.ExerciseListActivity;
+import com.example.sportmobli.activity.Home;
+import com.example.sportmobli.R;
+import com.example.sportmobli.activity.Tracking;
+import com.example.sportmobli.activity.UserProfile;
+import com.example.sportmobli.adapter.TrainingRecyclerAdapter;
+import com.example.sportmobli.model.Diet;
+import com.example.sportmobli.model.Exercise;
+import com.example.sportmobli.model.TrainingSession;
+
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Random;
 
 
@@ -136,6 +144,8 @@ public class Training extends AppCompatActivity implements TrainingRecyclerAdapt
         });
     }
 
+
+    // Populate training with sessions and exercises for each session
     @SuppressLint("NotifyDataSetChanged")
     private void initializeTrainingSessions() {
         List<Exercise> session1Exercises = new ArrayList<>();

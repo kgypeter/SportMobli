@@ -1,16 +1,17 @@
-package com.example.sportmobli;
+package com.example.sportmobli.adapter;
 
 import android.annotation.SuppressLint;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.sportmobli.TrainingSession;
+import com.example.sportmobli.R;
+import com.example.sportmobli.model.Exercise;
+import com.example.sportmobli.model.TrainingSession;
 
 import java.util.ArrayList;
 import java.util.List;
