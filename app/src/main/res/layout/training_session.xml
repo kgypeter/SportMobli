@@ -2,7 +2,7 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/recyclerView"
+    android:id="@+id/exerciseItemLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
@@ -18,50 +18,21 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/textView5"
-            android:layout_width="wrap_content"
+            android:id="@+id/sessionNameTextView"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:textSize="18sp"
             android:textColor="@color/black"
             android:textStyle="bold"
-            android:text="Chicken" />
+            android:text="Training Session Name" />
 
         <TextView
-            android:id="@+id/caloriesTextView"
+            android:id="@+id/sessionDurationTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="14sp"
+            android:textSize="16sp"
             android:textColor="@color/black"
-            android:textStyle="bold"
-            android:text="Calories: 100" />
-
-        <TextView
-            android:id="@+id/proteinTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="14sp"
-            android:textColor="@color/black"
-            android:textStyle="bold"
-            android:text="Protein: 10g" />
-
-        <TextView
-            android:id="@+id/carbsTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="14sp"
-            android:textColor="@color/black"
-            android:textStyle="bold"
-            android:text="Carbs: 20g" />
-
-        <TextView
-            android:id="@+id/fatsTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="14sp"
-            android:textColor="@color/black"
-            android:textStyle="bold"
-            android:text="Fats: 5g" />
-
+            android:text="Total Duration: 60 seconds" />
     </LinearLayout>
 
     <LinearLayout
@@ -77,7 +48,7 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_marginBottom="10dp"
-            android:layout_marginRight="10dp"
+            android:layout_marginEnd="10dp"
             android:background="@drawable/bin" />
 
         <Button
@@ -86,6 +57,5 @@
             android:layout_height="40dp"
             android:background="@drawable/pencil" />
     </LinearLayout>
-
 
 </LinearLayout>

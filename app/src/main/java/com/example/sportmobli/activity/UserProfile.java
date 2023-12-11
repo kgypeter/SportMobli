@@ -1,4 +1,4 @@
-package com.example.sportmobli;
+package com.example.sportmobli.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -7,23 +7,27 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-public class Tracking extends AppCompatActivity {
+import com.example.sportmobli.R;
+import com.example.sportmobli.model.Diet;
+
+public class UserProfile extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_tracking);
+        setContentView(R.layout.activity_user_profile);
 
         Button lolButton = findViewById(R.id.button3);
-        Button dietButton = findViewById(R.id.button5);
-        Button userProfileButton = findViewById(R.id.button6);
+        Button trainingButton = findViewById(R.id.button4);
         Button trackingButton = findViewById(R.id.button7);
+        Button dietButton = findViewById(R.id.button5);
 
         lolButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), Home.class);
                 startActivity(intent);
+                overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
             }
         });
 
@@ -32,14 +36,16 @@ public class Tracking extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), Diet.class);
                 startActivity(intent);
+                overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
             }
         });
 
-        userProfileButton.setOnClickListener(new View.OnClickListener() {
+        trainingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), UserProfile.class);
+                Intent intent = new Intent(getApplicationContext(), Training.class);
                 startActivity(intent);
+                overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
             }
         });
 
@@ -48,8 +54,8 @@ public class Tracking extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), Tracking.class);
                 startActivity(intent);
+                overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
             }
         });
-
     }
 }

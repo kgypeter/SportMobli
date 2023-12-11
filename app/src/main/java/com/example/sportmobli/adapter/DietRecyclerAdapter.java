@@ -1,9 +1,7 @@
-package com.example.sportmobli;
+package com.example.sportmobli.adapter;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
-import android.text.InputType;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,9 +12,12 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.sportmobli.R;
+import com.example.sportmobli.model.Diet;
+
 import java.util.ArrayList;
 
-public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyViewHolder> {
+public class DietRecyclerAdapter extends RecyclerView.Adapter<DietRecyclerAdapter.MyViewHolder> {
 
     private ArrayList<Diet> foodList;
     private ArrayList<Diet> filteredList;
@@ -27,9 +28,9 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
     private TextView totalCarbsTextView;
     private TextView totalFatsTextView;
 
-    public RecyclerAdapter(ArrayList<Diet> foodList, TextView totalGramsTextView,
-                           TextView totalCaloriesTextView, TextView totalProteinTextView,
-                           TextView totalCarbsTextView, TextView totalFatsTextView) {
+    public DietRecyclerAdapter(ArrayList<Diet> foodList, TextView totalGramsTextView,
+                               TextView totalCaloriesTextView, TextView totalProteinTextView,
+                               TextView totalCarbsTextView, TextView totalFatsTextView) {
         this.foodList = foodList;
         this.totalGramsTextView = totalGramsTextView;
         this.totalCaloriesTextView = totalCaloriesTextView;
@@ -62,6 +63,16 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
                 clickedDiet = foodList.get(getAdapterPosition());
                 showDetailsDialog(clickedDiet);
             });
+        }
+
+        public void hideButtons() {
+            itemView.findViewById(R.id.deleteButton).setVisibility(View.GONE);
+            itemView.findViewById(R.id.modifyButton).setVisibility(View.GONE);
+        }
+
+        public void showButtons() {
+            itemView.findViewById(R.id.deleteButton).setVisibility(View.VISIBLE);
+            itemView.findViewById(R.id.modifyButton).setVisibility(View.VISIBLE);
         }
 
         @SuppressLint("SetTextI18n")
@@ -109,7 +120,6 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
             builder.show();
         }
 
-        //        todo - calculate the sum of the other fields and send them to the UI
         @SuppressLint({"SetTextI18n", "DefaultLocale"})
         private void updateTotalGrams() {
             float totalCalories = 0;
@@ -162,6 +172,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
             holder.proteinTxt.setText("");
             holder.carbsTxt.setText("");
             holder.fatsTxt.setText("");
+            holder.hideButtons(); // Hide buttons when showing "No item found"
             holder.itemView.setClickable(false);
         } else {
             Diet diet = filteredList.get(position);
@@ -170,6 +181,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
             holder.proteinTxt.setText("Protein: " + diet.getProtein() + "g");
             holder.carbsTxt.setText("Carbs: " + diet.getCarbohydrates() + "g");
             holder.fatsTxt.setText("Fats: " + diet.getFats() + "g");
+            holder.showButtons(); // Show buttons when displaying regular list items
             holder.itemView.setClickable(true);
         }
     }

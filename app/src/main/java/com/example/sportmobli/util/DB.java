@@ -1,4 +1,4 @@
-package com.example.sportmobli;
+package com.example.sportmobli.util;
 
 import android.annotation.SuppressLint;
 import android.content.ContentValues;
