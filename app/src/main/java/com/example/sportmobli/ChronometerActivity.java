@@ -52,6 +52,18 @@ public class ChronometerActivity extends AppCompatActivity {
                 resumeExerciseSession();
             }
         });
+
+        pauseButton.setOnClickListener(v -> {
+            if (!isPaused) {
+                pauseExerciseSession();
+                // Change the text to "Resume" when paused
+                pauseButton.setText("Resume");
+            } else {
+                resumeExerciseSession();
+                // Change the text back to "Pause" when resumed
+                pauseButton.setText("Pause");
+            }
+        });
     }
 
     private void startExerciseSession() {
