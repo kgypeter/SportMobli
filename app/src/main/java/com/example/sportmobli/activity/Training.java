@@ -1,9 +1,5 @@
 package com.example.sportmobli.activity;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,16 +9,23 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
-import com.example.sportmobli.activity.ExerciseListActivity;
-import com.example.sportmobli.activity.Home;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.sportmobli.R;
-import com.example.sportmobli.activity.Tracking;
-import com.example.sportmobli.activity.UserProfile;
 import com.example.sportmobli.adapter.TrainingRecyclerAdapter;
 import com.example.sportmobli.model.Diet;
 import com.example.sportmobli.model.Exercise;
 import com.example.sportmobli.model.TrainingSession;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,6 +49,9 @@ public class Training extends AppCompatActivity implements TrainingRecyclerAdapt
     private RecyclerView recyclerView;
     private EditText searchEditText;
     private TrainingRecyclerAdapter adapter;
+
+    private FirebaseDatabase db;
+    private DatabaseReference trainingSessionReference;
 
     public Training() {
     }
@@ -73,11 +79,14 @@ public class Training extends AppCompatActivity implements TrainingRecyclerAdapt
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        db = FirebaseDatabase.getInstance();
+        trainingSessionReference = db.getReference("trainingSession");
+
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_training);
-
-        trainingSessions = new ArrayList<>();
-        initializeTrainingSessions();
+        getSessionsFromDatabase();
+//        initializeTrainingSessions();
 
         Button lolButton = findViewById(R.id.button3);
         Button dietButton = findViewById(R.id.button5);
@@ -144,6 +153,19 @@ public class Training extends AppCompatActivity implements TrainingRecyclerAdapt
         });
     }
 
+    private void getSessionsFromDatabase() {
+        trainingSessionReference.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                if (!task.isSuccessful()) {
+                    Toast.makeText(Training.this, "Error fetching sessions!", Toast.LENGTH_SHORT).show();
+                } else {
+                    List<TrainingSession> trainingSessionList = task.getResult().getValue(List.class);
+                    trainingSessions = trainingSessionList;
+                }
+            }
+        });
+    }
 
     // Populate training with sessions and exercises for each session
     @SuppressLint("NotifyDataSetChanged")

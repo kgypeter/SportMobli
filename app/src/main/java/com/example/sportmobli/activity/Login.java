@@ -58,8 +58,6 @@ public class Login extends AppCompatActivity {
 
                 } else {
 
-//                        String storedUser = sharedPref.getString("username", "");
-//                        String storedPass = sharedPref.getString("password", "");
 
                     userReference.child(usernameString).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                         @Override
