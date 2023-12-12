@@ -1,10 +1,7 @@
 package com.example.sportmobli.activity;
 
 import android.annotation.SuppressLint;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.text.Editable;
@@ -59,7 +56,6 @@ public class Training extends AppCompatActivity implements TrainingRecyclerAdapt
     private FirebaseDatabase db;
     private DatabaseReference trainingSessionReference;
 
-    private SharedPreferences sharedPreferences;
 
     public Training() {
     }
@@ -86,12 +82,17 @@ public class Training extends AppCompatActivity implements TrainingRecyclerAdapt
     }
 
     @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        getSessionsFromDatabase();
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         privateTrainingSessions = new ArrayList<>();
         publicTrainingSessions = new ArrayList<>();
         db = FirebaseDatabase.getInstance();
         trainingSessionReference = db.getReference("TrainingSession");
-        sharedPreferences = getSharedPreferences("user_info", MODE_PRIVATE);
 
 
         super.onCreate(savedInstanceState);
@@ -167,21 +168,8 @@ public class Training extends AppCompatActivity implements TrainingRecyclerAdapt
     }
 
     private void openAlertDialog() {
-        // Create an AlertDialog.Builder instance
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-
-        // Set the dialog title, message, and other properties
-        builder.setTitle("Alert Dialog")
-                .setMessage("This is a simple alert dialog.")
-                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.dismiss();
-                    }
-                });
-
-        // Create and show the dialog
-        AlertDialog dialog = builder.create();
-        dialog.show();
+        AddTrainingDialog addTrainingDialog = new AddTrainingDialog(this);
+        addTrainingDialog.show();
     }
 
     private void getSessionsFromDatabase() {
