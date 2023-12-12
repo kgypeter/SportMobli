@@ -18,10 +18,15 @@ public class TrainingSession implements Parcelable {
             return new TrainingSession[size];
         }
     };
+
+
     private String name;
     private List<Exercise> exercises;
     private float duration;
     private String owner;
+
+    public TrainingSession() {
+    }
 
     protected TrainingSession(Parcel in) {
         name = in.readString();
@@ -29,16 +34,15 @@ public class TrainingSession implements Parcelable {
 
     }
 
+
     public TrainingSession(String name) {
         this.name = name;
-        this.duration = 0;
         this.exercises = new ArrayList<>();
         this.owner = "public";
     }
 
     public TrainingSession(String name, String owner) {
         this.name = name;
-        this.duration = 0;
         this.exercises = new ArrayList<>();
         this.owner = owner;
     }
@@ -60,14 +64,6 @@ public class TrainingSession implements Parcelable {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public float getDuration() {
-        return duration;
-    }
-
-    public void setDuration(float duration) {
-        this.duration = duration;
     }
 
     public List<Exercise> getExercises() {
