@@ -4,9 +4,23 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class Exercise implements Parcelable {
+    public static final Creator<Exercise> CREATOR = new Creator<Exercise>() {
+        @Override
+        public Exercise createFromParcel(Parcel in) {
+            return new Exercise(in);
+        }
+
+        @Override
+        public Exercise[] newArray(int size) {
+            return new Exercise[size];
+        }
+    };
     private String name;
     private float duration; // Duration of the exercise in seconds
     private float restTime; // Rest time after the exercise in seconds
+
+    public Exercise() {
+    }
 
     public Exercise(String name, float duration, float restTime) {
         this.name = name;
@@ -19,18 +33,6 @@ public class Exercise implements Parcelable {
         duration = in.readFloat();
         restTime = in.readFloat();
     }
-
-    public static final Creator<Exercise> CREATOR = new Creator<Exercise>() {
-        @Override
-        public Exercise createFromParcel(Parcel in) {
-            return new Exercise(in);
-        }
-
-        @Override
-        public Exercise[] newArray(int size) {
-            return new Exercise[size];
-        }
-    };
 
     public String getName() {
         return name;

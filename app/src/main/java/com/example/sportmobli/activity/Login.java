@@ -1,7 +1,6 @@
 package com.example.sportmobli.activity;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -14,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.sportmobli.R;
 import com.example.sportmobli.model.User;
+import com.example.sportmobli.util.AppPreferences;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
@@ -32,7 +32,7 @@ public class Login extends AppCompatActivity {
     FirebaseDatabase db;
 
     DatabaseReference userReference;
-    SharedPreferences sharedPref;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,8 +44,6 @@ public class Login extends AppCompatActivity {
         password = findViewById(R.id.password);
         Login = findViewById(R.id.log_in);
         FirebaseDatabase db = FirebaseDatabase.getInstance();
-
-        sharedPref = getSharedPreferences("user_info", MODE_PRIVATE);
 
         Login.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -72,6 +70,8 @@ public class Login extends AppCompatActivity {
                                 String hashedPassword = DigestUtils.sha256Hex(passwordString);
                                 if (user.getPassword().equals(hashedPassword)) {
                                     Toast.makeText(Login.this, "Log in successful!", Toast.LENGTH_SHORT).show();
+                                    AppPreferences.saveUsername(Login.this, user.getUsername());
+
                                     Intent intent = new Intent(getApplicationContext(), Home.class);
                                     startActivity(intent);
                                 } else {

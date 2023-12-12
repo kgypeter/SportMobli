@@ -1,7 +1,10 @@
 package com.example.sportmobli.activity;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.text.Editable;
@@ -9,7 +12,7 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,11 +24,12 @@ import com.example.sportmobli.adapter.TrainingRecyclerAdapter;
 import com.example.sportmobli.model.Diet;
 import com.example.sportmobli.model.Exercise;
 import com.example.sportmobli.model.TrainingSession;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
+import com.example.sportmobli.util.AppPreferences;
 import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,7 +49,9 @@ import java.util.Random;
 public class Training extends AppCompatActivity implements TrainingRecyclerAdapter.OnItemClickListener {
 
     private String name;
-    private List<TrainingSession> trainingSessions;
+
+    private List<TrainingSession> privateTrainingSessions;
+    private List<TrainingSession> publicTrainingSessions;
     private RecyclerView recyclerView;
     private EditText searchEditText;
     private TrainingRecyclerAdapter adapter;
@@ -53,12 +59,14 @@ public class Training extends AppCompatActivity implements TrainingRecyclerAdapt
     private FirebaseDatabase db;
     private DatabaseReference trainingSessionReference;
 
+    private SharedPreferences sharedPreferences;
+
     public Training() {
     }
 
     public Training(String trainingName, List<TrainingSession> trainingSessions) {
         this.name = trainingName;
-        this.trainingSessions = trainingSessions;
+        this.privateTrainingSessions = trainingSessions;
     }
 
     public String getName() {
@@ -70,17 +78,20 @@ public class Training extends AppCompatActivity implements TrainingRecyclerAdapt
     }
 
     public List<TrainingSession> getExercises() {
-        return trainingSessions;
+        return privateTrainingSessions;
     }
 
     public void setExercises(List<TrainingSession> trainingSessions) {
-        this.trainingSessions = trainingSessions;
+        this.privateTrainingSessions = trainingSessions;
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        privateTrainingSessions = new ArrayList<>();
+        publicTrainingSessions = new ArrayList<>();
         db = FirebaseDatabase.getInstance();
-        trainingSessionReference = db.getReference("trainingSession");
+        trainingSessionReference = db.getReference("TrainingSession");
+        sharedPreferences = getSharedPreferences("user_info", MODE_PRIVATE);
 
 
         super.onCreate(savedInstanceState);
@@ -92,6 +103,7 @@ public class Training extends AppCompatActivity implements TrainingRecyclerAdapt
         Button dietButton = findViewById(R.id.button5);
         Button userProfileButton = findViewById(R.id.button6);
         Button trackingButton = findViewById(R.id.button7);
+        ImageView addButton = findViewById(R.id.addButton);
 
         lolButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -129,12 +141,13 @@ public class Training extends AppCompatActivity implements TrainingRecyclerAdapt
             }
         });
 
+        addButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openAlertDialog();
+            }
+        });
 
-        adapter = new TrainingRecyclerAdapter(trainingSessions);
-        recyclerView = findViewById(R.id.recyclerView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(adapter);
-        adapter.setOnItemClickListener(this);
 
         searchEditText = findViewById(R.id.searchEditText);
         searchEditText.addTextChangedListener(new TextWatcher() {
@@ -153,18 +166,83 @@ public class Training extends AppCompatActivity implements TrainingRecyclerAdapt
         });
     }
 
+    private void openAlertDialog() {
+        // Create an AlertDialog.Builder instance
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        // Set the dialog title, message, and other properties
+        builder.setTitle("Alert Dialog")
+                .setMessage("This is a simple alert dialog.")
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.dismiss();
+                    }
+                });
+
+        // Create and show the dialog
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
     private void getSessionsFromDatabase() {
-        trainingSessionReference.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+
+        trainingSessionReference.child("public").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onComplete(@NonNull Task<DataSnapshot> task) {
-                if (!task.isSuccessful()) {
-                    Toast.makeText(Training.this, "Error fetching sessions!", Toast.LENGTH_SHORT).show();
-                } else {
-                    List<TrainingSession> trainingSessionList = task.getResult().getValue(List.class);
-                    trainingSessions = trainingSessionList;
-                }
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                publicTrainingSessions = extractTrainingSessions(snapshot);
+                getPrivateSessions();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
             }
         });
+
+    }
+
+    public void getPrivateSessions() {
+        String currentUsername = AppPreferences.getUsername(Training.this);
+        trainingSessionReference.child(currentUsername).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                privateTrainingSessions = extractTrainingSessions(snapshot);
+                startAdapter();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    public void startAdapter() {
+        List<TrainingSession> trainingSessions = privateTrainingSessions;
+        trainingSessions.addAll(publicTrainingSessions);
+        adapter = new TrainingRecyclerAdapter(trainingSessions);
+        recyclerView = findViewById(R.id.recyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(Training.this));
+        recyclerView.setAdapter(adapter);
+        adapter.setOnItemClickListener(Training.this);
+    }
+
+    public List<TrainingSession> extractTrainingSessions(DataSnapshot snapshot) {
+        List<TrainingSession> trainingSessions = new ArrayList<>();
+        for (DataSnapshot sessionSnapshot : snapshot.getChildren()) {
+            TrainingSession trainingSession = new TrainingSession();
+            trainingSession.setName(sessionSnapshot.child("name").getValue(String.class));
+
+            List<Exercise> exercises = new ArrayList<>();
+            for (DataSnapshot exerciseSnapshot : sessionSnapshot.child("exercises").getChildren()) {
+                Exercise exercise = exerciseSnapshot.getValue(Exercise.class);
+                exercises.add(exercise);
+            }
+            trainingSession.setExercises(exercises);
+            trainingSessions.add(trainingSession);
+        }
+        return trainingSessions;
     }
 
     // Populate training with sessions and exercises for each session
@@ -178,7 +256,7 @@ public class Training extends AppCompatActivity implements TrainingRecyclerAdapt
         TrainingSession session1 = new TrainingSession("Session 1");
         session1.setExercises(session1Exercises);
 
-        trainingSessions.add(session1);
+        privateTrainingSessions.add(session1);
 
         for (int sessionNumber = 2; sessionNumber <= 6; sessionNumber++) {
             List<Exercise> sessionExercises = new ArrayList<>();
@@ -192,7 +270,7 @@ public class Training extends AppCompatActivity implements TrainingRecyclerAdapt
             }
             TrainingSession session = new TrainingSession("Session " + sessionNumber);
             session.setExercises(sessionExercises);
-            trainingSessions.add(session);
+            privateTrainingSessions.add(session);
         }
 
         Random random = new Random();
@@ -205,7 +283,7 @@ public class Training extends AppCompatActivity implements TrainingRecyclerAdapt
         }
         TrainingSession session11 = new TrainingSession("Session 11");
         session11.setExercises(session11Exercises);
-        trainingSessions.add(session11);
+        privateTrainingSessions.add(session11);
         if (adapter != null) {
             adapter.notifyDataSetChanged();
         }
@@ -213,7 +291,7 @@ public class Training extends AppCompatActivity implements TrainingRecyclerAdapt
 
     @Override
     public void onItemClick(int position) {
-        TrainingSession clickedSession = trainingSessions.get(position);
+        TrainingSession clickedSession = privateTrainingSessions.get(position);
 
         Intent intent = new Intent(this, ExerciseListActivity.class);
         intent.putParcelableArrayListExtra("exercises", (ArrayList<? extends Parcelable>) clickedSession.getExercises());
