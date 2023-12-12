@@ -221,6 +221,7 @@ public class Training extends AppCompatActivity implements TrainingRecyclerAdapt
         for (DataSnapshot sessionSnapshot : snapshot.getChildren()) {
             TrainingSession trainingSession = new TrainingSession();
             trainingSession.setName(sessionSnapshot.child("name").getValue(String.class));
+            trainingSession.setOwner(sessionSnapshot.child("owner").getValue(String.class));
 
             List<Exercise> exercises = new ArrayList<>();
             for (DataSnapshot exerciseSnapshot : sessionSnapshot.child("exercises").getChildren()) {

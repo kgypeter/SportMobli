@@ -4,6 +4,8 @@ public class TrainingSessionDTO {
 
     private String name;
 
+    private String owner;
+
     public TrainingSessionDTO() {
     }
 
@@ -15,4 +17,11 @@ public class TrainingSessionDTO {
         this.name = name;
     }
 
+    public String getOwner() {
+        return owner;
+    }
+
+    public void setOwner(String owner) {
+        this.owner = owner;
+    }
 }
