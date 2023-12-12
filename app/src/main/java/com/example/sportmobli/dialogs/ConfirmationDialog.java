@@ -1,4 +1,4 @@
-package com.example.sportmobli.activity;
+package com.example.sportmobli.dialogs;
 
 import android.app.AlertDialog;
 import android.content.Context;

@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sportmobli.R;
 import com.example.sportmobli.adapter.TrainingRecyclerAdapter;
+import com.example.sportmobli.dialogs.AddTrainingDialog;
 import com.example.sportmobli.model.Diet;
 import com.example.sportmobli.model.Exercise;
 import com.example.sportmobli.model.TrainingSession;
@@ -283,6 +284,9 @@ public class Training extends AppCompatActivity implements TrainingRecyclerAdapt
         TrainingSession clickedSession = privateTrainingSessions.get(position);
 
         Intent intent = new Intent(this, ExerciseListActivity.class);
+        intent.putExtra("sessionName", clickedSession.getName());
+        intent.putExtra("sessionOwner", clickedSession.getOwner());
+
         intent.putParcelableArrayListExtra("exercises", (ArrayList<? extends Parcelable>) clickedSession.getExercises());
 
         // Add transition animation

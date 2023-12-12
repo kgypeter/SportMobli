@@ -14,8 +14,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sportmobli.R;
-import com.example.sportmobli.activity.ConfirmationDialog;
-import com.example.sportmobli.activity.MessageDialog;
+import com.example.sportmobli.dialogs.ConfirmationDialog;
+import com.example.sportmobli.dialogs.MessageDialog;
 import com.example.sportmobli.model.Exercise;
 import com.example.sportmobli.model.TrainingSession;
 import com.example.sportmobli.util.AppPreferences;

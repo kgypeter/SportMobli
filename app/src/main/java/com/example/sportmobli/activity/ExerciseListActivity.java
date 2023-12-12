@@ -2,8 +2,8 @@ package com.example.sportmobli.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -50,18 +50,24 @@ public class ExerciseListActivity extends AppCompatActivity {
 //        });
         if (intent != null && intent.hasExtra("exercises")) {
             exercisesList = intent.getParcelableArrayListExtra("exercises"); // Assigning to class-level variable
+            String owner = intent.getParcelableExtra("owner");
+            String sessionName = intent.getParcelableExtra("sessionName");
             setupRecyclerView(exercisesList);
         }
 
         Button startButton = findViewById(R.id.startButton);
-        startButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent chronometerIntent = new Intent(ExerciseListActivity.this, ChronometerActivity.class);
-                chronometerIntent.putParcelableArrayListExtra("exercises", exercisesList);
-                startActivity(chronometerIntent);
-            }
+        ImageView addButton = findViewById(R.id.addButton);
+        startButton.setOnClickListener(v -> {
+            Intent chronometerIntent = new Intent(ExerciseListActivity.this, ChronometerActivity.class);
+            chronometerIntent.putParcelableArrayListExtra("exercises", exercisesList);
+            startActivity(chronometerIntent);
         });
+
+        addButton.setOnClickListener(
+                view -> {
+
+                }
+        );
     }
 
     private void setupRecyclerView(ArrayList<Exercise> exercisesList) {
