@@ -59,6 +59,7 @@ public class AddTrainingDialog {
                 String currentUsername = AppPreferences.getUsername(parentContext);
                 TrainingSessionDTO newTrainingSession = new TrainingSessionDTO();
                 newTrainingSession.setName(name);
+                newTrainingSession.setOwner(currentUsername);
                 trainingSessionReference.child(currentUsername).child(name).setValue(newTrainingSession).addOnCompleteListener(task -> {
                     if (!task.isSuccessful()) {
                         Toast.makeText(parentContext, "Error creating new session!", Toast.LENGTH_SHORT).show();

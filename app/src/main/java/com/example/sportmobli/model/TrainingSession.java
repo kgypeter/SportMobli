@@ -74,6 +74,14 @@ public class TrainingSession implements Parcelable {
         this.exercises = exercises;
     }
 
+    public String getOwner() {
+        return owner;
+    }
+
+    public void setOwner(String owner) {
+        this.owner = owner;
+    }
+
     // add an exercise to the sessison
     public void addExercise(Exercise exercise) {
         exercises.add(exercise);
