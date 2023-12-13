@@ -36,7 +36,7 @@ public class ExerciseListActivity extends AppCompatActivity {
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
-        getExercises();
+        refreshExercises();
     }
 
     @Override
@@ -77,18 +77,19 @@ public class ExerciseListActivity extends AppCompatActivity {
     private void addExerciseCallback(Exercise exercise) {
         trainingSessionReference.child(owner).child(sessionName).child("exercises").child(exercise.getName()).setValue(exercise).addOnSuccessListener(t -> {
             Toast.makeText(this, "Exercise saved successfully!", Toast.LENGTH_SHORT).show();
-            getExercises();
+            refreshExercises();
         }).addOnFailureListener(t -> {
             Toast.makeText(this, "Error saving exercise!", Toast.LENGTH_SHORT).show();
 
         });
     }
 
-    private void getExercises() {
+    private void refreshExercises() {
         trainingSessionReference.child(owner).child(sessionName).child("exercises").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 exercisesList = extractExercises(snapshot);
+                setupRecyclerView(exercisesList);
             }
 
             @Override
