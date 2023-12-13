@@ -74,16 +74,13 @@ public class Signup extends AppCompatActivity {
                             if (task.getResult().getValue() == null) {
                                 String passwordHash = DigestUtils.sha256Hex(passwordString);
                                 User newUser = new User(usernameString, passwordHash);
-                                userReference.child(usernameString).setValue(newUser).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<Void> task) {
-                                        sharedPref.edit().putBoolean("is_signed_in", true).apply();
-                                        sharedPref.edit().putString("username", usernameString).apply();
-                                        sharedPref.edit().putString("password", passwordString).apply();
-                                        Toast.makeText(Signup.this, "Sign up successful!", Toast.LENGTH_SHORT).show();
-                                        Intent intent = new Intent(getApplicationContext(), Login.class);
-                                        startActivity(intent);
-                                    }
+                                userReference.child(usernameString).setValue(newUser).addOnCompleteListener(task1 -> {
+                                    sharedPref.edit().putBoolean("is_signed_in", true).apply();
+                                    sharedPref.edit().putString("username", usernameString).apply();
+                                    sharedPref.edit().putString("password", passwordString).apply();
+                                    Toast.makeText(Signup.this, "Sign up successful!", Toast.LENGTH_SHORT).show();
+                                    Intent intent = new Intent(getApplicationContext(), Login.class);
+                                    startActivity(intent);
                                 });
                             } else {
                                 Toast.makeText(Signup.this, "User already exists!", Toast.LENGTH_SHORT).show();
