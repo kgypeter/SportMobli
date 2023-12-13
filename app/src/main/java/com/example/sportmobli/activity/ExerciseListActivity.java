@@ -76,6 +76,7 @@ public class ExerciseListActivity extends AppCompatActivity {
     }
 
     private void addExerciseCallback(Exercise exercise) {
+        exercise.setOrder(exercisesList.size() + 1);
         trainingSessionReference.child(owner).child(sessionName).child("exercises").child(exercise.getName()).setValue(exercise).addOnSuccessListener(t -> {
             Toast.makeText(this, "Exercise saved successfully!", Toast.LENGTH_SHORT).show();
             refreshExercises();
