@@ -78,5 +78,6 @@ public class AddExerciseDialog {
 
     public interface AddExerciseDialogListener {
         void saveExercise(Exercise exercise);
+
     }
 }
