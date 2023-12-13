@@ -82,7 +82,6 @@ public class Tracking extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
         api = PolarBleApiDefaultImpl.defaultImplementation(
                 getApplicationContext(),
                 EnumSet.of(
@@ -143,8 +142,8 @@ public class Tracking extends AppCompatActivity {
             currentHR = findViewById(R.id.textViewCurrentHR);
 
             plotter = new HRPlotter();
-            plotter.setListener(listener);
             plot = findViewById(R.id.hr_view_plot);
+            plotter.setListener(plot);
             plot.addSeries(plotter.hrSeries, plotter.hrFormatter);
             plot.addSeries(plotter.rrSeries, plotter.rrFormatter);
             plot.setRangeBoundaries(50, 100, BoundaryMode.AUTO);
@@ -158,6 +157,12 @@ public class Tracking extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "Failed to connect to " + deviceId, Toast.LENGTH_SHORT).show();
             throw new RuntimeException(e);
         }
+        startActivity();
+    }
+
+    public void startActivity(){
+
+
     }
     public void streamHR() {
         Toast.makeText(getApplicationContext(), "Device connected " + deviceId, Toast.LENGTH_SHORT).show();

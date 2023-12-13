@@ -5,6 +5,7 @@ import android.graphics.Color;
 import com.androidplot.PlotListener;
 import com.androidplot.xy.LineAndPointFormatter;
 import com.androidplot.xy.SimpleXYSeries;
+import com.androidplot.xy.XYPlot;
 import com.androidplot.xy.XYSeriesFormatter;
 import com.polar.sdk.api.model.PolarHrData;
 
@@ -17,7 +18,7 @@ public class HRPlotter {
     private static final int NVALS = 300; // 5 min
     private static final double RR_SCALE = 0.1;
 
-    private PlotterListener listener;
+    private XYPlot listener;
     public  XYSeriesFormatter<?> hrFormatter;
     public  XYSeriesFormatter<?> rrFormatter;
     public  SimpleXYSeries hrSeries;
@@ -92,11 +93,11 @@ public class HRPlotter {
             }
         }
         if (listener != null) {
-            listener.update();
+            listener.redraw();
         }
     }
 
-    public void setListener(PlotterListener listener) {
+    public void setListener(XYPlot listener) {
         this.listener = listener;
     }
 }
