@@ -193,7 +193,7 @@ public class Training extends AppCompatActivity implements TrainingRecyclerAdapt
     public void startAdapter() {
         List<TrainingSession> trainingSessions = privateTrainingSessions;
         trainingSessions.addAll(publicTrainingSessions);
-        adapter = new TrainingRecyclerAdapter(trainingSessions);
+        adapter = new TrainingRecyclerAdapter(trainingSessions, () -> getSessionsFromDatabase());
         RecyclerView recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(Training.this));
         recyclerView.setAdapter(adapter);
