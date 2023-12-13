@@ -1,4 +1,4 @@
-package com.example.sportmobli;
+package com.example.sportmobli.activity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -12,6 +12,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.sportmobli.R;
 import com.example.sportmobli.model.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -20,7 +21,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import org.apache.commons.codec.digest.DigestUtils;
-
 
 public class Login extends AppCompatActivity {
 
@@ -72,13 +72,31 @@ public class Login extends AppCompatActivity {
                                 String hashedPassword = DigestUtils.sha256Hex(passwordString);
                                 if (user.getPassword().equals(hashedPassword)) {
                                     Toast.makeText(Login.this, "Log in successful!", Toast.LENGTH_SHORT).show();
-                                    Intent intent = new Intent(getApplicationContext(), Home.class);
-                                    startActivity(intent);
+
+                                    // Fetch additional user information
+                                    String loggedInUsername = user.getUsername();
+                                    String userGender = user.getGender();
+                                    int userAge = user.getAge();
+                                    float userHeight = user.getHeight();
+                                    float userWeight = user.getWeight();
+
+                                    // Pass user information to UserProfile activity
+                                    Intent userProfileIntent = new Intent(getApplicationContext(), UserProfile.class);
+                                    userProfileIntent.putExtra("USERNAME", loggedInUsername);
+                                    userProfileIntent.putExtra("GENDER", userGender);
+                                    userProfileIntent.putExtra("AGE", userAge);
+                                    userProfileIntent.putExtra("HEIGHT", userHeight);
+                                    userProfileIntent.putExtra("WEIGHT", userWeight);
+                                    startActivity(userProfileIntent);
+
+                                    // Close the current Login activity
+                                    finish();
                                 } else {
                                     Toast.makeText(Login.this, "Invalid username or password!", Toast.LENGTH_SHORT).show();
                                 }
-                            }
 
+
+                            }
 
                         }
                     });

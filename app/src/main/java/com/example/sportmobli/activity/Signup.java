@@ -1,4 +1,4 @@
-package com.example.sportmobli;
+package com.example.sportmobli.activity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -11,6 +11,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.sportmobli.R;
+import com.example.sportmobli.activity.Login;
 import com.example.sportmobli.model.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
