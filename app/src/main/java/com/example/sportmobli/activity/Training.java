@@ -1,15 +1,14 @@
 package com.example.sportmobli.activity;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,6 +21,7 @@ import com.example.sportmobli.dialogs.AddTrainingDialog;
 import com.example.sportmobli.model.Diet;
 import com.example.sportmobli.model.Exercise;
 import com.example.sportmobli.model.TrainingSession;
+import com.example.sportmobli.model.TrainingSessionDTO;
 import com.example.sportmobli.util.AppPreferences;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -31,7 +31,6 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 
 // todo - implement the functionality of crud operations and make data persistent in firebase DB
@@ -50,11 +49,8 @@ public class Training extends AppCompatActivity implements TrainingRecyclerAdapt
 
     private List<TrainingSession> privateTrainingSessions;
     private List<TrainingSession> publicTrainingSessions;
-    private RecyclerView recyclerView;
-    private EditText searchEditText;
     private TrainingRecyclerAdapter adapter;
 
-    private FirebaseDatabase db;
     private DatabaseReference trainingSessionReference;
 
 
@@ -74,14 +70,6 @@ public class Training extends AppCompatActivity implements TrainingRecyclerAdapt
         this.name = name;
     }
 
-    public List<TrainingSession> getExercises() {
-        return privateTrainingSessions;
-    }
-
-    public void setExercises(List<TrainingSession> trainingSessions) {
-        this.privateTrainingSessions = trainingSessions;
-    }
-
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
@@ -92,14 +80,13 @@ public class Training extends AppCompatActivity implements TrainingRecyclerAdapt
     protected void onCreate(Bundle savedInstanceState) {
         privateTrainingSessions = new ArrayList<>();
         publicTrainingSessions = new ArrayList<>();
-        db = FirebaseDatabase.getInstance();
+        FirebaseDatabase db = FirebaseDatabase.getInstance();
         trainingSessionReference = db.getReference("TrainingSession");
 
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_training);
         getSessionsFromDatabase();
-//        initializeTrainingSessions();
 
         Button lolButton = findViewById(R.id.button3);
         Button dietButton = findViewById(R.id.button5);
@@ -107,51 +94,34 @@ public class Training extends AppCompatActivity implements TrainingRecyclerAdapt
         Button trackingButton = findViewById(R.id.button7);
         ImageView addButton = findViewById(R.id.addButton);
 
-        lolButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), Home.class);
-                startActivity(intent);
-                overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
-            }
+        lolButton.setOnClickListener(view -> {
+            Intent intent = new Intent(getApplicationContext(), Home.class);
+            startActivity(intent);
+            overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
         });
 
-        dietButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), Diet.class);
-                startActivity(intent);
-                overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
-            }
+        dietButton.setOnClickListener(view -> {
+            Intent intent = new Intent(getApplicationContext(), Diet.class);
+            startActivity(intent);
+            overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
         });
 
-        userProfileButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), UserProfile.class);
-                startActivity(intent);
-                overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
-            }
+        userProfileButton.setOnClickListener(view -> {
+            Intent intent = new Intent(getApplicationContext(), UserProfile.class);
+            startActivity(intent);
+            overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
         });
 
-        trackingButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), Tracking.class);
-                startActivity(intent);
-                overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
-            }
+        trackingButton.setOnClickListener(view -> {
+            Intent intent = new Intent(getApplicationContext(), Tracking.class);
+            startActivity(intent);
+            overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
         });
 
-        addButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                openAlertDialog();
-            }
-        });
+        addButton.setOnClickListener(view -> openAlertDialog());
 
 
-        searchEditText = findViewById(R.id.searchEditText);
+        EditText searchEditText = findViewById(R.id.searchEditText);
         searchEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -169,8 +139,8 @@ public class Training extends AppCompatActivity implements TrainingRecyclerAdapt
     }
 
     private void openAlertDialog() {
-        AddTrainingDialog addTrainingDialog = new AddTrainingDialog(this);
-        addTrainingDialog.show();
+
+        AddTrainingDialog.show(this, "Add a new session", this::addSessionToDatabase);
     }
 
     private void getSessionsFromDatabase() {
@@ -189,6 +159,19 @@ public class Training extends AppCompatActivity implements TrainingRecyclerAdapt
             }
         });
 
+    }
+
+    public void addSessionToDatabase(TrainingSessionDTO newTrainingSession) {
+        String currentUsername = AppPreferences.getUsername(this);
+        trainingSessionReference.child(currentUsername).child(newTrainingSession.getName()).setValue(newTrainingSession).addOnCompleteListener(task -> {
+            if (!task.isSuccessful()) {
+                Toast.makeText(this, "Error creating new session!", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "Session saved.", Toast.LENGTH_SHORT).show();
+
+            }
+
+        });
     }
 
     public void getPrivateSessions() {
@@ -211,7 +194,7 @@ public class Training extends AppCompatActivity implements TrainingRecyclerAdapt
         List<TrainingSession> trainingSessions = privateTrainingSessions;
         trainingSessions.addAll(publicTrainingSessions);
         adapter = new TrainingRecyclerAdapter(trainingSessions);
-        recyclerView = findViewById(R.id.recyclerView);
+        RecyclerView recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(Training.this));
         recyclerView.setAdapter(adapter);
         adapter.setOnItemClickListener(Training.this);
@@ -233,50 +216,6 @@ public class Training extends AppCompatActivity implements TrainingRecyclerAdapt
             trainingSessions.add(trainingSession);
         }
         return trainingSessions;
-    }
-
-    // Populate training with sessions and exercises for each session
-    @SuppressLint("NotifyDataSetChanged")
-    private void initializeTrainingSessions() {
-        List<Exercise> session1Exercises = new ArrayList<>();
-        for (int i = 1; i <= 10; i++) {
-            session1Exercises.add(new Exercise("Exercise " + i, 20, 30));
-        }
-
-        TrainingSession session1 = new TrainingSession("Session 1");
-        session1.setExercises(session1Exercises);
-
-        privateTrainingSessions.add(session1);
-
-        for (int sessionNumber = 2; sessionNumber <= 6; sessionNumber++) {
-            List<Exercise> sessionExercises = new ArrayList<>();
-            for (int exerciseNumber = 1; exerciseNumber <= 10; exerciseNumber++) {
-                if (sessionNumber % 2 == 0) {
-                    sessionExercises.add(new Exercise("Exercise " + exerciseNumber, 60, 10));
-                } else {
-                    sessionExercises.add(new Exercise("Exercise " + exerciseNumber, 35, 10));
-
-                }
-            }
-            TrainingSession session = new TrainingSession("Session " + sessionNumber);
-            session.setExercises(sessionExercises);
-            privateTrainingSessions.add(session);
-        }
-
-        Random random = new Random();
-        List<Exercise> session11Exercises = new ArrayList<>();
-        for (int exerciseNumber = 1; exerciseNumber <= 10; exerciseNumber++) {
-            int duration = random.nextInt(4) + 3; // Generates random duration between 3 and 6 seconds
-            int rest = random.nextInt(4) + 3; // Generates random rest time between 3 and 6 seconds
-
-            session11Exercises.add(new Exercise("Exercise " + exerciseNumber, duration, rest));
-        }
-        TrainingSession session11 = new TrainingSession("Session 11");
-        session11.setExercises(session11Exercises);
-        privateTrainingSessions.add(session11);
-        if (adapter != null) {
-            adapter.notifyDataSetChanged();
-        }
     }
 
     @Override
