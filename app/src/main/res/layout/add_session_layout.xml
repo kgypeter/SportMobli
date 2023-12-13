@@ -11,6 +11,7 @@
         android:layout_height="73dp"
         android:layout_marginTop="8dp"
         android:autofillHints=""
+        android:hint="Session name"
         android:inputType="text" />
 
 
