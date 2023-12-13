@@ -1,9 +1,7 @@
 package com.example.sportmobli.activity;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -13,8 +11,11 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.sportmobli.R;
-import com.example.sportmobli.R;
+import com.example.sportmobli.model.User;
 import com.example.sportmobli.util.AppPreferences;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -42,8 +43,6 @@ public class Login extends AppCompatActivity {
         Login = findViewById(R.id.log_in);
         FirebaseDatabase db = FirebaseDatabase.getInstance();
 
-        sharedPref = getSharedPreferences("user_info", MODE_PRIVATE);
-
         Login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -51,46 +50,45 @@ public class Login extends AppCompatActivity {
 
                 Intent intent = new Intent(getApplicationContext(), Home.class);
                 startActivity(intent);
-                } else {
 
-//                        String storedUser = sharedPref.getString("username", "");
-//                        String storedPass = sharedPref.getString("password", "");
 
-                    userReference.child(usernameString).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<DataSnapshot> task) {
-                            if (!task.isSuccessful()) {
+                String usernameString = username.getText().toString();
+                String passwordString = password.getText().toString();
+                userReference.child(usernameString).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DataSnapshot> task) {
+                        if (!task.isSuccessful()) {
+                            Toast.makeText(Login.this, "Invalid username or password!", Toast.LENGTH_SHORT).show();
+                        } else {
+                            User user = task.getResult().getValue(User.class);
+                            if (user == null) {
                                 Toast.makeText(Login.this, "Invalid username or password!", Toast.LENGTH_SHORT).show();
+                            }
+                            String hashedPassword = DigestUtils.sha256Hex(passwordString);
+                            if (user.getPassword().equals(hashedPassword)) {
+                                Toast.makeText(Login.this, "Log in successful!", Toast.LENGTH_SHORT).show();
+
+                                // Fetch additional user information
+                                String loggedInUsername = user.getUsername();
+                                String userGender = user.getGender();
+                                int userAge = user.getAge();
+                                float userHeight = user.getHeight();
+                                float userWeight = user.getWeight();
+
+                                // Pass user information to UserProfile activity
+                                Intent userProfileIntent = new Intent(getApplicationContext(), UserProfile.class);
+                                userProfileIntent.putExtra("USERNAME", loggedInUsername);
+                                userProfileIntent.putExtra("GENDER", userGender);
+                                userProfileIntent.putExtra("AGE", userAge);
+                                userProfileIntent.putExtra("HEIGHT", userHeight);
+                                userProfileIntent.putExtra("WEIGHT", userWeight);
+                                startActivity(userProfileIntent);
+
+                                // Close the current Login activity
+                                finish();
                             } else {
-                                User user = task.getResult().getValue(User.class);
-                                if (user == null) {
-                                    Toast.makeText(Login.this, "Invalid username or password!", Toast.LENGTH_SHORT).show();
-                                }
-                                String hashedPassword = DigestUtils.sha256Hex(passwordString);
-                                if (user.getPassword().equals(hashedPassword)) {
-                                    Toast.makeText(Login.this, "Log in successful!", Toast.LENGTH_SHORT).show();
-
-                                    // Fetch additional user information
-                                    String loggedInUsername = user.getUsername();
-                                    String userGender = user.getGender();
-                                    int userAge = user.getAge();
-                                    float userHeight = user.getHeight();
-                                    float userWeight = user.getWeight();
-
-                                    // Pass user information to UserProfile activity
-                                    Intent userProfileIntent = new Intent(getApplicationContext(), UserProfile.class);
-                                    userProfileIntent.putExtra("USERNAME", loggedInUsername);
-                                    userProfileIntent.putExtra("GENDER", userGender);
-                                    userProfileIntent.putExtra("AGE", userAge);
-                                    userProfileIntent.putExtra("HEIGHT", userHeight);
-                                    userProfileIntent.putExtra("WEIGHT", userWeight);
-                                    startActivity(userProfileIntent);
-
-                                    // Close the current Login activity
-                                    finish();
-                                } else {
-                                    Toast.makeText(Login.this, "Invalid username or password!", Toast.LENGTH_SHORT).show();
-                                }
+                                Toast.makeText(Login.this, "Invalid username or password!", Toast.LENGTH_SHORT).show();
+                            }
 
 
 //                String usernameString = username.getText().toString();
@@ -128,12 +126,12 @@ public class Login extends AppCompatActivity {
 //                        }
 //                    });
 //                }
-                            }
-
                         }
-                    });
-                }
+
+                    }
+                });
             }
+
         });
     }
 }
