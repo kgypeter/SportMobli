@@ -1,4 +1,4 @@
-package com.example.sportmobli;
+package com.example.sportmobli.activity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -11,6 +11,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.sportmobli.R;
 import com.example.sportmobli.model.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -19,7 +20,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import org.apache.commons.codec.digest.DigestUtils;
-
 
 public class Signup extends AppCompatActivity {
 
@@ -69,20 +69,18 @@ public class Signup extends AppCompatActivity {
                         if (!task.isSuccessful()) {
                             Toast.makeText(Signup.this, "Database error.", Toast.LENGTH_SHORT).show();
 
+
                         } else {
                             if (task.getResult().getValue() == null) {
                                 String passwordHash = DigestUtils.sha256Hex(passwordString);
                                 User newUser = new User(usernameString, passwordHash);
-                                userReference.child(usernameString).setValue(newUser).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<Void> task) {
-                                        sharedPref.edit().putBoolean("is_signed_in", true).apply();
-                                        sharedPref.edit().putString("username", usernameString).apply();
-                                        sharedPref.edit().putString("password", passwordString).apply();
-                                        Toast.makeText(Signup.this, "Sign up successful!", Toast.LENGTH_SHORT).show();
-                                        Intent intent = new Intent(getApplicationContext(), Login.class);
-                                        startActivity(intent);
-                                    }
+                                userReference.child(usernameString).setValue(newUser).addOnCompleteListener(task1 -> {
+                                    sharedPref.edit().putBoolean("is_signed_in", true).apply();
+                                    sharedPref.edit().putString("username", usernameString).apply();
+                                    sharedPref.edit().putString("password", passwordString).apply();
+                                    Toast.makeText(Signup.this, "Sign up successful!", Toast.LENGTH_SHORT).show();
+                                    Intent intent = new Intent(getApplicationContext(), Login.class);
+                                    startActivity(intent);
                                 });
                             } else {
                                 Toast.makeText(Signup.this, "User already exists!", Toast.LENGTH_SHORT).show();

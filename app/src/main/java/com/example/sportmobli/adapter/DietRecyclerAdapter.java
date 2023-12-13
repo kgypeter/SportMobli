@@ -1,9 +1,7 @@
-package com.example.sportmobli;
+package com.example.sportmobli.adapter;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
-import android.text.InputType;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,22 +12,25 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.sportmobli.R;
+import com.example.sportmobli.model.Diet;
+
 import java.util.ArrayList;
 
-public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyViewHolder> {
+public class DietRecyclerAdapter extends RecyclerView.Adapter<DietRecyclerAdapter.MyViewHolder> {
 
-    private ArrayList<Diet> foodList;
-    private ArrayList<Diet> filteredList;
-    private TextView totalGramsTextView;
+    private final ArrayList<Diet> foodList;
+    private final ArrayList<Diet> filteredList;
+    private final TextView totalGramsTextView;
 
-    private TextView totalCaloriesTextView;
-    private TextView totalProteinTextView;
-    private TextView totalCarbsTextView;
-    private TextView totalFatsTextView;
+    private final TextView totalCaloriesTextView;
+    private final TextView totalProteinTextView;
+    private final TextView totalCarbsTextView;
+    private final TextView totalFatsTextView;
 
-    public RecyclerAdapter(ArrayList<Diet> foodList, TextView totalGramsTextView,
-                           TextView totalCaloriesTextView, TextView totalProteinTextView,
-                           TextView totalCarbsTextView, TextView totalFatsTextView) {
+    public DietRecyclerAdapter(ArrayList<Diet> foodList, TextView totalGramsTextView,
+                               TextView totalCaloriesTextView, TextView totalProteinTextView,
+                               TextView totalCarbsTextView, TextView totalFatsTextView) {
         this.foodList = foodList;
         this.totalGramsTextView = totalGramsTextView;
         this.totalCaloriesTextView = totalCaloriesTextView;
@@ -39,13 +40,80 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
         this.filteredList = new ArrayList<>(foodList);
     }
 
+    @SuppressLint("NotifyDataSetChanged")
+    public void resetFilter() {
+        // Restore the original, unfiltered list
+        filteredList.clear();
+        filteredList.addAll(foodList);
+        notifyDataSetChanged();
+    }
+
+    @NonNull
+    @Override
+    public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.victuals, parent, false);
+
+        return new MyViewHolder(itemView);
+    }
+
+    @SuppressLint("SetTextI18n")
+    @Override
+    public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
+        if (isNoItemFound()) {
+            holder.nameTxt.setText("No item found");
+            holder.caloriesTxt.setText("");
+            holder.proteinTxt.setText("");
+            holder.carbsTxt.setText("");
+            holder.fatsTxt.setText("");
+            holder.hideButtons(); // Hide buttons when showing "No item found"
+            holder.itemView.setClickable(false);
+        } else {
+            Diet diet = filteredList.get(position);
+            holder.nameTxt.setText(diet.getFoodName());
+            holder.caloriesTxt.setText("Calories: " + diet.getCalories());
+            holder.proteinTxt.setText("Protein: " + diet.getProtein() + "g");
+            holder.carbsTxt.setText("Carbs: " + diet.getCarbohydrates() + "g");
+            holder.fatsTxt.setText("Fats: " + diet.getFats() + "g");
+            holder.showButtons(); // Show buttons when displaying regular list items
+            holder.itemView.setClickable(true);
+        }
+    }
+
+    @Override
+    public int getItemCount() {
+        return filteredList.size();
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    public void filterList(String query) {
+        filteredList.clear();
+        String filterPattern = query.toLowerCase().trim();
+
+        for (Diet item : foodList) {
+            if (item.getFoodName().toLowerCase().contains(filterPattern)) {
+                filteredList.add(item);
+            }
+        }
+
+        if (filteredList.isEmpty() && !query.isEmpty()) {
+            // If there are no matches and the query is not empty, add a dummy item
+            filteredList.add(new Diet("", 0, 0, 0, 0));
+        }
+
+        notifyDataSetChanged(); // Notify the adapter that the data set has changed
+    }
+
+    public boolean isNoItemFound() {
+        // Check if the filtered list contains only the dummy item
+        return filteredList.size() == 1 && filteredList.get(0).getFoodName().isEmpty();
+    }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        private TextView nameTxt;
-        private TextView caloriesTxt;
-        private TextView proteinTxt;
-        private TextView carbsTxt;
-        private TextView fatsTxt;
+        private final TextView nameTxt;
+        private final TextView caloriesTxt;
+        private final TextView proteinTxt;
+        private final TextView carbsTxt;
+        private final TextView fatsTxt;
 
         private Diet clickedDiet;
 
@@ -62,6 +130,14 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
                 clickedDiet = foodList.get(getAdapterPosition());
                 showDetailsDialog(clickedDiet);
             });
+        }
+
+        public void hideButtons() {
+            itemView.findViewById(R.id.deleteButton).setVisibility(View.GONE);
+        }
+
+        public void showButtons() {
+            itemView.findViewById(R.id.deleteButton).setVisibility(View.VISIBLE);
         }
 
         @SuppressLint("SetTextI18n")
@@ -109,7 +185,6 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
             builder.show();
         }
 
-        //        todo - calculate the sum of the other fields and send them to the UI
         @SuppressLint({"SetTextI18n", "DefaultLocale"})
         private void updateTotalGrams() {
             float totalCalories = 0;
@@ -135,73 +210,6 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
             totalFatsTextView.setText(String.format("Fats: %.2f g", totalFats));
         }
 
-    }
-
-    @SuppressLint("NotifyDataSetChanged")
-    public void resetFilter() {
-        // Restore the original, unfiltered list
-        filteredList.clear();
-        filteredList.addAll(foodList);
-        notifyDataSetChanged();
-    }
-
-    @NonNull
-    @Override
-    public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.victuals, parent, false);
-
-        return new MyViewHolder(itemView);
-    }
-
-    @SuppressLint("SetTextI18n")
-    @Override
-    public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        if (isNoItemFound()) {
-            holder.nameTxt.setText("No item found");
-            holder.caloriesTxt.setText("");
-            holder.proteinTxt.setText("");
-            holder.carbsTxt.setText("");
-            holder.fatsTxt.setText("");
-            holder.itemView.setClickable(false);
-        } else {
-            Diet diet = filteredList.get(position);
-            holder.nameTxt.setText(diet.getFoodName());
-            holder.caloriesTxt.setText("Calories: " + diet.getCalories());
-            holder.proteinTxt.setText("Protein: " + diet.getProtein() + "g");
-            holder.carbsTxt.setText("Carbs: " + diet.getCarbohydrates() + "g");
-            holder.fatsTxt.setText("Fats: " + diet.getFats() + "g");
-            holder.itemView.setClickable(true);
-        }
-    }
-
-    @Override
-    public int getItemCount() {
-        return filteredList.size();
-    }
-
-    @SuppressLint("NotifyDataSetChanged")
-    public void filterList(String query) {
-        filteredList.clear();
-        String filterPattern = query.toLowerCase().trim();
-
-        for (Diet item : foodList) {
-            if (item.getFoodName().toLowerCase().contains(filterPattern)) {
-                filteredList.add(item);
-            }
-        }
-
-        if (filteredList.isEmpty() && !query.isEmpty()) {
-            // If there are no matches and the query is not empty, add a dummy item
-            filteredList.add(new Diet("", 0, 0, 0, 0));
-        }
-
-        notifyDataSetChanged(); // Notify the adapter that the data set has changed
-    }
-
-
-    public boolean isNoItemFound() {
-        // Check if the filtered list contains only the dummy item
-        return filteredList.size() == 1 && filteredList.get(0).getFoodName().isEmpty();
     }
 
 }
