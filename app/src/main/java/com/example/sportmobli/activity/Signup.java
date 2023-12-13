@@ -71,6 +71,30 @@ public class Signup extends AppCompatActivity {
                         if (!task.isSuccessful()) {
                             Toast.makeText(Signup.this, "Database error.", Toast.LENGTH_SHORT).show();
 
+<<<<<<<<< Temporary merge branch 1:app/src/main/java/com/example/sportmobli/Signup.java
+=========
+                if (TextUtils.isEmpty(user) || TextUtils.isEmpty(pass) || TextUtils.isEmpty(cPass)) {
+                    Toast.makeText(Signup.this, "Please fill in all fields!", Toast.LENGTH_SHORT).show();
+                } else if (!isUsernameValid(user)) {
+                    Toast.makeText(Signup.this, "Username must have at least 3 characters and start with a letter!", Toast.LENGTH_SHORT).show();
+                } else if (!isPasswordValid(pass)) {
+                    Toast.makeText(Signup.this, "Password must have at least 6 characters, including uppercase, lowercase, digit and special character.", Toast.LENGTH_SHORT).show();
+                } else if (!pass.equals(cPass)) {
+                    Toast.makeText(Signup.this, "Password is not matching!", Toast.LENGTH_SHORT).show();
+                } else {
+                    Boolean checkUser = DB.checkUsername(user);
+                    if (!checkUser) {
+                        Boolean insert = DB.insertData(user, pass);
+                        if (insert) {
+                            sharedPref.edit().putBoolean("is_signed_in", true).apply();
+                            sharedPref.edit().putString("username", user).apply();
+                            sharedPref.edit().putString("password", pass).apply();
+                            Toast.makeText(Signup.this, "Sign up successful!", Toast.LENGTH_SHORT).show();
+
+                            Intent intent = new Intent(getApplicationContext(), Login.class);
+                            startActivity(intent);
+                            overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
+>>>>>>>>> Temporary merge branch 2:app/src/main/java/com/example/sportmobli/activity/Signup.java
                         } else {
                             if (task.getResult().getValue() == null) {
                                 String passwordHash = DigestUtils.sha256Hex(passwordString);

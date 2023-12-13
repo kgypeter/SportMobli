@@ -13,10 +13,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.sportmobli.R;
-import com.example.sportmobli.model.User;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.database.DataSnapshot;
+import com.example.sportmobli.R;
+import com.example.sportmobli.util.AppPreferences;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -25,12 +23,13 @@ import org.apache.commons.codec.digest.DigestUtils;
 public class Login extends AppCompatActivity {
 
     EditText username, password;
+
     Button Login;
 
     FirebaseDatabase db;
 
     DatabaseReference userReference;
-    SharedPreferences sharedPref;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,12 +47,10 @@ public class Login extends AppCompatActivity {
         Login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String usernameString = username.getText().toString();
-                String passwordString = password.getText().toString();
+                AppPreferences.saveUsername(Login.this, "user");
 
-                if (TextUtils.isEmpty(usernameString) || TextUtils.isEmpty(passwordString)) {
-                    Toast.makeText(Login.this, "Please fill in all fields!", Toast.LENGTH_SHORT).show();
-
+                Intent intent = new Intent(getApplicationContext(), Home.class);
+                startActivity(intent);
                 } else {
 
 //                        String storedUser = sharedPref.getString("username", "");
@@ -96,6 +93,41 @@ public class Login extends AppCompatActivity {
                                 }
 
 
+//                String usernameString = username.getText().toString();
+//                String passwordString = password.getText().toString();
+//
+//                if (TextUtils.isEmpty(usernameString) || TextUtils.isEmpty(passwordString)) {
+//                    Toast.makeText(Login.this, "Please fill in all fields!", Toast.LENGTH_SHORT).show();
+//
+//                } else {
+//
+//
+//                    userReference.child(usernameString).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+//                        @Override
+//                        public void onComplete(@NonNull Task<DataSnapshot> task) {
+//                            if (!task.isSuccessful()) {
+//                                Toast.makeText(Login.this, "Invalid username or password!", Toast.LENGTH_SHORT).show();
+//                            } else {
+//                                User user = task.getResult().getValue(User.class);
+//                                if (user == null) {
+//                                    Toast.makeText(Login.this, "Invalid username or password!", Toast.LENGTH_SHORT).show();
+//                                }
+//                                String hashedPassword = DigestUtils.sha256Hex(passwordString);
+//                                if (user.getPassword().equals(hashedPassword)) {
+//                                    Toast.makeText(Login.this, "Log in successful!", Toast.LENGTH_SHORT).show();
+//                                    AppPreferences.saveUsername(Login.this, user.getUsername());
+//
+//                                    Intent intent = new Intent(getApplicationContext(), Home.class);
+//                                    startActivity(intent);
+//                                } else {
+//                                    Toast.makeText(Login.this, "Invalid username or password!", Toast.LENGTH_SHORT).show();
+//                                }
+//                            }
+//
+//
+//                        }
+//                    });
+//                }
                             }
 
                         }

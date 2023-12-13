@@ -1,32 +1,36 @@
 package com.example.sportmobli.activity;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.Toast;
 
-import com.example.sportmobli.activity.ExerciseListActivity;
-import com.example.sportmobli.activity.Home;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.sportmobli.R;
-import com.example.sportmobli.activity.Tracking;
-import com.example.sportmobli.activity.UserProfile;
 import com.example.sportmobli.adapter.TrainingRecyclerAdapter;
+import com.example.sportmobli.dialogs.AddTrainingDialog;
 import com.example.sportmobli.model.Diet;
 import com.example.sportmobli.model.Exercise;
 import com.example.sportmobli.model.TrainingSession;
+import com.example.sportmobli.model.TrainingSessionDTO;
+import com.example.sportmobli.util.AppPreferences;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 
 // todo - implement the functionality of crud operations and make data persistent in firebase DB
@@ -42,17 +46,20 @@ import java.util.Random;
 public class Training extends AppCompatActivity implements TrainingRecyclerAdapter.OnItemClickListener {
 
     private String name;
-    private List<TrainingSession> trainingSessions;
-    private RecyclerView recyclerView;
-    private EditText searchEditText;
+
+    private List<TrainingSession> privateTrainingSessions;
+    private List<TrainingSession> publicTrainingSessions;
     private TrainingRecyclerAdapter adapter;
+
+    private DatabaseReference trainingSessionReference;
+
 
     public Training() {
     }
 
     public Training(String trainingName, List<TrainingSession> trainingSessions) {
         this.name = trainingName;
-        this.trainingSessions = trainingSessions;
+        this.privateTrainingSessions = trainingSessions;
     }
 
     public String getName() {
@@ -63,71 +70,58 @@ public class Training extends AppCompatActivity implements TrainingRecyclerAdapt
         this.name = name;
     }
 
-    public List<TrainingSession> getExercises() {
-        return trainingSessions;
-    }
-
-    public void setExercises(List<TrainingSession> trainingSessions) {
-        this.trainingSessions = trainingSessions;
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        getSessionsFromDatabase();
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        privateTrainingSessions = new ArrayList<>();
+        publicTrainingSessions = new ArrayList<>();
+        FirebaseDatabase db = FirebaseDatabase.getInstance();
+        trainingSessionReference = db.getReference("TrainingSession");
+
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_training);
-
-        trainingSessions = new ArrayList<>();
-        initializeTrainingSessions();
+        getSessionsFromDatabase();
 
         Button lolButton = findViewById(R.id.button3);
         Button dietButton = findViewById(R.id.button5);
         Button userProfileButton = findViewById(R.id.button6);
         Button trackingButton = findViewById(R.id.button7);
+        ImageView addButton = findViewById(R.id.addButton);
 
-        lolButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), Home.class);
-                startActivity(intent);
-                overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
-            }
+        lolButton.setOnClickListener(view -> {
+            Intent intent = new Intent(getApplicationContext(), Home.class);
+            startActivity(intent);
+            overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
         });
 
-        dietButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), Diet.class);
-                startActivity(intent);
-                overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
-            }
+        dietButton.setOnClickListener(view -> {
+            Intent intent = new Intent(getApplicationContext(), Diet.class);
+            startActivity(intent);
+            overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
         });
 
-        userProfileButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), UserProfile.class);
-                startActivity(intent);
-                overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
-            }
+        userProfileButton.setOnClickListener(view -> {
+            Intent intent = new Intent(getApplicationContext(), UserProfile.class);
+            startActivity(intent);
+            overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
         });
 
-        trackingButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), Tracking.class);
-                startActivity(intent);
-                overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
-            }
+        trackingButton.setOnClickListener(view -> {
+            Intent intent = new Intent(getApplicationContext(), Tracking.class);
+            startActivity(intent);
+            overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
         });
 
+        addButton.setOnClickListener(view -> openAlertDialog());
 
-        adapter = new TrainingRecyclerAdapter(trainingSessions);
-        recyclerView = findViewById(R.id.recyclerView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(adapter);
-        adapter.setOnItemClickListener(this);
 
-        searchEditText = findViewById(R.id.searchEditText);
+        EditText searchEditText = findViewById(R.id.searchEditText);
         searchEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -144,56 +138,94 @@ public class Training extends AppCompatActivity implements TrainingRecyclerAdapt
         });
     }
 
+    private void openAlertDialog() {
 
-    // Populate training with sessions and exercises for each session
-    @SuppressLint("NotifyDataSetChanged")
-    private void initializeTrainingSessions() {
-        List<Exercise> session1Exercises = new ArrayList<>();
-        for (int i = 1; i <= 10; i++) {
-            session1Exercises.add(new Exercise("Exercise " + i, 20, 30));
-        }
+        AddTrainingDialog.show(this, "Add a new session", this::addSessionToDatabase);
+    }
 
-        TrainingSession session1 = new TrainingSession("Session 1");
-        session1.setExercises(session1Exercises);
+    private void getSessionsFromDatabase() {
 
-        trainingSessions.add(session1);
+        trainingSessionReference.child("public").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
 
-        for (int sessionNumber = 2; sessionNumber <= 6; sessionNumber++) {
-            List<Exercise> sessionExercises = new ArrayList<>();
-            for (int exerciseNumber = 1; exerciseNumber <= 10; exerciseNumber++) {
-                if (sessionNumber % 2 == 0) {
-                    sessionExercises.add(new Exercise("Exercise " + exerciseNumber, 60, 10));
-                } else {
-                    sessionExercises.add(new Exercise("Exercise " + exerciseNumber, 35, 10));
-
-                }
+                publicTrainingSessions = extractTrainingSessions(snapshot);
+                getPrivateSessions();
             }
-            TrainingSession session = new TrainingSession("Session " + sessionNumber);
-            session.setExercises(sessionExercises);
-            trainingSessions.add(session);
-        }
 
-        Random random = new Random();
-        List<Exercise> session11Exercises = new ArrayList<>();
-        for (int exerciseNumber = 1; exerciseNumber <= 10; exerciseNumber++) {
-            int duration = random.nextInt(4) + 3; // Generates random duration between 3 and 6 seconds
-            int rest = random.nextInt(4) + 3; // Generates random rest time between 3 and 6 seconds
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
 
-            session11Exercises.add(new Exercise("Exercise " + exerciseNumber, duration, rest));
+            }
+        });
+
+    }
+
+    public void addSessionToDatabase(TrainingSessionDTO newTrainingSession) {
+        String currentUsername = AppPreferences.getUsername(this);
+        trainingSessionReference.child(currentUsername).child(newTrainingSession.getName()).setValue(newTrainingSession).addOnCompleteListener(task -> {
+            if (!task.isSuccessful()) {
+                Toast.makeText(this, "Error creating new session!", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "Session saved.", Toast.LENGTH_SHORT).show();
+
+            }
+
+        });
+    }
+
+    public void getPrivateSessions() {
+        String currentUsername = AppPreferences.getUsername(Training.this);
+        trainingSessionReference.child(currentUsername).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                privateTrainingSessions = extractTrainingSessions(snapshot);
+                startAdapter();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    public void startAdapter() {
+        List<TrainingSession> trainingSessions = privateTrainingSessions;
+        trainingSessions.addAll(publicTrainingSessions);
+        adapter = new TrainingRecyclerAdapter(trainingSessions, () -> getSessionsFromDatabase());
+        RecyclerView recyclerView = findViewById(R.id.recyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(Training.this));
+        recyclerView.setAdapter(adapter);
+        adapter.setOnItemClickListener(Training.this);
+    }
+
+    public List<TrainingSession> extractTrainingSessions(DataSnapshot snapshot) {
+        List<TrainingSession> trainingSessions = new ArrayList<>();
+        for (DataSnapshot sessionSnapshot : snapshot.getChildren()) {
+            TrainingSession trainingSession = new TrainingSession();
+            trainingSession.setName(sessionSnapshot.child("name").getValue(String.class));
+            trainingSession.setOwner(sessionSnapshot.child("owner").getValue(String.class));
+
+            List<Exercise> exercises = new ArrayList<>();
+            for (DataSnapshot exerciseSnapshot : sessionSnapshot.child("exercises").getChildren()) {
+                Exercise exercise = exerciseSnapshot.getValue(Exercise.class);
+                exercises.add(exercise);
+            }
+            trainingSession.setExercises(exercises);
+            trainingSessions.add(trainingSession);
         }
-        TrainingSession session11 = new TrainingSession("Session 11");
-        session11.setExercises(session11Exercises);
-        trainingSessions.add(session11);
-        if (adapter != null) {
-            adapter.notifyDataSetChanged();
-        }
+        return trainingSessions;
     }
 
     @Override
     public void onItemClick(int position) {
-        TrainingSession clickedSession = trainingSessions.get(position);
+        TrainingSession clickedSession = privateTrainingSessions.get(position);
 
         Intent intent = new Intent(this, ExerciseListActivity.class);
+        intent.putExtra("sessionName", clickedSession.getName());
+        intent.putExtra("sessionOwner", clickedSession.getOwner());
+
         intent.putParcelableArrayListExtra("exercises", (ArrayList<? extends Parcelable>) clickedSession.getExercises());
 
         // Add transition animation

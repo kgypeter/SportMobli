@@ -7,21 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TrainingSession implements Parcelable {
-    private String name;
-    private List<Exercise> exercises;
-    private float duration;
-
-    protected TrainingSession(Parcel in) {
-        name = in.readString();
-        duration = in.readFloat();
-    }
-
-    public TrainingSession(String name) {
-        this.name = name;
-        this.duration = 0;
-        this.exercises = new ArrayList<>();
-    }
-
     public static final Creator<TrainingSession> CREATOR = new Creator<TrainingSession>() {
         @Override
         public TrainingSession createFromParcel(Parcel in) {
@@ -33,6 +18,34 @@ public class TrainingSession implements Parcelable {
             return new TrainingSession[size];
         }
     };
+
+
+    private String name;
+    private List<Exercise> exercises;
+    private float duration;
+    private String owner;
+
+    public TrainingSession() {
+    }
+
+    protected TrainingSession(Parcel in) {
+        name = in.readString();
+        duration = in.readFloat();
+
+    }
+
+
+    public TrainingSession(String name) {
+        this.name = name;
+        this.exercises = new ArrayList<>();
+        this.owner = "public";
+    }
+
+    public TrainingSession(String name, String owner) {
+        this.name = name;
+        this.exercises = new ArrayList<>();
+        this.owner = owner;
+    }
 
     @Override
     public int describeContents() {
@@ -53,20 +66,20 @@ public class TrainingSession implements Parcelable {
         this.name = name;
     }
 
-    public float getDuration() {
-        return duration;
-    }
-
-    public void setDuration(float duration) {
-        this.duration = duration;
-    }
-
     public List<Exercise> getExercises() {
         return exercises;
     }
 
     public void setExercises(List<Exercise> exercises) {
         this.exercises = exercises;
+    }
+
+    public String getOwner() {
+        return owner;
+    }
+
+    public void setOwner(String owner) {
+        this.owner = owner;
     }
 
     // add an exercise to the sessison
