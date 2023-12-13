@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -11,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sportmobli.R;
 import com.example.sportmobli.adapter.ExerciseRecyclerAdapter;
+import com.example.sportmobli.dialogs.AddExerciseDialog;
 import com.example.sportmobli.model.Exercise;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -19,7 +21,9 @@ import java.util.ArrayList;
 
 public class ExerciseListActivity extends AppCompatActivity {
     FirebaseDatabase db;
-    DatabaseReference exercisesReference;
+    DatabaseReference trainingSessionReference;
+    private String owner;
+    private String sessionName;
     private RecyclerView recyclerView;
     private ExerciseRecyclerAdapter adapter;
     private ArrayList<Exercise> exercisesList;
@@ -28,7 +32,7 @@ public class ExerciseListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
         db = FirebaseDatabase.getInstance();
-        exercisesReference = db.getReference("");
+        trainingSessionReference = db.getReference("TrainingSession");
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_exercise_list);
@@ -37,21 +41,10 @@ public class ExerciseListActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
 
-//        exercisesReference.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-//            @Override
-//            public void onComplete(@NonNull Task<DataSnapshot> task) {
-//                if (!task.isSuccessful()) {
-//                    Toast.makeText(ExerciseListActivity.this, "Invalid username or password!", Toast.LENGTH_SHORT).show();
-//                } else {
-//                    List<TrainingSession> trainingSessions = task.getResult().getValue(List.class);
-//                    
-//                }
-//            }
-//        });
         if (intent != null && intent.hasExtra("exercises")) {
             exercisesList = intent.getParcelableArrayListExtra("exercises"); // Assigning to class-level variable
-            String owner = intent.getParcelableExtra("owner");
-            String sessionName = intent.getParcelableExtra("sessionName");
+            sessionName = intent.getExtras().get("sessionName").toString();
+            owner = intent.getExtras().get("sessionOwner").toString();
             setupRecyclerView(exercisesList);
         }
 
@@ -65,9 +58,19 @@ public class ExerciseListActivity extends AppCompatActivity {
 
         addButton.setOnClickListener(
                 view -> {
-
+                    AddExerciseDialog.show(this, "Add a new exercise", exercise -> addExerciseCallback(exercise));
                 }
         );
+    }
+
+    private void addExerciseCallback(Exercise exercise) {
+        trainingSessionReference.child(owner).child(sessionName).child("exercises").child(exercise.getName()).setValue(exercise).addOnSuccessListener(t -> {
+            Toast.makeText(this, "Exercise saved successfully!", Toast.LENGTH_SHORT).show();
+
+        }).addOnFailureListener(t -> {
+            Toast.makeText(this, "Error saving exercise!", Toast.LENGTH_SHORT).show();
+
+        });
     }
 
     private void setupRecyclerView(ArrayList<Exercise> exercisesList) {
