@@ -18,7 +18,6 @@ import com.example.sportmobli.dialogs.ConfirmationDialog;
 import com.example.sportmobli.dialogs.MessageDialog;
 import com.example.sportmobli.model.Exercise;
 import com.example.sportmobli.model.TrainingSession;
-import com.example.sportmobli.util.AppPreferences;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -29,11 +28,16 @@ public class TrainingRecyclerAdapter extends RecyclerView.Adapter<TrainingRecycl
 
     private final List<TrainingSession> trainingSessions;
     private final List<TrainingSession> filteredList;
+    private final DatabaseReference trainingSessionReference;
+    private final FetchDataListener fetchDataListener;
     private OnItemClickListener listener;
+    private Context parentContext;
 
 
-    public TrainingRecyclerAdapter(List<TrainingSession> trainingSessions) {
-
+    public TrainingRecyclerAdapter(List<TrainingSession> trainingSessions, FetchDataListener listener) {
+        FirebaseDatabase db = FirebaseDatabase.getInstance();
+        trainingSessionReference = db.getReference("TrainingSession");
+        this.fetchDataListener = listener;
         this.trainingSessions = trainingSessions;
         this.filteredList = new ArrayList<>(trainingSessions); // Initialize with all items
     }
@@ -46,8 +50,29 @@ public class TrainingRecyclerAdapter extends RecyclerView.Adapter<TrainingRecycl
     @Override
     public TrainingViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.training_session, parent, false);
+        parentContext = parent.getContext();
+        return new TrainingViewHolder(parent.getContext(), view, this::deleteCallback);
+    }
 
-        return new TrainingViewHolder(parent.getContext(), view);
+    public void deleteCallback(TrainingSession session) {
+        if (session.getOwner().equals("public")) {
+            MessageDialog.showAlertDialog(parentContext, "Oops", "This is a public session. You can only delete sessions you own.");
+        } else {
+            ConfirmationDialog.show(parentContext, "Confirm", "Are you sure you want to delete this?",
+                    () -> {
+                        deleteSession(session);
+                    });
+        }
+    }
+
+    public void deleteSession(TrainingSession session) {
+        trainingSessionReference.child(session.getOwner()).child(session.getName()).removeValue().addOnSuccessListener(
+                        task -> {
+                            Toast.makeText(parentContext, "Session deleted", Toast.LENGTH_SHORT).show();
+                            fetchDataListener.fetchData();
+                        }).
+                addOnFailureListener(task -> Toast.makeText(parentContext, "Error deleting session!", Toast.LENGTH_SHORT).show());
+
     }
 
     @SuppressLint("SetTextI18n")
@@ -105,19 +130,21 @@ public class TrainingRecyclerAdapter extends RecyclerView.Adapter<TrainingRecycl
         void onItemClick(int position);
     }
 
+    public interface FetchDataListener {
+        void fetchData();
+    }
+
     public static class TrainingViewHolder extends RecyclerView.ViewHolder {
         private final TextView sessionNameTextView;
         private final TextView sessionDurationTextView;
-        private final Context parentContext;
-        private FirebaseDatabase db;
-        private DatabaseReference trainingSessionReference;
+        private final DeleteSessionListener deleteSessionListener;
 
 
-        public TrainingViewHolder(Context parentContext, View itemView) {
+        public TrainingViewHolder(Context parentContext, View itemView, DeleteSessionListener listener) {
             super(itemView);
-            this.parentContext = parentContext;
             sessionNameTextView = itemView.findViewById(R.id.sessionNameTextView);
             sessionDurationTextView = itemView.findViewById(R.id.sessionDurationTextView);
+            deleteSessionListener = listener;
         }
 
         public void hideButtons() {
@@ -131,9 +158,7 @@ public class TrainingRecyclerAdapter extends RecyclerView.Adapter<TrainingRecycl
         @SuppressLint({"SetTextI18n", "DefaultLocale"})
         public void bind(TrainingSession session) {
             sessionNameTextView.setText(session.getName());
-            String currentUsername = AppPreferences.getUsername(parentContext);
-            db = FirebaseDatabase.getInstance();
-            trainingSessionReference = db.getReference("TrainingSession");
+
 
             // Calculate total duration including exercise duration and rest time
             float totalDurationSeconds = 0;
@@ -150,23 +175,14 @@ public class TrainingRecyclerAdapter extends RecyclerView.Adapter<TrainingRecycl
             //Add button listeners
             Button deleteButton = itemView.findViewById(R.id.deleteButton);
 
-            deleteButton.setOnClickListener(view -> {
-                if (session.getOwner().equals("public")) {
-                    MessageDialog.showAlertDialog(parentContext, "Oops", "This is a public session. You can only delete sessions you own.");
-                } else {
-                    ConfirmationDialog.show(parentContext, "Confirm", "Are you sure you want to delete this?",
-                            () -> trainingSessionReference.child(session.getName()).removeValue().addOnSuccessListener(task -> {
-                                Toast.makeText(parentContext, "Session deleted", Toast.LENGTH_SHORT).show();
-                            }).addOnFailureListener(task -> {
-                                Toast.makeText(parentContext, "Error deleting session!", Toast.LENGTH_SHORT).show();
-
-                            }));
-                }
-            });
+            deleteButton.setOnClickListener(view -> deleteSessionListener.deleteSession(session)
+            );
 
 
         }
 
-
+        public interface DeleteSessionListener {
+            void deleteSession(TrainingSession trainingSession);
+        }
     }
 }
