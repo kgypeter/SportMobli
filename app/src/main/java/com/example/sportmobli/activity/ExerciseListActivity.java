@@ -22,6 +22,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 
 public class ExerciseListActivity extends AppCompatActivity {
     FirebaseDatabase db;
@@ -105,11 +106,12 @@ public class ExerciseListActivity extends AppCompatActivity {
             Exercise exercise = exerciseSnapshot.getValue(Exercise.class);
             exercises.add(exercise);
         }
+        exercises.sort(Comparator.comparingInt(Exercise::getOrder));
         return exercises;
     }
 
     private void setupRecyclerView(ArrayList<Exercise> exercisesList) {
-        adapter = new ExerciseRecyclerAdapter(exercisesList);
+        adapter = new ExerciseRecyclerAdapter(exercisesList, owner, sessionName);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
