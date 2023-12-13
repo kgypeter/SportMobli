@@ -6,6 +6,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -14,8 +15,11 @@ import com.example.sportmobli.R;
 import com.example.sportmobli.adapter.ExerciseRecyclerAdapter;
 import com.example.sportmobli.dialogs.AddExerciseDialog;
 import com.example.sportmobli.model.Exercise;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
@@ -66,11 +70,34 @@ public class ExerciseListActivity extends AppCompatActivity {
     private void addExerciseCallback(Exercise exercise) {
         trainingSessionReference.child(owner).child(sessionName).child("exercises").child(exercise.getName()).setValue(exercise).addOnSuccessListener(t -> {
             Toast.makeText(this, "Exercise saved successfully!", Toast.LENGTH_SHORT).show();
-
+            getExercises();
         }).addOnFailureListener(t -> {
             Toast.makeText(this, "Error saving exercise!", Toast.LENGTH_SHORT).show();
 
         });
+    }
+
+    private void getExercises() {
+        trainingSessionReference.child(owner).child(sessionName).child("exercises").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                exercisesList = extractExercises(snapshot);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(ExerciseListActivity.this, "Error fetching exercises!", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private ArrayList<Exercise> extractExercises(DataSnapshot snapshot) {
+        ArrayList<Exercise> exercises = new ArrayList<>();
+        for (DataSnapshot exerciseSnapshot : snapshot.getChildren()) {
+            Exercise exercise = exerciseSnapshot.getValue(Exercise.class);
+            exercises.add(exercise);
+        }
+        return exercises;
     }
 
     private void setupRecyclerView(ArrayList<Exercise> exercisesList) {

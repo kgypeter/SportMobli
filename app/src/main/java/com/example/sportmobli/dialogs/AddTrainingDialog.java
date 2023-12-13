@@ -102,5 +102,9 @@ public class AddTrainingDialog {
         }
 
     }
+
+    public interface AddTrainingDialogListener {
+        void saveTraining(TrainingSessionDTO trainingSessionDTO);
+    }
 }
 
