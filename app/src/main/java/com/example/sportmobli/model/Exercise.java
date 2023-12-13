@@ -18,6 +18,7 @@ public class Exercise implements Parcelable {
     private String name;
     private float duration; // Duration of the exercise in seconds
     private float restTime; // Rest time after the exercise in seconds
+    private Integer order;
 
     public Exercise() {
     }
@@ -56,6 +57,14 @@ public class Exercise implements Parcelable {
 
     public void setRestTime(float restTime) {
         this.restTime = restTime;
+    }
+
+    public Integer getOrder() {
+        return order;
+    }
+
+    public void setOrder(Integer order) {
+        this.order = order;
     }
 
     @Override
