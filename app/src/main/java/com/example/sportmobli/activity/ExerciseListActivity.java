@@ -32,6 +32,13 @@ public class ExerciseListActivity extends AppCompatActivity {
     private ExerciseRecyclerAdapter adapter;
     private ArrayList<Exercise> exercisesList;
 
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        getExercises();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
