@@ -22,4 +22,22 @@
     <string name="tracking_page">Tracking Page</string>
     <string name="user_profile_page">User Profile Page</string>
     <string name="home_page">Home page</string>
+    <string name="recipes">Recipes</string>
+    <string name="drink">drink</string>
+    <string name="dinner">dinner</string>
+    <string name="lunch">lunch</string>
+    <string name="breakfast">breakfast</string>
+    <string name="breakfast_title">Breakfast</string>
+    <string name="description">description</string>
+    <string name="enter_grams">Enter grams</string>
+    <string name="add_quantity">Add quantity</string>
+    <string name="add_qtt">Add quantity:</string>
+    <string name="search">Search</string>
+    <string name="calories_0">Calories: 0</string>
+    <string name="protein_0">Protein: 0</string>
+    <string name="carbs_0">Carbs: 0</string>
+    <string name="fats_0">Fats: 0</string>
+    <string name="total_grams_0">Total Grams: 0</string>
+    <string name="data_100g">data/100g</string>
+    <string name="enter_session_name">enter_session_name</string>
 </resources>

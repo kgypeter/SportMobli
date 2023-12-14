@@ -7,37 +7,51 @@
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
+        android:label="SportMobil"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.SportMobli"
         tools:targetApi="31">
         <activity
-            android:name=".userProfile"
-            android:exported="false" />
+            android:name=".activity.ChronometerActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"/>
         <activity
-            android:name=".tracking"
-            android:exported="false" />
+            android:name=".activity.ExerciseListActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            />
         <activity
-            android:name=".training"
-            android:exported="false" />
-        <activity
-            android:name=".diet"
-            android:exported="false" />
-        <activity
-            android:name=".lol"
+            android:name=".activity.UserProfile"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".login"
+            android:name=".activity.Tracking"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".signup"
+            android:name=".activity.Training"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".MainActivity"
+            android:name=".model.Diet"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".activity.Home"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.Login"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.Signup"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.MainActivity"
             android:exported="true"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -46,6 +60,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".activity.DietHistoryActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.TrainingHistoryActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+
     </application>
 
 </manifest>

@@ -1,20 +1,27 @@
-package com.example.sportmobli;
+package com.example.sportmobli.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import com.example.sportmobli.R;
+import com.example.sportmobli.model.Diet;
+
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity {
 
     Button sign_in, log_in;
+    private ArrayList<Diet> foodList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        foodList = new ArrayList<>();
 
         sign_in = findViewById(R.id.sign_in);
         log_in = findViewById(R.id.log_in);
@@ -34,13 +41,16 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public void openSignup() {
-        Intent intent = new Intent(this, signup.class);
+    private void openSignup() {
+        Intent intent = new Intent(this, Signup.class);
         startActivity(intent);
+        overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
     }
 
-    public void openLogin() {
-        Intent intent = new Intent(this, login.class);
+    private void openLogin() {
+        Intent intent = new Intent(this, Login.class);
         startActivity(intent);
+        overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
     }
+
 }

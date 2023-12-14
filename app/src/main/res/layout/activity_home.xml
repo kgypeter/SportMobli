@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    tools:context=".lol">
+    tools:context=".activity.Home">
 
     <Button
         android:id="@+id/button3"
@@ -17,8 +17,7 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/button4"
         app:layout_constraintTop_toBottomOf="@+id/textView4"
-        app:layout_constraintVertical_bias="0.964"
-        tools:ignore="MissingConstraints" />
+        app:layout_constraintVertical_bias="0.964" />
 
     <Button
         android:id="@+id/button5"
@@ -30,8 +29,7 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView4"
-        app:layout_constraintVertical_bias="0.964"
-        tools:ignore="MissingConstraints" />
+        app:layout_constraintVertical_bias="0.964" />
 
     <Button
         android:id="@+id/button7"
@@ -43,8 +41,7 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/button3"
         app:layout_constraintTop_toBottomOf="@+id/textView4"
-        app:layout_constraintVertical_bias="0.964"
-        tools:ignore="MissingConstraints" />
+        app:layout_constraintVertical_bias="0.964" />
 
     <Button
         android:id="@+id/button6"
@@ -56,8 +53,7 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/button7"
         app:layout_constraintTop_toBottomOf="@+id/textView4"
-        app:layout_constraintVertical_bias="0.964"
-        tools:ignore="MissingConstraints" />
+        app:layout_constraintVertical_bias="0.964" />
 
     <Button
         android:id="@+id/button4"
@@ -69,15 +65,14 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/button5"
         app:layout_constraintTop_toBottomOf="@+id/textView4"
-        app:layout_constraintVertical_bias="0.964"
-        tools:ignore="MissingConstraints" />
+        app:layout_constraintVertical_bias="0.964" />
 
     <TextView
         android:id="@+id/textView4"
         android:layout_width="294dp"
         android:layout_height="72dp"
-        android:layout_marginTop="160dp"
-        android:text="@string/home_page"
+        android:layout_marginTop="64dp"
+        android:text="Home"
         android:textAlignment="center"
         android:textColor="@color/black"
         android:textSize="50sp"
@@ -85,7 +80,37 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="MissingConstraints" />
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/buttonDietHistory"
+        android:layout_width="195dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="136dp"
+        android:background="@drawable/rounded_button"
+        android:padding="16dp"
+        android:text="Diet History"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView4" />
+
+    <Button
+        android:id="@+id/buttonTrainingHistory"
+        android:layout_width="195dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:padding="16dp"
+        android:text="Training History"
+        android:textSize="18sp"
+        android:textColor="@color/white"
+        android:background="@drawable/rounded_button"
+        app:layout_constraintBottom_toTopOf="@+id/button3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buttonDietHistory"
+        app:layout_constraintVertical_bias="0.0" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
