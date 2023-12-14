@@ -1,4 +1,4 @@
-package com.example.sportmobli;
+package com.example.sportmobli.util;
 
 import android.graphics.Color;
 
@@ -98,6 +98,32 @@ public class HRPlotter {
         }
     }
 
+
+    public void reset(){
+        series = new HRSeries();
+        xHrVals = new ArrayList<>();
+        yHrVals = new ArrayList<>();
+        xRrVals = new ArrayList<>();
+        yRrVals = new ArrayList<>();
+        Date now = new Date();
+        double endTime = now.getTime();
+        double startTime = endTime - NVALS * 1000;
+        double delta = (endTime - startTime) / (NVALS - 1);
+
+        // Specify initial values to keep it from auto sizing
+        for (int i = 0; i < NVALS; i++) {
+            xHrVals.add(i, startTime + i * delta);
+            yHrVals.add(i, 60.0);
+            xRrVals.add(i, startTime + i * delta);
+            yRrVals.add(i, 100.0);
+        }
+        hrFormatter = new LineAndPointFormatter(Color.RED, null, null, null);
+        ((LineAndPointFormatter) hrFormatter).setLegendIconEnabled(false);
+        series.setHrSeries(new SimpleXYSeries(xHrVals, yHrVals, "HR"));
+        rrFormatter = new LineAndPointFormatter(Color.BLUE, null, null, null);
+        ((LineAndPointFormatter) rrFormatter).setLegendIconEnabled(false);
+        series.setRrSeries(new SimpleXYSeries(xRrVals, yRrVals, "RR"));
+    }
     public void setListener(XYPlot listener) {
         this.listener = listener;
     }

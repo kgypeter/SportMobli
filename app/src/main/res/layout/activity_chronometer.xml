@@ -1,6 +1,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:padding="16dp">
 
     <TextView
@@ -53,5 +54,29 @@
         android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="40dp"/>
+
+    <com.androidplot.xy.XYPlot
+        android:id="@+id/hr_view_plot"
+        style="@style/FullScreenGraph"
+        android:layout_width="fill_parent"
+        android:layout_height="304dp"
+        android:layout_above="@+id/restartButton"
+        android:layout_marginTop="28dp"
+        android:layout_marginBottom="55dp"
+        app:graphMarginBottom="12dp"
+        app:graphMarginLeft="30dp"
+        app:graphMarginRight="5dp"
+        app:graphMarginTop="20dp"
+        app:gridInsetLeft="25dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:lineLabels="left"
+        app:rangeTitleTextColor="@android:color/black"
+        app:rangeTitleTextSize="12dp"
+        app:renderMode="use_background_thread"
+        app:titleTextColor="@android:color/black"
+        app:titleTextSize="15dp" />
 
 </RelativeLayout>
