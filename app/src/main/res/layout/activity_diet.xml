@@ -109,13 +109,14 @@
         app:constraint_referenced_ids="button7,button6,button5,button3,button4" />
 
     <!-- RecyclerView setup -->
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
-        android:layout_width="340dp"
-        android:layout_height="330dp"
-        android:layout_marginTop="312dp"
+        android:layout_width="324dp"
+        android:layout_height="290dp"
+        android:layout_marginTop="308dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.492"
+        app:layout_constraintHorizontal_bias="0.494"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
