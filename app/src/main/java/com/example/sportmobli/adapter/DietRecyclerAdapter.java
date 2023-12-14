@@ -22,7 +22,6 @@ public class DietRecyclerAdapter extends RecyclerView.Adapter<DietRecyclerAdapte
     private final ArrayList<Diet> foodList;
     private final ArrayList<Diet> filteredList;
     private final TextView totalGramsTextView;
-
     private final TextView totalCaloriesTextView;
     private final TextView totalProteinTextView;
     private final TextView totalCarbsTextView;
