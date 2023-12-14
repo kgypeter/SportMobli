@@ -56,5 +56,25 @@ public class Home extends AppCompatActivity {
                 overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
             }
         });
+
+        // Find the Diet History Button
+        findViewById(R.id.buttonDietHistory).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Navigate to DietHistoryActivity
+                Intent intent = new Intent(Home.this, DietHistoryActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        // Find the Training History Button
+        findViewById(R.id.buttonTrainingHistory).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Navigate to TrainingHistoryActivity
+                Intent intent = new Intent(Home.this, TrainingHistoryActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 }
