@@ -7,6 +7,7 @@ import com.androidplot.xy.LineAndPointFormatter;
 import com.androidplot.xy.SimpleXYSeries;
 import com.androidplot.xy.XYPlot;
 import com.androidplot.xy.XYSeriesFormatter;
+import com.example.sportmobli.model.HRSeries;
 import com.polar.sdk.api.model.PolarHrData;
 
 import java.util.ArrayList;
@@ -21,14 +22,14 @@ public class HRPlotter {
     private XYPlot listener;
     public  XYSeriesFormatter<?> hrFormatter;
     public  XYSeriesFormatter<?> rrFormatter;
-    public  SimpleXYSeries hrSeries;
-    public  SimpleXYSeries rrSeries;
+    public HRSeries series;
     private List<Double> xHrVals = new ArrayList<>();
     private List<Double> yHrVals = new ArrayList<>();
     private List<Double> xRrVals = new ArrayList<>();
     private List<Double> yRrVals = new ArrayList<>();
 
     public HRPlotter() {
+        series = new HRSeries();
         Date now = new Date();
         double endTime = now.getTime();
         double startTime = endTime - NVALS * 1000;
@@ -43,10 +44,10 @@ public class HRPlotter {
         }
         hrFormatter = new LineAndPointFormatter(Color.RED, null, null, null);
         ((LineAndPointFormatter) hrFormatter).setLegendIconEnabled(false);
-        hrSeries = new SimpleXYSeries(xHrVals, yHrVals, "HR");
+        series.setHrSeries(new SimpleXYSeries(xHrVals, yHrVals, "HR"));
         rrFormatter = new LineAndPointFormatter(Color.BLUE, null, null, null);
         ((LineAndPointFormatter) rrFormatter).setLegendIconEnabled(false);
-        rrSeries = new SimpleXYSeries(xRrVals, yRrVals, "RR");
+        series.setRrSeries(new SimpleXYSeries(xRrVals, yRrVals, "RR"));
     }
 
     public void addValues(PolarHrData.PolarHrSample polarHrData) {
@@ -55,11 +56,11 @@ public class HRPlotter {
         for (int i = 0; i < NVALS - 1; i++) {
             xHrVals.set(i, xHrVals.get(i + 1));
             yHrVals.set(i, yHrVals.get(i + 1));
-            hrSeries.setXY(xHrVals.get(i), yHrVals.get(i), i);
+            series.getHrSeries().setXY(xHrVals.get(i), yHrVals.get(i), i);
         }
         xHrVals.set(NVALS - 1, (double) time);
         yHrVals.set(NVALS - 1, (double) polarHrData.getHr());
-        hrSeries.setXY(xHrVals.get(NVALS - 1), yHrVals.get(NVALS - 1), NVALS - 1);
+        series.getHrSeries().setXY(xHrVals.get(NVALS - 1), yHrVals.get(NVALS - 1), NVALS - 1);
 
         // Do RR
         // We don't know at what time the RR intervals start.  All we know is
@@ -76,7 +77,7 @@ public class HRPlotter {
             for (int i = 0; i < NVALS - nRrVals; i++) {
                 xRrVals.set(i, xRrVals.get(i + 1));
                 yRrVals.set(i, yRrVals.get(i + 1));
-                rrSeries.setXY(xRrVals.get(i), yRrVals.get(i), i);
+                series.getRrSeries().setXY(xRrVals.get(i), yRrVals.get(i), i);
             }
             double totalRR = 0.0;
             for (int i = 0; i < nRrVals; i++) {
@@ -89,7 +90,7 @@ public class HRPlotter {
                 xRrVals.set(i, time - totalRR);
                 yRrVals.set(i, rr);
                 totalRR -= rr;
-                rrSeries.setXY(xRrVals.get(i), yRrVals.get(i), i);
+                series.getRrSeries().setXY(xRrVals.get(i), yRrVals.get(i), i);
             }
         }
         if (listener != null) {
