@@ -1,4 +1,4 @@
-package com.example.sportmobli;
+package com.example.sportmobli.activity;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -12,6 +12,11 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.sportmobli.R;
+
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
@@ -19,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 2;
 
     Button sign_in, log_in;
-    private ArrayList<Diet> foodList;
+    private ArrayList<DietActivity> foodList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,10 +98,13 @@ public class MainActivity extends AppCompatActivity {
     private void openSignup() {
         Intent intent = new Intent(this, Signup.class);
         startActivity(intent);
+        overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
     }
 
     private void openLogin() {
         Intent intent = new Intent(this, Login.class);
         startActivity(intent);
+        overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
     }
+
 }

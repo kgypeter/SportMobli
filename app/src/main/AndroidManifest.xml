@@ -43,36 +43,44 @@
         android:theme="@style/Theme.SportMobli"
         tools:targetApi="31">
         <activity
-            android:name=".UserProfile"
-            android:exported="false"
-            android:screenOrientation="portrait"/>
-        <activity
-            android:name=".Tracking"
-            android:exported="false"
-            android:screenOrientation="portrait"/>
-        <activity
-            android:name=".Training"
-            android:exported="false"
-            android:screenOrientation="portrait"/>
-        <activity
-            android:name=".Diet"
-            android:windowSoftInputMode="adjustResize"
-            android:exported="false"
-            android:screenOrientation="portrait"/>
-        <activity
-            android:name=".Home"
+            android:name=".activity.ChronometerActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Login"
+            android:name=".activity.ExerciseListActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Signup"
+            android:name=".activity.UserProfile"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".MainActivity"
+            android:name=".activity.Tracking"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.Training"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.DietActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".activity.Home"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.Login"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.Signup"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.MainActivity"
             android:exported="true"
             android:screenOrientation="portrait">
             <intent-filter>

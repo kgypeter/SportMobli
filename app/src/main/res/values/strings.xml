@@ -39,8 +39,12 @@
     <string name="fats_0">Fats: 0</string>
     <string name="total_grams_0">Total Grams: 0</string>
     <string name="data_100g">data/100g</string>
+
     <string name="current_heart_rate">HR: 0</string>
     <string name="buttonStop">Stop</string>
     <string name="buttonStart">Start</string>
     <string name="verityId">Id of Verity Sense Device</string>
+
+    <string name="enter_session_name">enter_session_name</string>
+
 </resources>

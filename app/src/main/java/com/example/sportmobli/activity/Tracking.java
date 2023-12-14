@@ -1,4 +1,4 @@
-package com.example.sportmobli;
+package com.example.sportmobli.activity;
 
 import static android.content.ContentValues.TAG;
 
@@ -16,6 +16,7 @@ import com.androidplot.xy.BoundaryMode;
 import com.androidplot.xy.StepMode;
 import com.androidplot.xy.XYGraphWidget;
 import com.androidplot.xy.XYPlot;
+import com.example.sportmobli.HRPlotter;
 import com.polar.sdk.api.PolarBleApi;
 import com.polar.sdk.api.PolarBleApiCallback;
 import com.polar.sdk.api.PolarBleApiDefaultImpl;
@@ -30,6 +31,10 @@ import java.util.UUID;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.disposables.Disposable;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.sportmobli.R;
 
 public class Tracking extends AppCompatActivity {
 
@@ -48,21 +53,23 @@ public class Tracking extends AppCompatActivity {
         Button lolButton = findViewById(R.id.button3);
         Button dietButton = findViewById(R.id.button5);
         Button userProfileButton = findViewById(R.id.button6);
-        Button trackingButton = findViewById(R.id.button7);
+        Button trainingButton = findViewById(R.id.button4);
 
         lolButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), Home.class);
                 startActivity(intent);
+                overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
             }
         });
 
         dietButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), Diet.class);
+                Intent intent = new Intent(getApplicationContext(), DietActivity.class);
                 startActivity(intent);
+                overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
             }
         });
 
@@ -71,14 +78,16 @@ public class Tracking extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), UserProfile.class);
                 startActivity(intent);
+                overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
             }
         });
 
-        trackingButton.setOnClickListener(new View.OnClickListener() {
+        trainingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), Tracking.class);
+                Intent intent = new Intent(getApplicationContext(), Training.class);
                 startActivity(intent);
+                overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
             }
         });
         api = PolarBleApiDefaultImpl.defaultImplementation(
@@ -197,5 +206,6 @@ public class Tracking extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         api.shutDown();
+
     }
 }
