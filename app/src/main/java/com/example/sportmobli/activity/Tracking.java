@@ -16,7 +16,7 @@ import com.androidplot.xy.BoundaryMode;
 import com.androidplot.xy.StepMode;
 import com.androidplot.xy.XYGraphWidget;
 import com.androidplot.xy.XYPlot;
-import com.example.sportmobli.HRPlotter;
+import com.example.sportmobli.util.HRPlotter;
 import com.polar.sdk.api.PolarBleApi;
 import com.polar.sdk.api.PolarBleApiCallback;
 import com.polar.sdk.api.PolarBleApiDefaultImpl;
@@ -25,14 +25,11 @@ import com.polar.sdk.api.model.PolarDeviceInfo;
 import com.polar.sdk.api.model.PolarHrData;
 
 import java.text.DecimalFormat;
-import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.UUID;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.disposables.Disposable;
-
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.sportmobli.R;
 
