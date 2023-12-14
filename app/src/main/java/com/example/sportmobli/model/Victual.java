@@ -66,6 +66,10 @@ public class Victual {
         return totalGrams;
     }
 
+    public void setTotalGrams(float grams) {
+        this.totalGrams = grams;
+    }
+
     public void addToTotalGrams(float grams) {
         this.totalGrams += grams;
     }
