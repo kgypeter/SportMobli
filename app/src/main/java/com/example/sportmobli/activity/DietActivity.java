@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sportmobli.R;
 import com.example.sportmobli.adapter.DietRecyclerAdapter;
+import com.example.sportmobli.dialogs.ConfirmationDialog;
 import com.example.sportmobli.model.DietHistory;
 import com.example.sportmobli.model.Victual;
 import com.example.sportmobli.util.AppPreferences;
@@ -80,7 +81,7 @@ public class DietActivity extends AppCompatActivity {
                 startActivity(intent);
                 overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
             });
-            saveMealButton.setOnClickListener(view -> saveMeal());
+            saveMealButton.setOnClickListener(view -> ConfirmationDialog.show(this, "Add meal to your history.", "Make sure all macros are correct!", this::saveMeal));
 
             getFoodList();
 
