@@ -14,8 +14,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sportmobli.R;
 import com.example.sportmobli.model.Victual;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,9 +28,7 @@ public class DietRecyclerAdapter extends RecyclerView.Adapter<DietRecyclerAdapte
     private final TextView totalProteinTextView;
     private final TextView totalCarbsTextView;
     private final TextView totalFatsTextView;
-    private final DietRecyclerAdapter.FetchDataListener fetchDataListener;
-    private FirebaseDatabase db;
-    private DatabaseReference dietHistoryReference;
+
 
     public DietRecyclerAdapter(List<Victual> foodList, TextView totalGramsTextView,
                                TextView totalCaloriesTextView, TextView totalProteinTextView,
@@ -46,7 +42,6 @@ public class DietRecyclerAdapter extends RecyclerView.Adapter<DietRecyclerAdapte
         this.totalCarbsTextView = totalCarbsTextView;
         this.totalFatsTextView = totalFatsTextView;
         this.filteredList = new ArrayList<>(foodList);
-        this.fetchDataListener = fetchDataListener;
 
     }
 
