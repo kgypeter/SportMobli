@@ -38,7 +38,6 @@ public class Tracking extends AppCompatActivity {
     private Disposable hrDisposable;
     private HRPlotter plotter;
     private XYPlot plot;
-    MyPlotterListener listener = new MyPlotterListener();
     TextView currentHR;
 
     @Override
@@ -144,8 +143,8 @@ public class Tracking extends AppCompatActivity {
             plotter = new HRPlotter();
             plot = findViewById(R.id.hr_view_plot);
             plotter.setListener(plot);
-            plot.addSeries(plotter.hrSeries, plotter.hrFormatter);
-            plot.addSeries(plotter.rrSeries, plotter.rrFormatter);
+            plot.addSeries(plotter.series.getHrSeries(), plotter.hrFormatter);
+            plot.addSeries(plotter.series.getRrSeries(), plotter.rrFormatter);
             plot.setRangeBoundaries(50, 100, BoundaryMode.AUTO);
             plot.setDomainBoundaries(0, 360000, BoundaryMode.AUTO);
             plot.setRangeStep(StepMode.INCREMENT_BY_VAL, 10.0);
@@ -154,7 +153,7 @@ public class Tracking extends AppCompatActivity {
             plot.setLinesPerRangeLabel(2);
             streamHR();
         } catch (PolarInvalidArgument e) {
-            Toast.makeText(getApplicationContext(), "Failed to connect to " + deviceId, Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "Failed to connect to " + deviceId + e, Toast.LENGTH_SHORT).show();
             throw new RuntimeException(e);
         }
         startActivity();
@@ -182,6 +181,8 @@ public class Tracking extends AppCompatActivity {
                             error -> {
                                 Log.e(TAG, "HR stream failed. Reason " + error + ". Tried on device: " + deviceId);
                                 hrDisposable = null;
+                                Toast.makeText(getApplicationContext(), "Failed to connect to " + deviceId + ".\nError: " + error, Toast.LENGTH_LONG).show();
+                                error.printStackTrace();
                             },
                             () -> Log.d(TAG, "HR stream complete")
                     );
