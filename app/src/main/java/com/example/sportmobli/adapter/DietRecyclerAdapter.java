@@ -13,23 +13,31 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sportmobli.R;
-import com.example.sportmobli.model.Diet;
+import com.example.sportmobli.model.Victual;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class DietRecyclerAdapter extends RecyclerView.Adapter<DietRecyclerAdapter.MyViewHolder> {
 
-    private final ArrayList<Diet> foodList;
-    private final ArrayList<Diet> filteredList;
+    private final List<Victual> foodList;
+    private final List<Victual> filteredList;
     private final TextView totalGramsTextView;
     private final TextView totalCaloriesTextView;
     private final TextView totalProteinTextView;
     private final TextView totalCarbsTextView;
     private final TextView totalFatsTextView;
+    private final DietRecyclerAdapter.FetchDataListener fetchDataListener;
+    private FirebaseDatabase db;
+    private DatabaseReference dietHistoryReference;
 
-    public DietRecyclerAdapter(ArrayList<Diet> foodList, TextView totalGramsTextView,
+    public DietRecyclerAdapter(List<Victual> foodList, TextView totalGramsTextView,
                                TextView totalCaloriesTextView, TextView totalProteinTextView,
-                               TextView totalCarbsTextView, TextView totalFatsTextView) {
+                               TextView totalCarbsTextView, TextView totalFatsTextView,
+                               DietRecyclerAdapter.FetchDataListener fetchDataListener) {
+        // This needs to be initialised so it can be filled by the callback
         this.foodList = foodList;
         this.totalGramsTextView = totalGramsTextView;
         this.totalCaloriesTextView = totalCaloriesTextView;
@@ -37,6 +45,8 @@ public class DietRecyclerAdapter extends RecyclerView.Adapter<DietRecyclerAdapte
         this.totalCarbsTextView = totalCarbsTextView;
         this.totalFatsTextView = totalFatsTextView;
         this.filteredList = new ArrayList<>(foodList);
+        this.fetchDataListener = fetchDataListener;
+
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -51,7 +61,6 @@ public class DietRecyclerAdapter extends RecyclerView.Adapter<DietRecyclerAdapte
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.victuals, parent, false);
-
         return new MyViewHolder(itemView);
     }
 
@@ -67,7 +76,7 @@ public class DietRecyclerAdapter extends RecyclerView.Adapter<DietRecyclerAdapte
             holder.hideButtons(); // Hide buttons when showing "No item found"
             holder.itemView.setClickable(false);
         } else {
-            Diet diet = filteredList.get(position);
+            Victual diet = filteredList.get(position);
             holder.nameTxt.setText(diet.getFoodName());
             holder.caloriesTxt.setText("Calories: " + diet.getCalories());
             holder.proteinTxt.setText("Protein: " + diet.getProtein() + "g");
@@ -88,7 +97,7 @@ public class DietRecyclerAdapter extends RecyclerView.Adapter<DietRecyclerAdapte
         filteredList.clear();
         String filterPattern = query.toLowerCase().trim();
 
-        for (Diet item : foodList) {
+        for (Victual item : foodList) {
             if (item.getFoodName().toLowerCase().contains(filterPattern)) {
                 filteredList.add(item);
             }
@@ -96,7 +105,7 @@ public class DietRecyclerAdapter extends RecyclerView.Adapter<DietRecyclerAdapte
 
         if (filteredList.isEmpty() && !query.isEmpty()) {
             // If there are no matches and the query is not empty, add a dummy item
-            filteredList.add(new Diet("", 0, 0, 0, 0));
+            filteredList.add(new Victual("", 0, 0, 0, 0));
         }
 
         notifyDataSetChanged(); // Notify the adapter that the data set has changed
@@ -107,6 +116,10 @@ public class DietRecyclerAdapter extends RecyclerView.Adapter<DietRecyclerAdapte
         return filteredList.size() == 1 && filteredList.get(0).getFoodName().isEmpty();
     }
 
+    public interface FetchDataListener {
+        void fetchData();
+    }
+
     public class MyViewHolder extends RecyclerView.ViewHolder {
         private final TextView nameTxt;
         private final TextView caloriesTxt;
@@ -114,7 +127,7 @@ public class DietRecyclerAdapter extends RecyclerView.Adapter<DietRecyclerAdapte
         private final TextView carbsTxt;
         private final TextView fatsTxt;
 
-        private Diet clickedDiet;
+        private Victual clickedDiet;
 
         public MyViewHolder(final View view) {
             super(view);
@@ -140,7 +153,7 @@ public class DietRecyclerAdapter extends RecyclerView.Adapter<DietRecyclerAdapte
         }
 
         @SuppressLint("SetTextI18n")
-        private void showDetailsDialog(Diet diet) {
+        private void showDetailsDialog(Victual diet) {
             AlertDialog.Builder builder = new AlertDialog.Builder(itemView.getContext());
             builder.setTitle("Add quantity in grams");
 
@@ -192,13 +205,13 @@ public class DietRecyclerAdapter extends RecyclerView.Adapter<DietRecyclerAdapte
             float totalFats = 0;
             float total = 0;
 
-            for (Diet diet : foodList) {
+            for (Victual victual : foodList) {
                 // Increment the respective totals based on the multiplied values
-                totalCalories += (diet.getCalories() / 100) * diet.getTotalGrams();
-                totalProtein += (diet.getProtein() / 100) * diet.getTotalGrams();
-                totalCarbs += (diet.getCarbohydrates() / 100) * diet.getTotalGrams();
-                totalFats += (diet.getFats() / 100) * diet.getTotalGrams();
-                total += diet.getTotalGrams();
+                totalCalories += (victual.getCalories() / 100) * victual.getTotalGrams();
+                totalProtein += (victual.getProtein() / 100) * victual.getTotalGrams();
+                totalCarbs += (victual.getCarbohydrates() / 100) * victual.getTotalGrams();
+                totalFats += (victual.getFats() / 100) * victual.getTotalGrams();
+                total += victual.getTotalGrams();
             }
 
             // Update the respective TextViews with the calculated totals
@@ -210,5 +223,4 @@ public class DietRecyclerAdapter extends RecyclerView.Adapter<DietRecyclerAdapte
         }
 
     }
-
 }

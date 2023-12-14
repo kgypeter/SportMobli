@@ -15,12 +15,11 @@
         <activity
             android:name=".activity.ChronometerActivity"
             android:exported="false"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.ExerciseListActivity"
             android:exported="false"
-            android:screenOrientation="portrait"
-            />
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.UserProfile"
             android:exported="false"
@@ -34,7 +33,7 @@
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".model.Diet"
+            android:name=".activity.DietActivity"
             android:exported="false"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize" />

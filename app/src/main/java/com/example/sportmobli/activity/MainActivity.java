@@ -1,20 +1,20 @@
 package com.example.sportmobli.activity;
 
-import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.sportmobli.R;
-import com.example.sportmobli.model.Diet;
 
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
     Button sign_in, log_in;
-    private ArrayList<Diet> foodList;
+    private ArrayList<DietActivity> foodList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
