@@ -8,7 +8,6 @@ import android.widget.Button;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.sportmobli.R;
-import com.example.sportmobli.model.Diet;
 
 public class Tracking extends AppCompatActivity {
 
@@ -34,7 +33,7 @@ public class Tracking extends AppCompatActivity {
         dietButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), Diet.class);
+                Intent intent = new Intent(getApplicationContext(), DietActivity.class);
                 startActivity(intent);
                 overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
             }

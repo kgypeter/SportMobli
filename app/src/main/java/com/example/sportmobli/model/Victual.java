@@ -1,19 +1,33 @@
 package com.example.sportmobli.model;
 
+public class Victual {
 
-import java.time.LocalDateTime;
-
-public class DietHistory {
-
-    private String owner;
+    private String foodName;
     private float calories;
     private float protein;
     private float carbohydrates;
     private float fats;
+    private float totalGrams;
 
-    private LocalDateTime dateAdded;
 
-    public DietHistory() {
+    public Victual() {
+    }
+
+    public Victual(String foodName, float calories, float protein, float carbohydrates, float fats) {
+        this.foodName = foodName;
+        this.calories = calories;
+        this.protein = protein;
+        this.carbohydrates = carbohydrates;
+        this.fats = fats;
+        this.totalGrams = 0;
+    }
+
+    public String getFoodName() {
+        return foodName;
+    }
+
+    public void setFoodName(String foodName) {
+        this.foodName = foodName;
     }
 
     public float getCalories() {
@@ -48,19 +62,15 @@ public class DietHistory {
         this.fats = fats;
     }
 
-    public LocalDateTime getDateAdded() {
-        return dateAdded;
+    public float getTotalGrams() {
+        return totalGrams;
     }
 
-    public void setDateAdded(LocalDateTime dateAdded) {
-        this.dateAdded = dateAdded;
+    public void setTotalGrams(float grams) {
+        this.totalGrams = grams;
     }
 
-    public String getOwner() {
-        return owner;
-    }
-
-    public void setOwner(String owner) {
-        this.owner = owner;
+    public void addToTotalGrams(float grams) {
+        this.totalGrams += grams;
     }
 }

@@ -1,15 +1,18 @@
 package com.example.sportmobli.adapter;
 
+
 import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sportmobli.R;
+
 import com.example.sportmobli.activity.DietHistoryActivity;
 import com.example.sportmobli.model.DietHistory;
 
@@ -20,11 +23,13 @@ public class DietHistoryRecyclerAdapter extends RecyclerView.Adapter<DietHistory
     private final ArrayList<DietHistory> dietHistoryList;
 
     public DietHistoryRecyclerAdapter(ArrayList<DietHistory> dietHistoryList) {
+
         this.dietHistoryList = dietHistoryList;
     }
 
     @NonNull
     @Override
+
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.diet_history_item, parent, false);
         return new MyViewHolder(itemView);
@@ -34,7 +39,7 @@ public class DietHistoryRecyclerAdapter extends RecyclerView.Adapter<DietHistory
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         DietHistory dietHistory = dietHistoryList.get(position);
-        holder.historyDate.setText("Date: " + dietHistory.getDate());
+        holder.historyDate.setText("Date: " + dietHistory.getDateAdded());
         holder.historyCalories.setText("Calories: " + dietHistory.getCalories());
         holder.historyProtein.setText("Protein: " + dietHistory.getProtein());
         holder.historyCarbs.setText("Carbs: " + dietHistory.getCarbohydrates());
@@ -56,10 +61,13 @@ public class DietHistoryRecyclerAdapter extends RecyclerView.Adapter<DietHistory
             historyCarbs = view.findViewById(R.id.historyCarbs);
             historyFats = view.findViewById(R.id.historyFats);
         }
+
     }
 
     @Override
     public int getItemCount() {
+
         return dietHistoryList.size();
+
     }
 }

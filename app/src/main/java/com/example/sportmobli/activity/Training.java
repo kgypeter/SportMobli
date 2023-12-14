@@ -18,7 +18,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.sportmobli.R;
 import com.example.sportmobli.adapter.TrainingRecyclerAdapter;
 import com.example.sportmobli.dialogs.AddTrainingDialog;
-import com.example.sportmobli.model.Diet;
 import com.example.sportmobli.model.Exercise;
 import com.example.sportmobli.model.TrainingSession;
 import com.example.sportmobli.model.TrainingSessionDTO;
@@ -101,7 +100,7 @@ public class Training extends AppCompatActivity implements TrainingRecyclerAdapt
         });
 
         dietButton.setOnClickListener(view -> {
-            Intent intent = new Intent(getApplicationContext(), Diet.class);
+            Intent intent = new Intent(getApplicationContext(), DietActivity.class);
             startActivity(intent);
             overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
         });
