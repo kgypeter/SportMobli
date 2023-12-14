@@ -45,7 +45,7 @@ public class DietActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         FirebaseDatabase db = FirebaseDatabase.getInstance();
         victualReference = db.getReference("victuals");
-        dietHistoryReference = db.getReference("dietHistory");
+        dietHistoryReference = db.getReference("DietHistory");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_diet);
 
