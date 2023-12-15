@@ -22,10 +22,13 @@ import com.androidplot.xy.BoundaryMode;
 import com.androidplot.xy.StepMode;
 import com.androidplot.xy.XYGraphWidget;
 import com.androidplot.xy.XYPlot;
+import com.example.sportmobli.util.AppPreferences;
 import com.example.sportmobli.util.HRPlotter;
 import com.example.sportmobli.R;
 import com.example.sportmobli.model.Exercise;
 import com.example.sportmobli.util.PolarBleApiUtil;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.polar.sdk.api.PolarBleApi;
 import com.polar.sdk.api.PolarBleApiDefaultImpl;
 import com.polar.sdk.api.errors.PolarInvalidArgument;
@@ -64,12 +67,16 @@ public class ChronometerActivity extends AppCompatActivity {
     private XYPlot plot;
     TextView currentHR;
     boolean verityReady = false;
+    FirebaseDatabase db;
+    DatabaseReference trainingHistoryReference;
 
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chronometer);
+        db = FirebaseDatabase.getInstance();
+        trainingHistoryReference = db.getReference("TrainingHistory");
 
         chronometerTextView = findViewById(R.id.chronometerTextView);
         exerciseTitleTextView = findViewById(R.id.exerciseTitleTextView);
@@ -172,6 +179,11 @@ public class ChronometerActivity extends AppCompatActivity {
         }).start();
     }
     private void startExerciseSession() {
+        streamHR();
+        exerciseTimerRecursion();
+    }
+    private void exerciseTimerRecursion(){
+
         if (currentExerciseIndex < exercisesList.size()) {
             Exercise currentExercise = exercisesList.get(currentExerciseIndex);
             long duration;
@@ -184,6 +196,7 @@ public class ChronometerActivity extends AppCompatActivity {
             } else {
                 duration = (long) ((currentExercise.getRestTime() * 1000) + 1000);
                 title = "Rest";
+
             }
 
             setExerciseTitle(title);
@@ -192,11 +205,24 @@ public class ChronometerActivity extends AppCompatActivity {
             speakText(title);
 
             startTimer(duration);
-            streamHR();
             isExerciseTime = !isExerciseTime;
         } else {
-            exerciseTitleTextView.setText("Exercise session finished");
+            endSession();
         }
+    }
+    private void endSession(){
+        exerciseTitleTextView.setText("Exercise session finished");
+        if (hrDisposable != null && !hrDisposable.isDisposed()) {
+            // Stop the HR stream and save the session to firebase
+            saveSession();
+            hrDisposable.dispose();
+            hrDisposable = null;
+        }
+}
+private void saveSession(){
+        String currentUsername = AppPreferences.getUsername(this);
+        // To save in firebase
+}
     }
 
     private void setExerciseTitle(String title) {
@@ -225,7 +251,6 @@ public class ChronometerActivity extends AppCompatActivity {
         plot.setDomainStep(StepMode.INCREMENT_BY_VAL, 60000.0);
         plot.getGraph().getLineLabelStyle(XYGraphWidget.Edge.LEFT).setFormat(new DecimalFormat("#"));
         plot.setLinesPerRangeLabel(2);
-        streamHR();
         currentExerciseIndex = 0;
         isExerciseTime = true;
         isPaused = false;
@@ -246,7 +271,7 @@ public class ChronometerActivity extends AppCompatActivity {
                     if (!isExerciseTime) {
                         currentExerciseIndex++;
                     }
-                    startExerciseSession();
+                    exerciseTimerRecursion();
                 }
             }
         }.start();
@@ -268,8 +293,8 @@ public class ChronometerActivity extends AppCompatActivity {
         pauseTimer();
         if (hrDisposable != null && !hrDisposable.isDisposed()) {
             // Stop the HR stream
-            hrDisposable.dispose();
-            hrDisposable = null;
+//            hrDisposable.dispose();
+//            hrDisposable = null;
         }
         startButton.setEnabled(false);
         pauseButton.setEnabled(true);
@@ -277,7 +302,6 @@ public class ChronometerActivity extends AppCompatActivity {
 
     private void resumeExerciseSession() {
         resumeTimer();
-        streamHR();
         startButton.setEnabled(false);
         pauseButton.setEnabled(true);
     }
@@ -339,4 +363,5 @@ public class ChronometerActivity extends AppCompatActivity {
             textToSpeech.shutdown();
         }
     }
+
 }
