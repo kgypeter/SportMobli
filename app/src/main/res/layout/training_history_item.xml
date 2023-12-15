@@ -1,6 +1,6 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/historyItemLayout"
+    android:id="@+id/historyItemLayoutTraining"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
@@ -16,49 +16,31 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/historyDate"
+            android:id="@+id/historySessionName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="14sp"
             android:textColor="@color/black"
             android:textStyle="bold"
-            android:text="Date: January 1, 2023" />
+            android:text="Session Name: Session ABC" />
 
         <TextView
-            android:id="@+id/historyCalories"
+            android:id="@+id/historyTotalTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="14sp"
             android:textColor="@color/black"
             android:textStyle="bold"
-            android:text="Calories: 300" />
+            android:text="Total Time: 1 hour" />
 
         <TextView
-            android:id="@+id/historyCarbs"
+            android:id="@+id/historyAddedDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="14sp"
             android:textColor="@color/black"
             android:textStyle="bold"
-            android:text="Carbs: 50g" />
-
-        <TextView
-            android:id="@+id/historyProtein"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="14sp"
-            android:textColor="@color/black"
-            android:textStyle="bold"
-            android:text="Protein: 20g" />
-
-        <TextView
-            android:id="@+id/historyFats"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="14sp"
-            android:textColor="@color/black"
-            android:textStyle="bold"
-            android:text="Fats: 15g" />
+            android:text="Added Date and Time" />
 
     </LinearLayout>
 
