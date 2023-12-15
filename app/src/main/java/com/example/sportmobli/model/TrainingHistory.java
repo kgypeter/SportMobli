@@ -1,15 +1,27 @@
 package com.example.sportmobli.model;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Map;
 
 public class TrainingHistory {
     private String sessionName;
     private String owner;
-    private LocalDate addedDate;
+    private LocalDateTime addedDate;
 
     private String totalTime;
 
+    private Map<String, Double> hrHistory;
+
     public TrainingHistory() {
+    }
+
+    public Map<String, Double> getHrHistory() {
+        return hrHistory;
+    }
+
+    public void setHrHistory(Map<String, Double> hrHistory) {
+        this.hrHistory = hrHistory;
     }
 
     public String getSessionName() {
@@ -28,11 +40,11 @@ public class TrainingHistory {
         this.owner = owner;
     }
 
-    public LocalDate getAddedDate() {
+    public LocalDateTime getAddedDate() {
         return addedDate;
     }
 
-    public void setAddedDate(LocalDate addedDate) {
+    public void setAddedDate(LocalDateTime addedDate) {
         this.addedDate = addedDate;
     }
 

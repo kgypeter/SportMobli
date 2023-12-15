@@ -1,12 +1,24 @@
 package com.example.sportmobli.model;
 
+import java.util.Map;
+
 public class TrainingHistoryDisplay {
 
     private String sessionName;
     private String totalTime;
     private String addedDate;
+    private Map<String, Double> hrHistory;
+
 
     public TrainingHistoryDisplay() {
+    }
+
+    public Map<String, Double> getHrHistory() {
+        return hrHistory;
+    }
+
+    public void setHrHistory(Map<String, Double> hrHistory) {
+        this.hrHistory = hrHistory;
     }
 
     public String getSessionName() {
