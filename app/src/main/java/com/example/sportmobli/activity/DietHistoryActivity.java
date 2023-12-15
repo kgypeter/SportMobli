@@ -1,6 +1,7 @@
 package com.example.sportmobli.activity;
 
 import android.os.Bundle;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -54,10 +55,11 @@ public class DietHistoryActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                // Handle error
+                Toast.makeText(DietHistoryActivity.this, "Failed to fetch diet history: " + error.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
+
 
     private List<DietHistoryDisplay> extractHistoryList(DataSnapshot snapshot) {
         ArrayList<DietHistoryDisplay> dietHistoryList = new ArrayList<>();
@@ -91,7 +93,5 @@ public class DietHistoryActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(adapter);
-
-
     }
 }

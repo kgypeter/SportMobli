@@ -1,6 +1,7 @@
 package com.example.sportmobli.activity;
 
 import android.os.Bundle;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -46,14 +47,16 @@ public class TrainingHistoryActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 trainingHistoryList = extractTrainingHistory(snapshot);
+                startAdapter();
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
+                Toast.makeText(TrainingHistoryActivity.this, "Failed to retrieve data: " + error.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
+
 
     private List<TrainingHistoryDisplay> extractTrainingHistory(DataSnapshot snapshot) {
         List<TrainingHistoryDisplay> trainingHistoryDisplays = new ArrayList<>();
@@ -80,3 +83,4 @@ public class TrainingHistoryActivity extends AppCompatActivity {
 
     }
 }
+

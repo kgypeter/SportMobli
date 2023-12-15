@@ -33,8 +33,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-// todo - implement the functionality of crud operations and make data persistent in firebase DB
-//  - hide delete and edit buttons when there is no search result for a session
 public class DietActivity extends AppCompatActivity {
 
     private DatabaseReference victualReference;
@@ -102,7 +100,7 @@ public class DietActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
+                Toast.makeText(DietActivity.this, "Failed to retrieve food list: " + error.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
