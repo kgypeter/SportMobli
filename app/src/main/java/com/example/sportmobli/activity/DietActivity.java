@@ -8,6 +8,7 @@ import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,29 +18,34 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sportmobli.R;
 import com.example.sportmobli.adapter.DietRecyclerAdapter;
+import com.example.sportmobli.dialogs.ConfirmationDialog;
+import com.example.sportmobli.model.DietHistory;
 import com.example.sportmobli.model.Victual;
+import com.example.sportmobli.util.AppPreferences;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 // todo - implement the functionality of crud operations and make data persistent in firebase DB
 //  - hide delete and edit buttons when there is no search result for a session
 public class DietActivity extends AppCompatActivity {
 
-    private FirebaseDatabase db;
     private DatabaseReference victualReference;
+    private DatabaseReference dietHistoryReference;
     private List<Victual> victualList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        db = FirebaseDatabase.getInstance();
+        FirebaseDatabase db = FirebaseDatabase.getInstance();
         victualReference = db.getReference("victuals");
-
+        dietHistoryReference = db.getReference("DietHistory");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_diet);
 
@@ -50,6 +56,7 @@ public class DietActivity extends AppCompatActivity {
             Button trainingButton = findViewById(R.id.button4);
             Button userProfileButton = findViewById(R.id.button6);
             Button trackingButton = findViewById(R.id.button7);
+            Button saveMealButton = findViewById(R.id.saveMealButton);
 
             trainingButton.setOnClickListener(view -> {
                 Intent intent = new Intent(getApplicationContext(), Training.class);
@@ -74,7 +81,7 @@ public class DietActivity extends AppCompatActivity {
                 startActivity(intent);
                 overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
             });
-
+            saveMealButton.setOnClickListener(view -> ConfirmationDialog.show(this, "Add meal to your history.", "Make sure all macros are correct!", this::saveMeal));
 
             getFoodList();
 
@@ -98,6 +105,33 @@ public class DietActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    private void saveMeal() {
+        float totalCarbs = 0;
+        float totalProtein = 0;
+        float totalFats = 0;
+        float totalCalories = 0;
+        for (Victual victual : victualList) {
+            totalCalories += victual.getCalories() * victual.getTotalGrams() / 100;
+            totalCarbs += victual.getCarbohydrates() * victual.getTotalGrams() / 100;
+            totalProtein += victual.getProtein() * victual.getTotalGrams() / 100;
+            totalFats += victual.getFats() * victual.getTotalGrams() / 100;
+            victual.setTotalGrams(0);
+        }
+        String currentUsername = AppPreferences.getUsername(this);
+        LocalDateTime currentTime = LocalDateTime.now();
+
+        DietHistory dietHistory = new DietHistory();
+        dietHistory.setCalories(totalCalories);
+        dietHistory.setCarbohydrates(totalCarbs);
+        dietHistory.setFats(totalFats);
+        dietHistory.setProtein(totalProtein);
+        dietHistory.setDateAdded(currentTime);
+        String uuid = UUID.randomUUID().toString();
+        dietHistoryReference.child(currentUsername).child(uuid).setValue(dietHistory)
+                .addOnSuccessListener(task -> Toast.makeText(this, "Entry saved successfully", Toast.LENGTH_SHORT).show())
+                .addOnFailureListener(task -> Toast.makeText(this, "Error saving diet entry!", Toast.LENGTH_SHORT).show());
     }
 
     private List<Victual> extractFoodList(DataSnapshot snapshot) {
