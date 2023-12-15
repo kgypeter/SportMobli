@@ -20,6 +20,7 @@ import com.androidplot.xy.BoundaryMode;
 import com.androidplot.xy.StepMode;
 import com.androidplot.xy.XYGraphWidget;
 import com.androidplot.xy.XYPlot;
+import com.example.sportmobli.model.TrainingHistory;
 import com.example.sportmobli.util.AppPreferences;
 import com.example.sportmobli.util.HRPlotter;
 import com.example.sportmobli.R;
@@ -33,8 +34,13 @@ import com.polar.sdk.api.errors.PolarInvalidArgument;
 import com.polar.sdk.api.model.PolarHrData;
 
 import java.text.DecimalFormat;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.EnumSet;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.disposables.Disposable;
@@ -51,6 +57,9 @@ public class ChronometerActivity extends AppCompatActivity {
     private boolean isExerciseTime = true;
     private long timeRemaining;
     private boolean isPaused = false;
+    FirebaseDatabase db;
+    DatabaseReference trainingHistoryReference;
+    private String sessionName;
 
     //Verity Sense Stuff
     private PolarBleApi api;
@@ -60,8 +69,7 @@ public class ChronometerActivity extends AppCompatActivity {
     private XYPlot plot;
     TextView currentHR;
     boolean verityReady = false;
-    FirebaseDatabase db;
-    DatabaseReference trainingHistoryReference;
+
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -82,6 +90,7 @@ public class ChronometerActivity extends AppCompatActivity {
         Intent intent = getIntent();
         if (intent != null && intent.hasExtra("exercises")) {
             exercisesList = intent.getParcelableArrayListExtra("exercises");
+            sessionName = intent.getExtras().get("sessionName").toString();
         }
 
         startButton.setOnClickListener(v -> startExerciseSession());
@@ -127,7 +136,6 @@ public class ChronometerActivity extends AppCompatActivity {
             plot = findViewById(R.id.hr_view_plot);
             plotter.setListener(plot);
             plot.addSeries(plotter.series.getHrSeries(), plotter.hrFormatter);
-            plot.addSeries(plotter.series.getRrSeries(), plotter.rrFormatter);
             plot.setRangeBoundaries(50, 100, BoundaryMode.AUTO);
             plot.setDomainBoundaries(0, 360000, BoundaryMode.AUTO);
             plot.setRangeStep(StepMode.INCREMENT_BY_VAL, 10.0);
@@ -189,27 +197,31 @@ public class ChronometerActivity extends AppCompatActivity {
             hrDisposable = null;
         }
 }
-private void saveSession(){
-        String currentUsername = AppPreferences.getUsername(this);
-        // To save in firebase
+private void saveSession(){String currentUsername = AppPreferences.getUsername(this);
+    TrainingHistory trainingHistoryEntry = new TrainingHistory();
+    LocalDateTime dateAdded = LocalDateTime.now();
+    trainingHistoryEntry.setAddedDate(dateAdded);
+    trainingHistoryEntry.setSessionName(sessionName);
+    trainingHistoryEntry.setOwner(currentUsername);
+
+    Map<String, Double> hrHistory = new HashMap<>();
+    List<Double> yVals = plotter.series.getyHrVals();
+    for (Integer i=0;i<yVals.size(); i++){
+        hrHistory.put(i.toString(), yVals.get(i));
+
+    }
+    trainingHistoryEntry.setHrHistory(hrHistory);
+    String uuid = UUID.randomUUID().toString();
+    trainingHistoryReference.child(currentUsername).child(uuid).setValue(trainingHistoryEntry);
+
+
 }
     private void restartExerciseSession() {
         // Cancel the existing timer if running
         if (exerciseTimer != null) {
             exerciseTimer.cancel();
         }
-        plot.clear();
-        plotter.reset();
-        plot = findViewById(R.id.hr_view_plot);
-        plotter.setListener(plot);
-        plot.addSeries(plotter.series.getHrSeries(), plotter.hrFormatter);
-        plot.addSeries(plotter.series.getRrSeries(), plotter.rrFormatter);
-        plot.setRangeBoundaries(50, 100, BoundaryMode.AUTO);
-        plot.setDomainBoundaries(0, 360000, BoundaryMode.AUTO);
-        plot.setRangeStep(StepMode.INCREMENT_BY_VAL, 10.0);
-        plot.setDomainStep(StepMode.INCREMENT_BY_VAL, 60000.0);
-        plot.getGraph().getLineLabelStyle(XYGraphWidget.Edge.LEFT).setFormat(new DecimalFormat("#"));
-        plot.setLinesPerRangeLabel(2);
+
         currentExerciseIndex = 0;
         isExerciseTime = true;
         isPaused = false;
