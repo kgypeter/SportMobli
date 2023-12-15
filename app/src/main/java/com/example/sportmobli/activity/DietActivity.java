@@ -120,14 +120,14 @@ public class DietActivity extends AppCompatActivity {
             victual.setTotalGrams(0);
         }
         String currentUsername = AppPreferences.getUsername(this);
-        LocalDateTime addDate = LocalDateTime.now();
+        LocalDateTime currentTime = LocalDateTime.now();
 
         DietHistory dietHistory = new DietHistory();
         dietHistory.setCalories(totalCalories);
         dietHistory.setCarbohydrates(totalCarbs);
         dietHistory.setFats(totalFats);
         dietHistory.setProtein(totalProtein);
-        dietHistory.setDateAdded(addDate);
+        dietHistory.setDateAdded(currentTime);
         String uuid = UUID.randomUUID().toString();
         dietHistoryReference.child(currentUsername).child(uuid).setValue(dietHistory)
                 .addOnSuccessListener(task -> Toast.makeText(this, "Entry saved successfully", Toast.LENGTH_SHORT).show())
