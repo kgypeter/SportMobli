@@ -84,7 +84,6 @@ public class DietHistoryActivity extends AppCompatActivity {
     }
 
     private void updateAdapter() {
-        // todo
 
         RecyclerView recyclerView = findViewById(R.id.recyclerViewDietHistory);
         adapter = new DietHistoryRecyclerAdapter(dietHistoryList);
@@ -92,10 +91,7 @@ public class DietHistoryActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(adapter);
-//        adapter = new DietHistoryRecyclerAdapter(dietHistoryList);
-//        RecyclerView recyclerView = findViewById(R.id.recyclerView);
-//        recyclerView.setLayoutManager(new LinearLayoutManager(DietHistoryActivity.this));
-//        recyclerView.setAdapter(adapter);
+
 
     }
 }
