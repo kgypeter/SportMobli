@@ -7,6 +7,8 @@ public class TrainingHistory {
     private String owner;
     private LocalDate addedDate;
 
+    private String totalTime;
+
     public TrainingHistory() {
     }
 
@@ -32,5 +34,13 @@ public class TrainingHistory {
 
     public void setAddedDate(LocalDate addedDate) {
         this.addedDate = addedDate;
+    }
+
+    public String getTotalTime() {
+        return totalTime;
+    }
+
+    public void setTotalTime(String totalTime) {
+        this.totalTime = totalTime;
     }
 }

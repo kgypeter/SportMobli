@@ -8,14 +8,14 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sportmobli.R;
-import com.example.sportmobli.model.TrainingHistory;
+import com.example.sportmobli.model.TrainingHistoryDisplay;
 
 import java.util.List;
 
 public class TrainingHistoryRecyclerAdapter extends RecyclerView.Adapter<TrainingHistoryRecyclerAdapter.TrainingHistoryViewHolder> {
-    private final List<TrainingHistory> trainingHistoryList;
+    private final List<TrainingHistoryDisplay> trainingHistoryList;
 
-    public TrainingHistoryRecyclerAdapter(List<TrainingHistory> trainingHistoryList) {
+    public TrainingHistoryRecyclerAdapter(List<TrainingHistoryDisplay> trainingHistoryList) {
         this.trainingHistoryList = trainingHistoryList;
     }
 
@@ -28,7 +28,7 @@ public class TrainingHistoryRecyclerAdapter extends RecyclerView.Adapter<Trainin
 
     @Override
     public void onBindViewHolder(@NonNull TrainingHistoryViewHolder holder, int position) {
-        TrainingHistory trainingHistory = trainingHistoryList.get(position);
+        TrainingHistoryDisplay trainingHistory = trainingHistoryList.get(position);
         holder.bind(trainingHistory);
     }
 
@@ -39,11 +39,12 @@ public class TrainingHistoryRecyclerAdapter extends RecyclerView.Adapter<Trainin
 
     public class TrainingHistoryViewHolder extends RecyclerView.ViewHolder {
 
+
         public TrainingHistoryViewHolder(final View view) {
             super(view);
         }
 
-        public void bind(TrainingHistory trainingHistory) {
+        public void bind(TrainingHistoryDisplay trainingHistory) {
 
         }
     }

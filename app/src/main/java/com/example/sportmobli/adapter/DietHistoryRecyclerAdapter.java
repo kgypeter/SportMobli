@@ -36,11 +36,7 @@ public class DietHistoryRecyclerAdapter extends RecyclerView.Adapter<DietHistory
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         DietHistoryDisplay dietHistory = dietHistoryList.get(position);
-        holder.historyDate.setText("Date: " + dietHistory.getDateAdded());
-        holder.historyCalories.setText("Calories: " + dietHistory.getCalories());
-        holder.historyProtein.setText("Protein: " + dietHistory.getProtein());
-        holder.historyCarbs.setText("Carbs: " + dietHistory.getCarbohydrates());
-        holder.historyFats.setText("Fats: " + dietHistory.getFats());
+        holder.bind(dietHistory);
     }
 
     @Override
@@ -51,11 +47,11 @@ public class DietHistoryRecyclerAdapter extends RecyclerView.Adapter<DietHistory
     }
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView historyDate;
-        public TextView historyCalories;
-        public TextView historyProtein;
-        public TextView historyCarbs;
-        public TextView historyFats;
+        private final TextView historyDate;
+        private final TextView historyCalories;
+        private final TextView historyProtein;
+        private final TextView historyCarbs;
+        private final TextView historyFats;
 
         public MyViewHolder(View view) {
             super(view);
@@ -64,6 +60,14 @@ public class DietHistoryRecyclerAdapter extends RecyclerView.Adapter<DietHistory
             historyProtein = view.findViewById(R.id.historyProtein);
             historyCarbs = view.findViewById(R.id.historyCarbs);
             historyFats = view.findViewById(R.id.historyFats);
+        }
+
+        public void bind(DietHistoryDisplay dietHistory) {
+            historyDate.setText("Date: " + dietHistory.getDateAdded());
+            historyCalories.setText("Calories: " + dietHistory.getCalories());
+            historyProtein.setText("Protein: " + dietHistory.getProtein());
+            historyCarbs.setText("Carbs: " + dietHistory.getCarbohydrates());
+            historyFats.setText("Fats: " + dietHistory.getFats());
         }
 
     }
