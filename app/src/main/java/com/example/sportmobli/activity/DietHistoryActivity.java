@@ -69,7 +69,7 @@ public class DietHistoryActivity extends AppCompatActivity {
             Integer fats = historySnapshot.child("fats").getValue(Integer.class);
             Integer calories = historySnapshot.child("calories").getValue(Integer.class);
 
-            String date = DateUtil.extractDateFromSnapshot(historySnapshot);
+            String date = DateUtil.extractDateFromSnapshot(historySnapshot, "dateAdded");
 
             DietHistoryDisplay dietHistoryDisplay = new DietHistoryDisplay();
             dietHistoryDisplay.setDateAdded(date);
