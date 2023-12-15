@@ -7,22 +7,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sportmobli.R;
+import com.example.sportmobli.model.DietHistoryDisplay;
 
-import com.example.sportmobli.activity.DietHistoryActivity;
-import com.example.sportmobli.model.DietHistory;
-
-import java.util.ArrayList;
+import java.util.List;
 
 public class DietHistoryRecyclerAdapter extends RecyclerView.Adapter<DietHistoryRecyclerAdapter.MyViewHolder> {
 
-    private final ArrayList<DietHistory> dietHistoryList;
+    private final List<DietHistoryDisplay> dietHistoryList;
 
-    public DietHistoryRecyclerAdapter(ArrayList<DietHistory> dietHistoryList) {
+    public DietHistoryRecyclerAdapter(List<DietHistoryDisplay> dietHistoryList) {
 
         this.dietHistoryList = dietHistoryList;
     }
@@ -38,12 +35,19 @@ public class DietHistoryRecyclerAdapter extends RecyclerView.Adapter<DietHistory
     @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        DietHistory dietHistory = dietHistoryList.get(position);
+        DietHistoryDisplay dietHistory = dietHistoryList.get(position);
         holder.historyDate.setText("Date: " + dietHistory.getDateAdded());
         holder.historyCalories.setText("Calories: " + dietHistory.getCalories());
         holder.historyProtein.setText("Protein: " + dietHistory.getProtein());
         holder.historyCarbs.setText("Carbs: " + dietHistory.getCarbohydrates());
         holder.historyFats.setText("Fats: " + dietHistory.getFats());
+    }
+
+    @Override
+    public int getItemCount() {
+
+        return dietHistoryList.size();
+
     }
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
@@ -61,13 +65,6 @@ public class DietHistoryRecyclerAdapter extends RecyclerView.Adapter<DietHistory
             historyCarbs = view.findViewById(R.id.historyCarbs);
             historyFats = view.findViewById(R.id.historyFats);
         }
-
-    }
-
-    @Override
-    public int getItemCount() {
-
-        return dietHistoryList.size();
 
     }
 }
