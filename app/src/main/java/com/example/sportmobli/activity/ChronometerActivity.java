@@ -79,7 +79,7 @@ public class ChronometerActivity extends AppCompatActivity {
                 duration = (long) ((currentExercise.getDuration() * 1000) + 1000); // Convert to milliseconds
                 title = currentExercise.getName();
             } else {
-                duration = (long) ((currentExercise.getRestTime() * 1000) + 1000); // Convert to milliseconds
+                duration = (long) ((currentExercise.getRestTime() * 1000) + 1000);
                 title = "Rest";
             }
 
@@ -110,15 +110,15 @@ public class ChronometerActivity extends AppCompatActivity {
     }
 
     private void startTimer(long duration) {
+        chronometer.setBase(SystemClock.elapsedRealtime());
+        chronometer.start();
         exerciseTimer = new CountDownTimer(duration, 1000) {
             public void onTick(long millisUntilFinished) {
                 timeRemaining = millisUntilFinished;
-                chronometer.setBase(SystemClock.elapsedRealtime() + millisUntilFinished);
             }
 
             public void onFinish() {
                 if (!isPaused) {
-                    // Increment currentExerciseIndex after both exercise and rest periods
                     if (!isExerciseTime) {
                         currentExerciseIndex++;
                     }
@@ -129,6 +129,7 @@ public class ChronometerActivity extends AppCompatActivity {
         startButton.setEnabled(false);
         pauseButton.setEnabled(true);
     }
+
 
     private void pauseTimer() {
         if (exerciseTimer != null) {
@@ -145,7 +146,7 @@ public class ChronometerActivity extends AppCompatActivity {
     private void pauseExerciseSession() {
         pauseTimer();
         startButton.setEnabled(false);
-        pauseButton.setEnabled(true); // Enable the pause button for resume
+        pauseButton.setEnabled(true);
     }
 
     private void resumeExerciseSession() {
