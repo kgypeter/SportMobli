@@ -21,7 +21,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class TrainingHistoryActivity extends AppCompatActivity {
 
@@ -61,16 +63,29 @@ public class TrainingHistoryActivity extends AppCompatActivity {
     private List<TrainingHistoryDisplay> extractTrainingHistory(DataSnapshot snapshot) {
         List<TrainingHistoryDisplay> trainingHistoryDisplays = new ArrayList<>();
         for (DataSnapshot historySnapshot : snapshot.getChildren()) {
-            String date = DateUtil.extractDateFromSnapshot(historySnapshot);
-            String sessionName = snapshot.child("sessionName").getValue(String.class);
-            String totalTime = snapshot.child("totalTime").getValue(String.class);
+            String date = DateUtil.extractDateFromSnapshot(historySnapshot, "addedDate");
+            String sessionName = historySnapshot.child("sessionName").getValue(String.class);
+            String totalTime = historySnapshot.child("totalTime").getValue(String.class);
+
             TrainingHistoryDisplay trainingHistoryDisplay = new TrainingHistoryDisplay();
+            Map<String, Double> hrSeries = extractHrSeries(historySnapshot.child("hrHistory"));
             trainingHistoryDisplay.setAddedDate(date);
             trainingHistoryDisplay.setSessionName(sessionName);
             trainingHistoryDisplay.setTotalTime(totalTime);
+            trainingHistoryDisplay.setHrHistory(hrSeries);
             trainingHistoryDisplays.add(trainingHistoryDisplay);
         }
         return trainingHistoryDisplays;
+    }
+
+    private Map<String, Double> extractHrSeries(DataSnapshot snapshot) {
+        Map<String, Double> hrHistory = new HashMap<>();
+        for (DataSnapshot entrySnapshot : snapshot.getChildren()) {
+            String key = entrySnapshot.getKey();
+            Double value = entrySnapshot.getValue(Double.class);
+            hrHistory.put(key, value);
+        }
+        return hrHistory;
     }
 
     private void startAdapter() {

@@ -63,8 +63,10 @@ public class ExerciseListActivity extends AppCompatActivity {
         Button startButton = findViewById(R.id.startButton);
         ImageView addButton = findViewById(R.id.addButton);
         startButton.setOnClickListener(v -> {
+
             Intent chronometerIntent = new Intent(ExerciseListActivity.this, ChronometerActivity.class);
             chronometerIntent.putParcelableArrayListExtra("exercises", exercisesList);
+            chronometerIntent.putExtra("sessionName", sessionName);
             startActivity(chronometerIntent);
         });
 
