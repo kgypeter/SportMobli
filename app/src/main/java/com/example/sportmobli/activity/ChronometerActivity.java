@@ -20,11 +20,12 @@ import com.androidplot.xy.BoundaryMode;
 import com.androidplot.xy.StepMode;
 import com.androidplot.xy.XYGraphWidget;
 import com.androidplot.xy.XYPlot;
+import com.example.sportmobli.R;
+import com.example.sportmobli.dialogs.AddVeritySenseDialog;
+import com.example.sportmobli.model.Exercise;
 import com.example.sportmobli.model.TrainingHistory;
 import com.example.sportmobli.util.AppPreferences;
 import com.example.sportmobli.util.HRPlotter;
-import com.example.sportmobli.R;
-import com.example.sportmobli.model.Exercise;
 import com.example.sportmobli.util.PolarBleApiUtil;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -46,6 +47,11 @@ import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.disposables.Disposable;
 
 public class ChronometerActivity extends AppCompatActivity {
+    FirebaseDatabase db;
+    DatabaseReference trainingHistoryReference;
+    TextView currentHR;
+    boolean verityReady = false;
+    private String deviceId;
     private Chronometer chronometer;
     private TextView exerciseTitleTextView;
     private Button startButton;
@@ -57,19 +63,12 @@ public class ChronometerActivity extends AppCompatActivity {
     private boolean isExerciseTime = true;
     private long timeRemaining;
     private boolean isPaused = false;
-    FirebaseDatabase db;
-    DatabaseReference trainingHistoryReference;
     private String sessionName;
-
     //Verity Sense Stuff
     private PolarBleApi api;
-    private final String deviceId = "A6FC0B2E";
     private Disposable hrDisposable;
     private HRPlotter plotter;
     private XYPlot plot;
-    TextView currentHR;
-    boolean verityReady = false;
-
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -86,6 +85,12 @@ public class ChronometerActivity extends AppCompatActivity {
         restartButton = findViewById(R.id.restartButton);
         restartButton.setOnClickListener(v -> restartExerciseSession());
         startButton.setVisibility(View.GONE);
+        AddVeritySenseDialog.show(this, "If you want to use a Verity Sense device, enter its id. If not, click cancel.", new AddVeritySenseDialog.AddVerityDialogListener() {
+            @Override
+            public void fetchDeviceId() {
+                showTimerLayout();
+            }
+        });
 
         Intent intent = getIntent();
         if (intent != null && intent.hasExtra("exercises")) {
@@ -115,57 +120,74 @@ public class ChronometerActivity extends AppCompatActivity {
         });
 
 
-        //verity sense stuff
-        api = PolarBleApiDefaultImpl.defaultImplementation(
-                getApplicationContext(),
-                EnumSet.of(
-                        PolarBleApi.PolarBleSdkFeature.FEATURE_POLAR_ONLINE_STREAMING,
-                        PolarBleApi.PolarBleSdkFeature.FEATURE_BATTERY_INFO,
-                        PolarBleApi.PolarBleSdkFeature.FEATURE_DEVICE_INFO
-                )
-        );
-        api.setApiLogger(str -> Log.d("SDK", str));
-        api.setApiCallback(PolarBleApiUtil.getApiSetup(deviceId, getApplicationContext(), () -> executeWhenApiReady()));
+    }
 
-        try {
-            api.connectToDevice(deviceId);
-            Toast.makeText(getApplicationContext(), "Connecting to " + deviceId, Toast.LENGTH_SHORT).show();
-            currentHR = findViewById(R.id.textViewCurrentHR);
+    private void showTimerLayout() {
+        deviceId = AppPreferences.getVerityDeviceId(this);
+        if (deviceId == null || deviceId.equals("")) {
+            executeWhenApiReady();
+        } else {
+            //verity sense stuff
+            api = PolarBleApiDefaultImpl.defaultImplementation(
+                    getApplicationContext(),
+                    EnumSet.of(
+                            PolarBleApi.PolarBleSdkFeature.FEATURE_POLAR_ONLINE_STREAMING,
+                            PolarBleApi.PolarBleSdkFeature.FEATURE_BATTERY_INFO,
+                            PolarBleApi.PolarBleSdkFeature.FEATURE_DEVICE_INFO
+                    )
+            );
+            api.setApiLogger(str -> Log.d("SDK", str));
+            api.setApiCallback(PolarBleApiUtil.getApiSetup(deviceId, getApplicationContext(), () -> executeWhenApiReady()));
 
-            plotter = new HRPlotter();
-            plot = findViewById(R.id.hr_view_plot);
-            plotter.setListener(plot);
-            plot.addSeries(plotter.series.getHrSeries(), plotter.hrFormatter);
-            plot.setRangeBoundaries(50, 100, BoundaryMode.AUTO);
-            plot.setDomainBoundaries(0, 360000, BoundaryMode.AUTO);
-            plot.setRangeStep(StepMode.INCREMENT_BY_VAL, 10.0);
-            plot.setDomainStep(StepMode.INCREMENT_BY_VAL, 60000.0);
-            plot.getGraph().getLineLabelStyle(XYGraphWidget.Edge.LEFT).setFormat(new DecimalFormat("#"));
-            plot.setLinesPerRangeLabel(2);
+            try {
+                api.connectToDevice(deviceId);
+                Toast.makeText(getApplicationContext(), "Connecting to " + deviceId, Toast.LENGTH_SHORT).show();
+                currentHR = findViewById(R.id.textViewCurrentHR);
 
-        } catch (PolarInvalidArgument e) {
-            Toast.makeText(getApplicationContext(), "Failed to connect to " + deviceId + e, Toast.LENGTH_SHORT).show();
-            throw new RuntimeException(e);
+                plotter = new HRPlotter();
+                plot = findViewById(R.id.hr_view_plot);
+                plotter.setListener(plot);
+                plot.addSeries(plotter.series.getHrSeries(), plotter.hrFormatter);
+                plot.setRangeBoundaries(50, 100, BoundaryMode.AUTO);
+                plot.setDomainBoundaries(0, 360000, BoundaryMode.AUTO);
+                plot.setRangeStep(StepMode.INCREMENT_BY_VAL, 10.0);
+                plot.setDomainStep(StepMode.INCREMENT_BY_VAL, 60000.0);
+                plot.getGraph().getLineLabelStyle(XYGraphWidget.Edge.LEFT).setFormat(new DecimalFormat("#"));
+                plot.setLinesPerRangeLabel(2);
+
+            } catch (PolarInvalidArgument e) {
+                Toast.makeText(getApplicationContext(), "Failed to connect to " + deviceId + e, Toast.LENGTH_SHORT).show();
+                executeWhenApiReady();
+                throw new RuntimeException(e);
+            }
         }
     }
+
     private void executeWhenApiReady() {
 
         new Thread(() -> {
 
-                try {
-                    runOnUiThread(() -> {startButton.setVisibility(View.VISIBLE);verityReady=true;});
-                    Thread.sleep(300);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+            try {
+                runOnUiThread(() -> {
+                    startButton.setVisibility(View.VISIBLE);
+                    verityReady = true;
+                });
+                Thread.sleep(300);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
 
         }).start();
     }
+
     private void startExerciseSession() {
-        streamHR();
+        if (deviceId != null && !deviceId.equals("")) {
+            streamHR();
+        }
         exerciseTimerRecursion();
     }
-    private void exerciseTimerRecursion(){
+
+    private void exerciseTimerRecursion() {
 
         if (currentExerciseIndex < exercisesList.size()) {
             Exercise currentExercise = exercisesList.get(currentExerciseIndex);
@@ -188,7 +210,8 @@ public class ChronometerActivity extends AppCompatActivity {
             endSession();
         }
     }
-    private void endSession(){
+
+    private void endSession() {
         exerciseTitleTextView.setText("Exercise session finished");
         if (hrDisposable != null && !hrDisposable.isDisposed()) {
             // Stop the HR stream and save the session to firebase
@@ -196,26 +219,29 @@ public class ChronometerActivity extends AppCompatActivity {
             hrDisposable.dispose();
             hrDisposable = null;
         }
-}
-private void saveSession(){String currentUsername = AppPreferences.getUsername(this);
-    TrainingHistory trainingHistoryEntry = new TrainingHistory();
-    LocalDateTime dateAdded = LocalDateTime.now();
-    trainingHistoryEntry.setAddedDate(dateAdded);
-    trainingHistoryEntry.setSessionName(sessionName);
-    trainingHistoryEntry.setOwner(currentUsername);
+    }
 
-    Map<String, Double> hrHistory = new HashMap<>();
-    List<Double> yVals = plotter.series.getyHrVals();
-    for (Integer i=0;i<yVals.size(); i++){
-        hrHistory.put(i.toString(), yVals.get(i));
+    private void saveSession() {
+        String currentUsername = AppPreferences.getUsername(this);
+        TrainingHistory trainingHistoryEntry = new TrainingHistory();
+        LocalDateTime dateAdded = LocalDateTime.now();
+        trainingHistoryEntry.setAddedDate(dateAdded);
+        trainingHistoryEntry.setSessionName(sessionName);
+        trainingHistoryEntry.setOwner(currentUsername);
+
+        Map<String, Double> hrHistory = new HashMap<>();
+        List<Double> yVals = plotter.series.getyHrVals();
+        for (Integer i = 0; i < yVals.size(); i++) {
+            hrHistory.put(i.toString(), yVals.get(i));
+
+        }
+        trainingHistoryEntry.setHrHistory(hrHistory);
+        String uuid = UUID.randomUUID().toString();
+        trainingHistoryReference.child(currentUsername).child(uuid).setValue(trainingHistoryEntry);
+
 
     }
-    trainingHistoryEntry.setHrHistory(hrHistory);
-    String uuid = UUID.randomUUID().toString();
-    trainingHistoryReference.child(currentUsername).child(uuid).setValue(trainingHistoryEntry);
 
-
-}
     private void restartExerciseSession() {
         // Cancel the existing timer if running
         if (exerciseTimer != null) {
