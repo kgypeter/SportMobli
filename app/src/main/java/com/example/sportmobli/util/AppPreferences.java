@@ -18,4 +18,16 @@ public class AppPreferences {
         SharedPreferences preferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         return preferences.getString("username", "");
     }
+
+    public static void setVerityDeviceId(Context context, String deviceId) {
+        SharedPreferences preferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString("deviceId", deviceId);
+        editor.apply();
+    }
+
+    public static String getVerityDeviceId(Context context) {
+        SharedPreferences preferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        return preferences.getString("deviceId", "");
+    }
 }
