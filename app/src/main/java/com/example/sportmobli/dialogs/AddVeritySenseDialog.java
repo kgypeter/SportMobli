@@ -24,8 +24,11 @@ public class AddVeritySenseDialog {
 
         View customLayout = LayoutInflater.from(context).inflate(R.layout.add_verity_layout, null);
         builder.setView(customLayout);
-
+        String prefDeviceId = AppPreferences.getVerityDeviceId(context);
         EditText editTextName = customLayout.findViewById(R.id.deviceIdEditText);
+        if (prefDeviceId != null) {
+            editTextName.setText(prefDeviceId);
+        }
         Button btnCancel = customLayout.findViewById(R.id.btnCancel);
         Button btnSave = customLayout.findViewById(R.id.btnSave);
 
