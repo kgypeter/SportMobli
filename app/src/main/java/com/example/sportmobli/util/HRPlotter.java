@@ -2,7 +2,6 @@ package com.example.sportmobli.util;
 
 import android.graphics.Color;
 
-import com.androidplot.PlotListener;
 import com.androidplot.xy.LineAndPointFormatter;
 import com.androidplot.xy.SimpleXYSeries;
 import com.androidplot.xy.XYPlot;
@@ -12,17 +11,15 @@ import com.polar.sdk.api.model.PolarHrData;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 public class HRPlotter {
     private static final String TAG = "TimePlotter";
     private static final int NVALS = 5; // 5 min
     private static final double RR_SCALE = 0.1;
-
-    private XYPlot listener;
-    public  XYSeriesFormatter<?> hrFormatter;
-    public  XYSeriesFormatter<?> rrFormatter;
+    public XYSeriesFormatter<?> hrFormatter;
+    public XYSeriesFormatter<?> rrFormatter;
     public HRSeries series;
+    private XYPlot listener;
 
     public HRPlotter() {
         series = new HRSeries();
@@ -61,7 +58,7 @@ public class HRPlotter {
     }
 
 
-    public void reset(){
+    public void reset() {
         series = new HRSeries();
         series.setxHrVals(new ArrayList<>());
         series.setyHrVals(new ArrayList<>());
@@ -84,6 +81,7 @@ public class HRPlotter {
         ((LineAndPointFormatter) rrFormatter).setLegendIconEnabled(false);
         series.setRrSeries(new SimpleXYSeries(series.getxRrVals(), series.getyRrVals(), "RR"));
     }
+
     public void setListener(XYPlot listener) {
         this.listener = listener;
     }

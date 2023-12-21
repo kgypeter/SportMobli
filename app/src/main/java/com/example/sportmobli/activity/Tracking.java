@@ -2,8 +2,6 @@ package com.example.sportmobli.activity;
 
 import static android.content.ContentValues.TAG;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,10 +10,13 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.androidplot.xy.BoundaryMode;
 import com.androidplot.xy.StepMode;
 import com.androidplot.xy.XYGraphWidget;
 import com.androidplot.xy.XYPlot;
+import com.example.sportmobli.R;
 import com.example.sportmobli.util.HRPlotter;
 import com.polar.sdk.api.PolarBleApi;
 import com.polar.sdk.api.PolarBleApiCallback;
@@ -26,21 +27,20 @@ import com.polar.sdk.api.model.PolarHrData;
 
 import java.text.DecimalFormat;
 import java.util.EnumSet;
+import java.util.Objects;
 import java.util.UUID;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.disposables.Disposable;
 
-import com.example.sportmobli.R;
-
 public class Tracking extends AppCompatActivity {
 
-    private PolarBleApi api;
     private final String deviceId = "A6FC0B2E";
+    TextView currentHR;
+    private PolarBleApi api;
     private Disposable hrDisposable;
     private HRPlotter plotter;
     private XYPlot plot;
-    TextView currentHR;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,12 +117,8 @@ public class Tracking extends AppCompatActivity {
             public void bleSdkFeatureReady(String identifier, PolarBleApi.PolarBleSdkFeature feature) {
                 Log.d(TAG, "feature ready " + feature);
 
-                switch (feature) {
-                    case FEATURE_POLAR_ONLINE_STREAMING:
-                        streamHR();
-                        break;
-                    default:
-                        break;
+                if (Objects.requireNonNull(feature) == PolarBleApi.PolarBleSdkFeature.FEATURE_POLAR_ONLINE_STREAMING) {
+                    streamHR();
                 }
             }
 
@@ -165,10 +161,11 @@ public class Tracking extends AppCompatActivity {
         startActivity();
     }
 
-    public void startActivity(){
+    public void startActivity() {
 
 
     }
+
     public void streamHR() {
         Toast.makeText(getApplicationContext(), "Device connected " + deviceId, Toast.LENGTH_SHORT).show();
         boolean isDisposed = hrDisposable == null || hrDisposable.isDisposed();
