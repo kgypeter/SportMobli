@@ -254,11 +254,18 @@ public class ChronometerActivity extends AppCompatActivity {
 
     private void saveSession() {
         String currentUsername = AppPreferences.getUsername(this);
+        float totalTime = 0;
+        for (Exercise exercise : exercisesList) {
+            totalTime += exercise.getRestTime();
+            totalTime += exercise.getDuration();
+        }
+
         TrainingHistory trainingHistoryEntry = new TrainingHistory();
         LocalDateTime dateAdded = LocalDateTime.now();
         trainingHistoryEntry.setAddedDate(dateAdded);
         trainingHistoryEntry.setSessionName(sessionName);
         trainingHistoryEntry.setOwner(currentUsername);
+        trainingHistoryEntry.setTotalTime(totalTime);
 
         Map<String, Double> hrHistory = new HashMap<>();
         List<Double> yVals = plotter.series.getyHrVals();

@@ -1,6 +1,5 @@
 package com.example.sportmobli.model;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Map;
 
@@ -9,7 +8,7 @@ public class TrainingHistory {
     private String owner;
     private LocalDateTime addedDate;
 
-    private String totalTime;
+    private float totalTime;
 
     private Map<String, Double> hrHistory;
 
@@ -48,11 +47,11 @@ public class TrainingHistory {
         this.addedDate = addedDate;
     }
 
-    public String getTotalTime() {
+    public float getTotalTime() {
         return totalTime;
     }
 
-    public void setTotalTime(String totalTime) {
+    public void setTotalTime(float totalTime) {
         this.totalTime = totalTime;
     }
 }
