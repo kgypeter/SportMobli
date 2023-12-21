@@ -66,10 +66,10 @@ public class DietHistoryActivity extends AppCompatActivity {
 
         for (DataSnapshot historySnapshot : snapshot.getChildren()) {
 
-            Integer protein = historySnapshot.child("protein").getValue(Integer.class);
-            Integer carbohydrate = historySnapshot.child("carbohydrates").getValue(Integer.class);
-            Integer fats = historySnapshot.child("fats").getValue(Integer.class);
-            Integer calories = historySnapshot.child("calories").getValue(Integer.class);
+            Integer protein = Math.round(historySnapshot.child("protein").getValue(Float.class));
+            Integer carbohydrate = Math.round(historySnapshot.child("carbohydrates").getValue(Float.class));
+            Integer fats = Math.round(historySnapshot.child("fats").getValue(Float.class));
+            Integer calories = Math.round(historySnapshot.child("calories").getValue(Float.class));
 
             String date = DateUtil.extractDateFromSnapshot(historySnapshot, "dateAdded");
 
@@ -78,7 +78,7 @@ public class DietHistoryActivity extends AppCompatActivity {
             dietHistoryDisplay.setCalories(calories);
             dietHistoryDisplay.setProtein(protein);
             dietHistoryDisplay.setFats(fats);
-            dietHistoryDisplay.setCalories(carbohydrate);
+            dietHistoryDisplay.setCarbohydrates(carbohydrate);
 
             dietHistoryList.add(dietHistoryDisplay);
         }
