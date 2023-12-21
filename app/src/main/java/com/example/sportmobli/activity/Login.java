@@ -50,9 +50,6 @@ public class Login extends AppCompatActivity {
             public void onClick(View view) {
                 AppPreferences.saveUsername(Login.this, "user");
 
-                Intent intent = new Intent(getApplicationContext(), Home.class);
-                startActivity(intent);
-
                 String usernameString = username.getText().toString();
                 String passwordString = password.getText().toString();
 
