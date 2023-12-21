@@ -13,6 +13,7 @@ import com.example.sportmobli.R;
 import com.example.sportmobli.adapter.DietHistoryRecyclerAdapter;
 import com.example.sportmobli.model.DietHistoryDisplay;
 import com.example.sportmobli.util.AppPreferences;
+import com.example.sportmobli.util.DateComparatorUtil;
 import com.example.sportmobli.util.DateUtil;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -82,6 +83,7 @@ public class DietHistoryActivity extends AppCompatActivity {
 
             dietHistoryList.add(dietHistoryDisplay);
         }
+        dietHistoryList.sort(DateComparatorUtil::compareDietHistory);
         return dietHistoryList;
     }
 

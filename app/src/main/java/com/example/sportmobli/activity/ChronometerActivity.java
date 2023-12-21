@@ -213,9 +213,10 @@ public class ChronometerActivity extends AppCompatActivity {
 
     private void endSession() {
         exerciseTitleTextView.setText("Exercise session finished");
+        saveSession();
         if (hrDisposable != null && !hrDisposable.isDisposed()) {
             // Stop the HR stream and save the session to firebase
-            saveSession();
+
             hrDisposable.dispose();
             hrDisposable = null;
         }
@@ -236,13 +237,15 @@ public class ChronometerActivity extends AppCompatActivity {
         trainingHistoryEntry.setOwner(currentUsername);
         trainingHistoryEntry.setTotalTime(totalTime);
 
-        Map<String, Double> hrHistory = new HashMap<>();
-        List<Double> yVals = plotter.series.getyHrVals();
-        for (Integer i = 0; i < yVals.size(); i++) {
-            hrHistory.put(i.toString(), yVals.get(i));
+        if (plotter != null) {
+            Map<String, Double> hrHistory = new HashMap<>();
 
+            List<Double> yVals = plotter.series.getyHrVals();
+            for (Integer i = 0; i < yVals.size(); i++) {
+                hrHistory.put(i.toString(), yVals.get(i));
+            }
+            trainingHistoryEntry.setHrHistory(hrHistory);
         }
-        trainingHistoryEntry.setHrHistory(hrHistory);
         String uuid = UUID.randomUUID().toString();
         trainingHistoryReference.child(currentUsername).child(uuid).setValue(trainingHistoryEntry);
 
