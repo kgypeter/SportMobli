@@ -40,6 +40,7 @@ public class TrainingHistoryActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         db = FirebaseDatabase.getInstance();
         dietHistoryReference = db.getReference("TrainingHistory");
+        getData();
         setContentView(R.layout.activity_training_history);
     }
 
