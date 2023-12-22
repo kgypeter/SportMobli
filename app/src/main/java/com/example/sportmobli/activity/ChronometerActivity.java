@@ -2,9 +2,12 @@ package com.example.sportmobli.activity;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.SystemClock;
+import android.speech.tts.TextToSpeech;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.TextView;
@@ -15,6 +18,7 @@ import com.example.sportmobli.R;
 import com.example.sportmobli.model.Exercise;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class ChronometerActivity extends AppCompatActivity {
     private Chronometer chronometer;
@@ -31,19 +35,39 @@ public class ChronometerActivity extends AppCompatActivity {
 
     private TextView chronometerTextView;
 
+    private TextToSpeech textToSpeech;
+
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chronometer);
-        chronometerTextView = findViewById(R.id.chronometerTextView);
 
+        chronometerTextView = findViewById(R.id.chronometerTextView);
+        exerciseTitleTextView = findViewById(R.id.exerciseTitleTextView);
+
+        // Initialize TextToSpeech for reading exercise titles aloud
+        textToSpeech = new TextToSpeech(this, status -> {
+            if (status == TextToSpeech.SUCCESS) {
+                int result = textToSpeech.setLanguage(Locale.US); // Set language
+
+                if (result == TextToSpeech.LANG_MISSING_DATA ||
+                        result == TextToSpeech.LANG_NOT_SUPPORTED) {
+                    Log.e("TTS", "Language not supported");
+                }
+            } else {
+                Log.e("TTS", "Initialization failed");
+            }
+        });
+
+        chronometerTextView = findViewById(R.id.chronometerTextView);
         exerciseTitleTextView = findViewById(R.id.exerciseTitleTextView);
         startButton = findViewById(R.id.startButton);
         pauseButton = findViewById(R.id.pauseButton);
         restartButton = findViewById(R.id.restartButton);
         restartButton.setOnClickListener(v -> restartExerciseSession());
 
+        // Retrieve exercises from intent
         Intent intent = getIntent();
         if (intent != null && intent.hasExtra("exercises")) {
             exercisesList = intent.getParcelableArrayListExtra("exercises");
@@ -77,20 +101,34 @@ public class ChronometerActivity extends AppCompatActivity {
             long duration;
             String title;
 
+            // Determine duration and title based on exercise/rest time
             if (isExerciseTime) {
-                duration = (long) ((currentExercise.getDuration() * 1000) + 1000); // Convert to milliseconds
+                duration = (long) ((currentExercise.getDuration() * 1000) + 1000);
                 title = currentExercise.getName();
             } else {
-                duration = (long) ((currentExercise.getRestTime() * 1000) + 1000); // Convert to milliseconds
+                duration = (long) ((currentExercise.getRestTime() * 1000) + 1000);
                 title = "Rest";
             }
 
             setExerciseTitle(title);
+
+            // Speak the text from exerciseTitleTextView
+            speakText(title);
+
             startTimer(duration);
             isExerciseTime = !isExerciseTime;
         } else {
             exerciseTitleTextView.setText("Exercise session finished");
         }
+    }
+
+    private void setExerciseTitle(String title) {
+        exerciseTitleTextView.setText(title);
+    }
+
+    // Method to speak the text
+    private void speakText(String text) {
+        textToSpeech.speak(text, TextToSpeech.QUEUE_FLUSH, null, null);
     }
 
     private void restartExerciseSession() {
@@ -105,10 +143,6 @@ public class ChronometerActivity extends AppCompatActivity {
         startButton.setEnabled(true);
         pauseButton.setEnabled(true);
         startExerciseSession();
-    }
-
-    private void setExerciseTitle(String title) {
-        exerciseTitleTextView.setText(title);
     }
 
     private void startTimer(long duration) {
@@ -140,17 +174,6 @@ public class ChronometerActivity extends AppCompatActivity {
         chronometerTextView.setText(time);
     }
 
-    private void pauseTimer() {
-        if (exerciseTimer != null) {
-            exerciseTimer.cancel();
-        }
-        isPaused = true;
-    }
-
-    private void resumeTimer() {
-        startTimer(timeRemaining);
-        isPaused = false;
-    }
 
     private void pauseExerciseSession() {
         pauseTimer();
@@ -162,5 +185,28 @@ public class ChronometerActivity extends AppCompatActivity {
         resumeTimer();
         startButton.setEnabled(false);
         pauseButton.setEnabled(true);
+    }
+
+        private void pauseTimer() {
+            if (exerciseTimer != null) {
+                exerciseTimer.cancel();
+            }
+            isPaused = true;
+        }
+
+        private void resumeTimer() {
+            startTimer(timeRemaining);
+            isPaused = false;
+        }
+
+    // Override onDestroy method to release MediaPlayer resources when activity is destroyed
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // Release TextToSpeech resources
+        if (textToSpeech != null) {
+            textToSpeech.stop();
+            textToSpeech.shutdown();
+        }
     }
 }
