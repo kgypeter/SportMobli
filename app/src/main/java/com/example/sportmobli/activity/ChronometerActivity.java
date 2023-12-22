@@ -29,13 +29,15 @@ public class ChronometerActivity extends AppCompatActivity {
     private long timeRemaining;
     private boolean isPaused = false;
 
+    private TextView chronometerTextView;
+
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chronometer);
+        chronometerTextView = findViewById(R.id.chronometerTextView);
 
-        chronometer = findViewById(R.id.chronometer);
         exerciseTitleTextView = findViewById(R.id.exerciseTitleTextView);
         startButton = findViewById(R.id.startButton);
         pauseButton = findViewById(R.id.pauseButton);
@@ -113,12 +115,11 @@ public class ChronometerActivity extends AppCompatActivity {
         exerciseTimer = new CountDownTimer(duration, 1000) {
             public void onTick(long millisUntilFinished) {
                 timeRemaining = millisUntilFinished;
-                chronometer.setBase(SystemClock.elapsedRealtime() + millisUntilFinished);
+                updateChronometerText(millisUntilFinished);
             }
 
             public void onFinish() {
                 if (!isPaused) {
-                    // Increment currentExerciseIndex after both exercise and rest periods
                     if (!isExerciseTime) {
                         currentExerciseIndex++;
                     }
@@ -128,6 +129,15 @@ public class ChronometerActivity extends AppCompatActivity {
         }.start();
         startButton.setEnabled(false);
         pauseButton.setEnabled(true);
+    }
+
+    private void updateChronometerText(long millisUntilFinished) {
+        int seconds = (int) (millisUntilFinished / 1000);
+        int minutes = seconds / 60;
+        seconds = seconds % 60;
+
+        String time = String.format("%02d:%02d", minutes, seconds);
+        chronometerTextView.setText(time);
     }
 
     private void pauseTimer() {
@@ -145,7 +155,7 @@ public class ChronometerActivity extends AppCompatActivity {
     private void pauseExerciseSession() {
         pauseTimer();
         startButton.setEnabled(false);
-        pauseButton.setEnabled(true); // Enable the pause button for resume
+        pauseButton.setEnabled(true);
     }
 
     private void resumeExerciseSession() {
