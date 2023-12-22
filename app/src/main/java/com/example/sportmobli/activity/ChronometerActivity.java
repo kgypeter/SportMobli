@@ -352,8 +352,9 @@ public class ChronometerActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        api.shutDown();
-
+        if (api != null) {
+            api.shutDown();
+        }
     }
 
 }
