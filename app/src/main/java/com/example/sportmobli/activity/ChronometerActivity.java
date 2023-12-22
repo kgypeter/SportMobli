@@ -2,10 +2,8 @@ package com.example.sportmobli.activity;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.os.SystemClock;
 import android.speech.tts.TextToSpeech;
 import android.util.Log;
 import android.widget.Button;
@@ -187,17 +185,17 @@ public class ChronometerActivity extends AppCompatActivity {
         pauseButton.setEnabled(true);
     }
 
-        private void pauseTimer() {
-            if (exerciseTimer != null) {
-                exerciseTimer.cancel();
-            }
-            isPaused = true;
+    private void pauseTimer() {
+        if (exerciseTimer != null) {
+            exerciseTimer.cancel();
         }
+        isPaused = true;
+    }
 
-        private void resumeTimer() {
-            startTimer(timeRemaining);
-            isPaused = false;
-        }
+    private void resumeTimer() {
+        startTimer(timeRemaining);
+        isPaused = false;
+    }
 
     // Override onDestroy method to release MediaPlayer resources when activity is destroyed
     @Override
