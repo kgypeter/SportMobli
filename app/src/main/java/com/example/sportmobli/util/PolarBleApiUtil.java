@@ -6,13 +6,15 @@ import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.polar.sdk.api.PolarBleApi;
 import com.polar.sdk.api.PolarBleApiCallback;
 import com.polar.sdk.api.model.PolarDeviceInfo;
 
+import java.util.Objects;
 import java.util.UUID;
 
 public class PolarBleApiUtil {
-    public static PolarBleApiCallback getApiSetup(String deviceId, Context context, PolarListener listener){
+    public static PolarBleApiCallback getApiSetup(String deviceId, Context context, PolarListener listener) {
         return new PolarBleApiCallback() {
             @Override
             public void deviceConnected(PolarDeviceInfo polarDeviceInfo) {
@@ -34,13 +36,10 @@ public class PolarBleApiUtil {
             public void bleSdkFeatureReady(String identifier, com.polar.sdk.api.PolarBleApi.PolarBleSdkFeature feature) {
                 Log.d(TAG, "feature ready " + feature);
 
-                switch (feature) {
-                    case FEATURE_POLAR_ONLINE_STREAMING:
-
-                        listener.executeWhenReady();
-                        break;
-                    default:
-                        break;
+                if (Objects.requireNonNull(feature) == PolarBleApi.PolarBleSdkFeature.FEATURE_POLAR_ONLINE_STREAMING) {
+                    listener.executeWhenReady();
+                } else {
+                    listener.executeWhenReady();
                 }
             }
 
@@ -58,7 +57,8 @@ public class PolarBleApiUtil {
             }
         };
     }
-    public interface PolarListener{
-         void executeWhenReady();
+
+    public interface PolarListener {
+        void executeWhenReady();
     }
 }
