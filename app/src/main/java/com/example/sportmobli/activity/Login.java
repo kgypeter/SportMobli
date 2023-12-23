@@ -68,6 +68,7 @@ public class Login extends AppCompatActivity {
                                 User user = task.getResult().getValue(User.class);
                                 if (user == null) {
                                     Toast.makeText(Login.this, "Invalid username or password!", Toast.LENGTH_SHORT).show();
+                                    return;
                                 }
                                 String hashedPassword = DigestUtils.sha256Hex(passwordString);
                                 if (user.getPassword().equals(hashedPassword)) {
