@@ -6,45 +6,45 @@ import java.time.LocalDateTime;
 public class DietHistory {
 
     private String owner;
-    private float calories;
-    private float protein;
-    private float carbohydrates;
-    private float fats;
+    private Float calories;
+    private Float protein;
+    private Float carbohydrates;
+    private Float fats;
 
     private LocalDateTime dateAdded;
 
     public DietHistory() {
     }
 
-    public float getCalories() {
+    public Float getCalories() {
         return calories;
     }
 
-    public void setCalories(float calories) {
+    public void setCalories(Float calories) {
         this.calories = calories;
     }
 
-    public float getProtein() {
+    public Float getProtein() {
         return protein;
     }
 
-    public void setProtein(float protein) {
+    public void setProtein(Float protein) {
         this.protein = protein;
     }
 
-    public float getCarbohydrates() {
+    public Float getCarbohydrates() {
         return carbohydrates;
     }
 
-    public void setCarbohydrates(float carbohydrates) {
+    public void setCarbohydrates(Float carbohydrates) {
         this.carbohydrates = carbohydrates;
     }
 
-    public float getFats() {
+    public Float getFats() {
         return fats;
     }
 
-    public void setFats(float fats) {
+    public void setFats(Float fats) {
         this.fats = fats;
     }
 

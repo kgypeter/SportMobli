@@ -34,7 +34,10 @@ public class AddVeritySenseDialog {
         Button btnSave = customLayout.findViewById(R.id.btnSave);
 
         // Set button click listeners
-        btnCancel.setOnClickListener(v -> dismissDialog(context, listener));
+        btnCancel.setOnClickListener(v -> {
+            AppPreferences.setVerityDeviceId(context, null);
+            dismissDialog(context, listener);
+        });
 
         btnSave.setOnClickListener(view -> {
             String deviceId = editTextName.getText().toString();

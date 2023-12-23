@@ -7,7 +7,7 @@ import java.util.List;
 
 public class HRSeries {
     private SimpleXYSeries hrSeries;
-    private  SimpleXYSeries rrSeries;
+    private SimpleXYSeries rrSeries;
     private List<Double> xHrVals = new ArrayList<>();
     private List<Double> yHrVals = new ArrayList<>();
     private List<Double> xRrVals = new ArrayList<>();
@@ -18,12 +18,12 @@ public class HRSeries {
         return hrSeries;
     }
 
-    public SimpleXYSeries getRrSeries() {
-        return rrSeries;
-    }
-
     public void setHrSeries(SimpleXYSeries hrSeries) {
         this.hrSeries = hrSeries;
+    }
+
+    public SimpleXYSeries getRrSeries() {
+        return rrSeries;
     }
 
     public void setRrSeries(SimpleXYSeries rrSeries) {

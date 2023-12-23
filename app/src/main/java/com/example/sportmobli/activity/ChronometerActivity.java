@@ -213,9 +213,10 @@ public class ChronometerActivity extends AppCompatActivity {
 
     private void endSession() {
         exerciseTitleTextView.setText("Exercise session finished");
+        saveSession();
         if (hrDisposable != null && !hrDisposable.isDisposed()) {
             // Stop the HR stream and save the session to firebase
-            saveSession();
+
             hrDisposable.dispose();
             hrDisposable = null;
         }
@@ -223,19 +224,28 @@ public class ChronometerActivity extends AppCompatActivity {
 
     private void saveSession() {
         String currentUsername = AppPreferences.getUsername(this);
+        float totalTime = 0;
+        for (Exercise exercise : exercisesList) {
+            totalTime += exercise.getRestTime();
+            totalTime += exercise.getDuration();
+        }
+
         TrainingHistory trainingHistoryEntry = new TrainingHistory();
         LocalDateTime dateAdded = LocalDateTime.now();
         trainingHistoryEntry.setAddedDate(dateAdded);
         trainingHistoryEntry.setSessionName(sessionName);
         trainingHistoryEntry.setOwner(currentUsername);
+        trainingHistoryEntry.setTotalTime(totalTime);
 
-        Map<String, Double> hrHistory = new HashMap<>();
-        List<Double> yVals = plotter.series.getyHrVals();
-        for (Integer i = 0; i < yVals.size(); i++) {
-            hrHistory.put(i.toString(), yVals.get(i));
+        if (plotter != null) {
+            Map<String, Double> hrHistory = new HashMap<>();
 
+            List<Double> yVals = plotter.series.getyHrVals();
+            for (Integer i = 0; i < yVals.size(); i++) {
+                hrHistory.put(i.toString(), yVals.get(i));
+            }
+            trainingHistoryEntry.setHrHistory(hrHistory);
         }
-        trainingHistoryEntry.setHrHistory(hrHistory);
         String uuid = UUID.randomUUID().toString();
         trainingHistoryReference.child(currentUsername).child(uuid).setValue(trainingHistoryEntry);
 
@@ -342,8 +352,9 @@ public class ChronometerActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        api.shutDown();
-
+        if (api != null) {
+            api.shutDown();
+        }
     }
 
 }
