@@ -51,22 +51,19 @@
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.UserProfile"
-            android:exported="false"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".activity.Tracking"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.Training"
             android:exported="false"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".activity.DietActivity"
             android:exported="false"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustResize" />
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".activity.Home"
             android:exported="false"

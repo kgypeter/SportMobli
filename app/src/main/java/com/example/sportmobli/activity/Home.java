@@ -18,8 +18,6 @@ public class Home extends AppCompatActivity {
 
         Button dietButton = findViewById(R.id.button5);
         Button trainingButton = findViewById(R.id.button4);
-        Button userProfileButton = findViewById(R.id.button6);
-        Button trackingButton = findViewById(R.id.button7);
 
         dietButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -39,39 +37,17 @@ public class Home extends AppCompatActivity {
             }
         });
 
-        userProfileButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), UserProfile.class);
-                startActivity(intent);
-                overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
-            }
-        });
-
-        trackingButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), Tracking.class);
-                startActivity(intent);
-                overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
-            }
-        });
-
-        // Find the Diet History Button
         findViewById(R.id.buttonDietHistory).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Navigate to DietHistoryActivity
                 Intent intent = new Intent(Home.this, DietHistoryActivity.class);
                 startActivity(intent);
             }
         });
 
-        // Find the Training History Button
         findViewById(R.id.buttonTrainingHistory).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Navigate to TrainingHistoryActivity
                 Intent intent = new Intent(Home.this, TrainingHistoryActivity.class);
                 startActivity(intent);
             }

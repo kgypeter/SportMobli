@@ -31,17 +31,6 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-
-// todo - implement the functionality of crud operations and make data persistent in firebase DB
-//  - hide delete and edit buttons when there is no search result for a session
-
-/**
- * Parcelable is an Android interface used for efficient serialization and deserialization
- * of objects. It's optimized for passing complex data structures between components
- * (like activities or services). Implementing Parcelable in a class allows objects
- * of that class to be packed into Intents and transferred between different parts
- * of an Android application.
- */
 public class Training extends AppCompatActivity implements TrainingRecyclerAdapter.OnItemClickListener {
 
     private String name;
@@ -89,8 +78,6 @@ public class Training extends AppCompatActivity implements TrainingRecyclerAdapt
 
         Button lolButton = findViewById(R.id.button3);
         Button dietButton = findViewById(R.id.button5);
-        Button userProfileButton = findViewById(R.id.button6);
-        Button trackingButton = findViewById(R.id.button7);
         ImageView addButton = findViewById(R.id.addButton);
 
         lolButton.setOnClickListener(view -> {
@@ -101,18 +88,6 @@ public class Training extends AppCompatActivity implements TrainingRecyclerAdapt
 
         dietButton.setOnClickListener(view -> {
             Intent intent = new Intent(getApplicationContext(), DietActivity.class);
-            startActivity(intent);
-            overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
-        });
-
-        userProfileButton.setOnClickListener(view -> {
-            Intent intent = new Intent(getApplicationContext(), UserProfile.class);
-            startActivity(intent);
-            overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
-        });
-
-        trackingButton.setOnClickListener(view -> {
-            Intent intent = new Intent(getApplicationContext(), Tracking.class);
             startActivity(intent);
             overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
         });
