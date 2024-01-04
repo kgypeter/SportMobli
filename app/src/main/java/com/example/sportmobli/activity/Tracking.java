@@ -18,7 +18,6 @@ public class Tracking extends AppCompatActivity {
 
         Button lolButton = findViewById(R.id.button3);
         Button dietButton = findViewById(R.id.button5);
-        Button userProfileButton = findViewById(R.id.button6);
         Button trainingButton = findViewById(R.id.button4);
 
         lolButton.setOnClickListener(new View.OnClickListener() {
@@ -34,15 +33,6 @@ public class Tracking extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), DietActivity.class);
-                startActivity(intent);
-                overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
-            }
-        });
-
-        userProfileButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), UserProfile.class);
                 startActivity(intent);
                 overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
             }

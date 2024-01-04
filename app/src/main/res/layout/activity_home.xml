@@ -7,65 +7,54 @@
     android:background="@color/white"
     tools:context=".activity.Home">
 
+    <!-- Vertical guidelines -->
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_left"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="46dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_right"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="46dp" />
+
     <Button
         android:id="@+id/button3"
-        android:layout_width="56dp"
-        android:layout_height="54dp"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         android:background="@drawable/home"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/button7"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/button4"
-        app:layout_constraintTop_toBottomOf="@+id/textView4"
-        app:layout_constraintVertical_bias="0.964" />
+        app:layout_constraintEnd_toStartOf="@+id/button5"
+        app:layout_constraintHorizontal_chainStyle="spread_inside"
+        app:layout_constraintStart_toEndOf="@+id/guideline_left"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.976" />
 
     <Button
         android:id="@+id/button5"
-        android:layout_width="56dp"
-        android:layout_height="54dp"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         android:background="@drawable/diet"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/button4"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView4"
-        app:layout_constraintVertical_bias="0.964" />
-
-    <Button
-        android:id="@+id/button7"
-        android:layout_width="56dp"
-        android:layout_height="54dp"
-        android:background="@drawable/progress"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/button6"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/button3"
-        app:layout_constraintTop_toBottomOf="@+id/textView4"
-        app:layout_constraintVertical_bias="0.964" />
-
-    <Button
-        android:id="@+id/button6"
-        android:layout_width="56dp"
-        android:layout_height="54dp"
-        android:background="@drawable/user"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/button7"
-        app:layout_constraintTop_toBottomOf="@+id/textView4"
-        app:layout_constraintVertical_bias="0.964" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.976" />
 
     <Button
         android:id="@+id/button4"
-        android:layout_width="56dp"
-        android:layout_height="54dp"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         android:background="@drawable/training"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/button3"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintEnd_toStartOf="@+id/guideline_right"
         app:layout_constraintStart_toEndOf="@+id/button5"
-        app:layout_constraintTop_toBottomOf="@+id/textView4"
-        app:layout_constraintVertical_bias="0.964" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.976" />
 
     <TextView
         android:id="@+id/textView4"
@@ -85,10 +74,14 @@
     <Button
         android:id="@+id/buttonDietHistory"
         android:layout_width="195dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="136dp"
+        android:layout_height="110dp"
+        android:layout_marginTop="104dp"
         android:background="@drawable/rounded_button"
         android:padding="16dp"
+        android:shadowColor="#5E5B5B"
+        android:shadowDx="4"
+        android:shadowDy="4"
+        android:shadowRadius="2"
         android:text="Diet History"
         android:textColor="@color/white"
         android:textSize="18sp"
@@ -99,11 +92,15 @@
     <Button
         android:id="@+id/buttonTrainingHistory"
         android:layout_width="195dp"
-        android:layout_height="wrap_content"
+        android:layout_height="110dp"
         android:layout_marginTop="50dp"
         android:padding="16dp"
         android:text="Training History"
         android:textSize="18sp"
+        android:shadowColor="#5E5B5B"
+        android:shadowDx="4"
+        android:shadowDy="4"
+        android:shadowRadius="2"
         android:textColor="@color/white"
         android:background="@drawable/rounded_button"
         app:layout_constraintBottom_toTopOf="@+id/button3"

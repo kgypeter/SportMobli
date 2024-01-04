@@ -52,24 +52,10 @@ public class DietActivity extends AppCompatActivity {
         try {
             Button lolButton = findViewById(R.id.button3);
             Button trainingButton = findViewById(R.id.button4);
-            Button userProfileButton = findViewById(R.id.button6);
-            Button trackingButton = findViewById(R.id.button7);
             Button saveMealButton = findViewById(R.id.saveMealButton);
 
             trainingButton.setOnClickListener(view -> {
                 Intent intent = new Intent(getApplicationContext(), Training.class);
-                startActivity(intent);
-                overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
-            });
-
-            userProfileButton.setOnClickListener(view -> {
-                Intent intent = new Intent(getApplicationContext(), UserProfile.class);
-                startActivity(intent);
-                overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
-            });
-
-            trackingButton.setOnClickListener(view -> {
-                Intent intent = new Intent(getApplicationContext(), Tracking.class);
                 startActivity(intent);
                 overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
             });
