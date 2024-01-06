@@ -9,8 +9,6 @@ import android.os.CountDownTimer;
 import android.os.SystemClock;
 import android.util.Log;
 import android.view.View;
-import android.speech.tts.TextToSpeech;
-import android.util.Log;
 import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.TextView;
@@ -39,7 +37,6 @@ import com.polar.sdk.api.model.PolarHrData;
 import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Locale;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
@@ -67,11 +64,6 @@ public class ChronometerActivity extends AppCompatActivity {
     private long timeRemaining;
     private boolean isPaused = false;
     private String sessionName;
-
-    private TextView chronometerTextView;
-
-    private TextToSpeech textToSpeech;
-
     //Verity Sense Stuff
     private PolarBleApi api;
     private Disposable hrDisposable;
@@ -86,24 +78,7 @@ public class ChronometerActivity extends AppCompatActivity {
         db = FirebaseDatabase.getInstance();
         trainingHistoryReference = db.getReference("TrainingHistory");
 
-        chronometerTextView = findViewById(R.id.chronometerTextView);
-        exerciseTitleTextView = findViewById(R.id.exerciseTitleTextView);
-
-        // Initialize TextToSpeech for reading exercise titles aloud
-        textToSpeech = new TextToSpeech(this, status -> {
-            if (status == TextToSpeech.SUCCESS) {
-                int result = textToSpeech.setLanguage(Locale.US); // Set language
-
-                if (result == TextToSpeech.LANG_MISSING_DATA ||
-                        result == TextToSpeech.LANG_NOT_SUPPORTED) {
-                    Log.e("TTS", "Language not supported");
-                }
-            } else {
-                Log.e("TTS", "Initialization failed");
-            }
-        });
-
-        chronometerTextView = findViewById(R.id.chronometerTextView);
+        chronometer = findViewById(R.id.chronometer);
         exerciseTitleTextView = findViewById(R.id.exerciseTitleTextView);
         startButton = findViewById(R.id.startButton);
         pauseButton = findViewById(R.id.pauseButton);
@@ -117,7 +92,6 @@ public class ChronometerActivity extends AppCompatActivity {
             }
         });
 
-        // Retrieve exercises from intent
         Intent intent = getIntent();
         if (intent != null && intent.hasExtra("exercises")) {
             exercisesList = intent.getParcelableArrayListExtra("exercises");
@@ -220,9 +194,8 @@ public class ChronometerActivity extends AppCompatActivity {
             long duration;
             String title;
 
-            // Determine duration and title based on exercise/rest time
             if (isExerciseTime) {
-                duration = (long) ((currentExercise.getDuration() * 1000) + 1000);
+                duration = (long) ((currentExercise.getDuration() * 1000) + 1000); // Convert to milliseconds
                 title = currentExercise.getName();
             } else {
                 duration = (long) ((currentExercise.getRestTime() * 1000) + 1000);
@@ -231,10 +204,6 @@ public class ChronometerActivity extends AppCompatActivity {
             }
 
             setExerciseTitle(title);
-
-            // Speak the text from exerciseTitleTextView
-            speakText(title);
-
             startTimer(duration);
             isExerciseTime = !isExerciseTime;
         } else {
@@ -283,18 +252,6 @@ public class ChronometerActivity extends AppCompatActivity {
 
     }
 
-}
-    }
-
-    private void setExerciseTitle(String title) {
-        exerciseTitleTextView.setText(title);
-    }
-
-    // Method to speak the text
-    private void speakText(String text) {
-        textToSpeech.speak(text, TextToSpeech.QUEUE_FLUSH, null, null);
-    }
-
     private void restartExerciseSession() {
         // Cancel the existing timer if running
         if (exerciseTimer != null) {
@@ -309,11 +266,16 @@ public class ChronometerActivity extends AppCompatActivity {
         startExerciseSession();
     }
 
+    private void setExerciseTitle(String title) {
+        exerciseTitleTextView.setText(title);
+    }
+
     private void startTimer(long duration) {
+        chronometer.setBase(SystemClock.elapsedRealtime());
+        chronometer.start();
         exerciseTimer = new CountDownTimer(duration, 1000) {
             public void onTick(long millisUntilFinished) {
                 timeRemaining = millisUntilFinished;
-                updateChronometerText(millisUntilFinished);
             }
 
             public void onFinish() {
@@ -329,15 +291,18 @@ public class ChronometerActivity extends AppCompatActivity {
         pauseButton.setEnabled(true);
     }
 
-    private void updateChronometerText(long millisUntilFinished) {
-        int seconds = (int) (millisUntilFinished / 1000);
-        int minutes = seconds / 60;
-        seconds = seconds % 60;
 
-        String time = String.format("%02d:%02d", minutes, seconds);
-        chronometerTextView.setText(time);
+    private void pauseTimer() {
+        if (exerciseTimer != null) {
+            exerciseTimer.cancel();
+        }
+        isPaused = true;
     }
 
+    private void resumeTimer() {
+        startTimer(timeRemaining);
+        isPaused = false;
+    }
 
     private void pauseExerciseSession() {
         pauseTimer();
@@ -389,29 +354,6 @@ public class ChronometerActivity extends AppCompatActivity {
         super.onDestroy();
         if (api != null) {
             api.shutDown();
-        }
-    }
-
-    private void pauseTimer() {
-        if (exerciseTimer != null) {
-            exerciseTimer.cancel();
-        }
-        isPaused = true;
-    }
-
-    private void resumeTimer() {
-        startTimer(timeRemaining);
-        isPaused = false;
-    }
-
-    // Override onDestroy method to release MediaPlayer resources when activity is destroyed
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        // Release TextToSpeech resources
-        if (textToSpeech != null) {
-            textToSpeech.stop();
-            textToSpeech.shutdown();
         }
     }
 
