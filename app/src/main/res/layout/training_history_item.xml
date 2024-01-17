@@ -42,13 +42,6 @@
             android:textStyle="bold"
             android:text="Added Date and Time" />
 
-        <com.androidplot.xy.XYPlot
-            android:id="@+id/historyHrPlot"
-            style="@style/FullScreenGraph"
-            android:layout_width="fill_parent"
-            android:layout_height="150dp"
-            />
-
     </LinearLayout>
 
 </LinearLayout>

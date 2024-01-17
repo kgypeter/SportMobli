@@ -1,6 +1,9 @@
 package com.example.sportmobli.adapter;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.androidplot.xy.XYPlot;
 import com.example.sportmobli.R;
+import com.example.sportmobli.activity.PlotActivity;
 import com.example.sportmobli.model.TrainingHistoryDisplay;
 import com.example.sportmobli.util.HRPlotter;
 
@@ -19,9 +23,11 @@ import java.util.Map;
 
 public class TrainingHistoryRecyclerAdapter extends RecyclerView.Adapter<TrainingHistoryRecyclerAdapter.TrainingHistoryViewHolder> {
     private final List<TrainingHistoryDisplay> trainingHistoryList;
+    private final Context context;
 
-    public TrainingHistoryRecyclerAdapter(List<TrainingHistoryDisplay> trainingHistoryList) {
+    public TrainingHistoryRecyclerAdapter(List<TrainingHistoryDisplay> trainingHistoryList, Context context) {
         this.trainingHistoryList = trainingHistoryList;
+        this.context = context;
     }
 
     @NonNull
@@ -32,9 +38,29 @@ public class TrainingHistoryRecyclerAdapter extends RecyclerView.Adapter<Trainin
     }
 
     @Override
-    public void onBindViewHolder(@NonNull TrainingHistoryViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull TrainingHistoryViewHolder holder, final int position) {
         TrainingHistoryDisplay trainingHistory = trainingHistoryList.get(position);
         holder.bind(trainingHistory);
+
+        // Handle item clicks
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Create an Intent to start the new activity
+                Intent intent = new Intent(context, PlotActivity.class);
+
+                // Pass data to the new activity
+                Bundle bundle = new Bundle();
+                Map<String, Double> history = trainingHistory.getHrHistory();
+                for (String key : history.keySet()){
+                    bundle.putDouble(key,history.get(key) );
+                }
+                intent.putExtra("hrSeries", bundle);
+
+                // Start the new activity
+                context.startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -53,7 +79,7 @@ public class TrainingHistoryRecyclerAdapter extends RecyclerView.Adapter<Trainin
             historySessionName = view.findViewById(R.id.historySessionName);
             historyTotalTime = view.findViewById(R.id.historyTotalTime);
             historyAddedDate = view.findViewById(R.id.historyAddedDate);
-            plot = view.findViewById(R.id.historyHrPlot);
+            plot = view.findViewById(R.id.hr_view_plot);
 
         }
 
@@ -62,17 +88,7 @@ public class TrainingHistoryRecyclerAdapter extends RecyclerView.Adapter<Trainin
             historySessionName.setText("Session Name: " + trainingHistory.getSessionName());
             historyTotalTime.setText("Total Time: " + trainingHistory.getTotalTime());
             historyAddedDate.setText("Added Date: " + trainingHistory.getAddedDate());
-            Map<String, Double> hrSeries = trainingHistory.getHrHistory();
-            HRPlotter plotter = new HRPlotter();
 
-            plotter.setListener(plot);
-            plot.addSeries(plotter.series.getHrSeries(), plotter.hrFormatter);
-            if (hrSeries != null) {
-                for (int i = 5; i < hrSeries.size(); i++) {
-                    double value = hrSeries.get(String.valueOf(i));
-                    plotter.addValuesManual((long) i, value);
-                }
-            }
         }
     }
 }
