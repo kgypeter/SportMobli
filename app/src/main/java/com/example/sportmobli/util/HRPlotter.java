@@ -20,18 +20,20 @@ public class HRPlotter {
     public XYSeriesFormatter<?> rrFormatter;
     public HRSeries series;
     private XYPlot listener;
+    private double initialTime;
 
     public HRPlotter() {
         series = new HRSeries();
         Date now = new Date();
         double endTime = now.getTime();
+        initialTime = endTime;
         double startTime = endTime - NVALS * 1000;
         double delta = (endTime - startTime) / (NVALS - 1);
 
 //         Specify initial values to keep it from auto sizing
         for (int i = 0; i < NVALS; i++) {
-            series.getxHrVals().add(i, startTime + i * delta);
-            series.getyHrVals().add(i, 0.0);
+            series.getxHrVals().add(i, (double) now.getTime());
+            series.getyHrVals().add(i, 60.0);
 
         }
         hrFormatter = new LineAndPointFormatter(Color.RED, null, null, null);
@@ -50,6 +52,20 @@ public class HRPlotter {
         series.getxHrVals().add((double) time);
         series.getyHrVals().add((double) polarHrData.getHr());
         series.getHrSeries().addLast(time, polarHrData.getHr());
+
+
+        if (listener != null) {
+            listener.redraw();
+        }
+    }
+
+    public void addValuesManual(long recievedTime, double value) {
+        double time = initialTime + recievedTime;
+
+
+        series.getxHrVals().add((double) time);
+        series.getyHrVals().add(value);
+        series.getHrSeries().addLast((double) time, value);
 
 
         if (listener != null) {

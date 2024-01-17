@@ -96,12 +96,13 @@ public class TrainingHistoryActivity extends AppCompatActivity {
 
     private void startAdapter() {
         RecyclerView recyclerView = findViewById(R.id.recyclerViewTrainingHistory);
-        adapter = new TrainingHistoryRecyclerAdapter(trainingHistoryList);
+        // Pass the context to the adapter
+        adapter = new TrainingHistoryRecyclerAdapter(trainingHistoryList, TrainingHistoryActivity.this);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(adapter);
-
     }
+
 }
 

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <com.androidplot.xy.XYPlot
+        android:id="@+id/plot"
+        style="@style/FullScreenGraph"
+        android:layout_width="fill_parent"
+        android:layout_height="304dp"
+        android:layout_marginTop="28dp"
+        android:layout_marginBottom="55dp"
+        app:graphMarginBottom="12dp"
+        app:graphMarginLeft="30dp"
+        app:graphMarginRight="5dp"
+        app:graphMarginTop="20dp"
+        app:gridInsetLeft="25dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:lineLabels="left"
+        app:rangeTitleTextColor="@android:color/black"
+        app:rangeTitleTextSize="12dp"
+        app:renderMode="use_background_thread"
+        app:titleTextColor="@android:color/black"
+        app:titleTextSize="15dp" />
+
+</LinearLayout>
