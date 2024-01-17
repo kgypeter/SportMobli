@@ -1,7 +1,9 @@
 package com.example.sportmobli.activity;
 
 import android.os.Bundle;
+
 import androidx.appcompat.app.AppCompatActivity;
+
 import com.androidplot.xy.XYPlot;
 import com.example.sportmobli.R;
 import com.example.sportmobli.util.HRPlotter;
@@ -31,8 +33,7 @@ public class PlotActivity extends AppCompatActivity {
                     hrHistory.put(key, bundle.getDouble(key));
                 }
 
-                // Now you have the hrHistory Map containing the data from the previous activity
-                // You can use this Map as needed in your PlotActivity
+                // hrHistory Map containing the data from the previous activity
                 plotter.setListener(plot);
                 plot.addSeries(plotter.series.getHrSeries(), plotter.hrFormatter);
                 if (hrHistory != null) {
