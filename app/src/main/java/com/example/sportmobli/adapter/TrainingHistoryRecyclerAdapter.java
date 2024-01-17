@@ -46,7 +46,6 @@ public class TrainingHistoryRecyclerAdapter extends RecyclerView.Adapter<Trainin
         private final TextView historySessionName;
         private final TextView historyTotalTime;
         private final TextView historyAddedDate;
-        private final HRPlotter plotter;
         private final XYPlot plot;
 
         public TrainingHistoryViewHolder(final View view) {
@@ -54,11 +53,8 @@ public class TrainingHistoryRecyclerAdapter extends RecyclerView.Adapter<Trainin
             historySessionName = view.findViewById(R.id.historySessionName);
             historyTotalTime = view.findViewById(R.id.historyTotalTime);
             historyAddedDate = view.findViewById(R.id.historyAddedDate);
-
-            plotter = new HRPlotter();
             plot = view.findViewById(R.id.historyHrPlot);
-            plotter.setListener(plot);
-            plot.addSeries(plotter.series.getHrSeries(), plotter.hrFormatter);
+
         }
 
         @SuppressLint("SetTextI18n")
@@ -67,8 +63,12 @@ public class TrainingHistoryRecyclerAdapter extends RecyclerView.Adapter<Trainin
             historyTotalTime.setText("Total Time: " + trainingHistory.getTotalTime());
             historyAddedDate.setText("Added Date: " + trainingHistory.getAddedDate());
             Map<String, Double> hrSeries = trainingHistory.getHrHistory();
-            if(hrSeries != null){
-                for(int i = 5; i < hrSeries.size(); i++){
+            HRPlotter plotter = new HRPlotter();
+
+            plotter.setListener(plot);
+            plot.addSeries(plotter.series.getHrSeries(), plotter.hrFormatter);
+            if (hrSeries != null) {
+                for (int i = 5; i < hrSeries.size(); i++) {
                     double value = hrSeries.get(String.valueOf(i));
                     plotter.addValuesManual((long) i, value);
                 }
